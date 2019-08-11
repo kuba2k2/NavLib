@@ -4,23 +4,28 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
+import android.view.MotionEvent.INVALID_POINTER_ID
 import android.view.View
 import android.view.ViewGroup
+import android.widget.FrameLayout
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.core.view.MotionEventCompat
+import androidx.core.widget.NestedScrollView
+import androidx.customview.widget.ViewDragHelper
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class NavView : LinearLayout {
+class NavView : FrameLayout {
 
     private var contentView: LinearLayout? = null
     private lateinit var bottomAppBar: BottomAppBar
     private lateinit var floatingActionButton: FloatingActionButton
     private lateinit var scrimView: View
-    private lateinit var bottomSheet: View
+    private lateinit var bottomSheet: NestedScrollView
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     private var bottomSheetVisible = false
 
@@ -56,7 +61,7 @@ class NavView : LinearLayout {
 
         contentView = findViewById<LinearLayout>(R.id.nv_content)
 
-        findViewById<TextView>(R.id.textView).text = "${displayWidth}dp x ${displayHeight}dp"
+        //findViewById<TextView>(R.id.textView).text = "${displayWidth}dp x ${displayHeight}dp"
 
         bottomAppBar = findViewById(R.id.nv_bottomAppBar)
         floatingActionButton = findViewById(R.id.nv_floatingActionButton)
@@ -64,16 +69,18 @@ class NavView : LinearLayout {
         bottomSheet = findViewById(R.id.nv_bottomSheet)
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
 
+        bottomSheetBehavior.state = STATE_HIDDEN
+
         bottomAppBar.setOnTouchListener { v, event ->
             bottomSheet.dispatchTouchEvent(event)
             false
         }
 
         scrimView.setOnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_UP && bottomSheetVisible) {
+            if (event.action == MotionEvent.ACTION_UP && bottomSheetBehavior.state != STATE_HIDDEN) {
                 bottomSheetBehavior.state = STATE_HIDDEN
             }
-            false
+            true
         }
 
         bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
@@ -90,7 +97,6 @@ class NavView : LinearLayout {
             }
         })
 
-
         floatingActionButton.setOnClickListener {
             if (bottomSheetBehavior.state == STATE_HIDDEN) {
                 bottomSheetBehavior.state = STATE_COLLAPSED
@@ -100,7 +106,14 @@ class NavView : LinearLayout {
             }
         }
 
+
+
     }
+
+
+
+
+
 
     override fun addView(child: View?, index: Int, params: ViewGroup.LayoutParams?) {
         if (contentView == null) {

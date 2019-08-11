@@ -1,18 +1,55 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="NavView">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimaryLight</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">#64b5f6</item>
+        <item name="colorPrimaryDark">#1976d2</item>
+        <item name="colorPrimaryVariant">#1976d2</item>
+        <item name="colorAccent">#ba68c8</item>
+        <item name="colorSecondary">#ba68c8</item>
+        <item name="colorSecondaryVariant">#9c27b0</item>
+        <item name="android:colorBackground">@color/black</item>
+        <item name="colorSurface">#1f1f1f</item>
+
+        <item name="android:statusBarColor" tools:targetApi="lollipop">?android:colorBackground</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+        <item name="android:navigationBarColor" tools:targetApi="lollipop">?colorPrimaryDark</item>
+
+        <item name="colorOnPrimary">#000000</item>
+        <item name="colorOnSecondary">#000000</item>
+        <item name="colorOnBackground">#ffffff</item>
+        <item name="colorOnSurface">#ffffff</item>
+
+        <item name="nv_actionBarBackground">?colorSurface</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
     <style name="AppTheme.Light" parent="NavView.Light">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <item name="colorPrimary">#2196f3</item>
+        <item name="colorPrimaryDark">#1976d2</item>
+        <item name="colorPrimaryVariant">#90caf9</item>
+        <item name="colorAccent">#ba68c8</item>
+        <item name="colorSecondary">#ba68c8</item>
+        <item name="colorSecondaryVariant">#9c27b0</item>
+        <item name="android:colorBackground">@color/white</item>
+        <item name="android:windowBackground">?android:colorBackground</item>
+        <item name="colorSurface">#ffffff</item>
+
+        <item name="android:statusBarColor" tools:targetApi="lollipop">?android:colorBackground</item>
+        <item name="android:windowLightStatusBar" tools:targetApi="m">true</item>
+        <item name="android:navigationBarColor" tools:targetApi="lollipop">?colorPrimaryDark</item>
+
+        <item name="colorOnPrimary">#000000</item>
+        <item name="colorOnSecondary">#000000</item>
+        <item name="colorOnBackground">#000000</item>
+        <item name="colorOnSurface">#000000</item>
+
+        <item name="nv_actionBarBackground">?colorSurface</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
     </style>
 
 </resources>
