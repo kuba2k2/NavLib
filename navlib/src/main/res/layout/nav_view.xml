@@ -7,16 +7,13 @@
     android:orientation="vertical"
     tools:parentTag="FrameLayout">
 
-    <com.google.android.material.appbar.AppBarLayout
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?nv_actionBarBackground"
-            app:title="@string/app_name" /><!--style="@style/Widget.MaterialComponents.Toolbar.Surface"-->
-    </com.google.android.material.appbar.AppBarLayout>
+        android:layout_height="?attr/actionBarSize"
+        android:elevation="4dp"
+        android:background="?nv_actionBarBackground"
+        app:title="@string/app_name" />
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
@@ -53,7 +50,8 @@
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:translationZ="10dp">
 
         <View
             android:id="@+id/nv_scrim"
