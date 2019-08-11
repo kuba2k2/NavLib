@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,84 +7,119 @@
     android:orientation="vertical"
     tools:parentTag="FrameLayout">
 
-    <com.google.android.material.appbar.MaterialToolbar
-        android:id="@+id/toolbar"
+    <View
+        android:id="@+id/nv_statusBarBackground"
         android:layout_width="match_parent"
-        android:layout_height="?attr/actionBarSize"
-        android:elevation="4dp"
-        android:background="?nv_actionBarBackground"
-        app:title="@string/app_name" />
+        android:layout_height="25dp"
+        android:background="?android:windowBackground" />
 
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
+    <View
+        android:id="@+id/nv_navigationBarBackground"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="48dp"
+        android:layout_gravity="bottom"
+        android:background="?colorPrimaryDark"
+        tools:background="?colorPrimaryVariant" />
 
-        <LinearLayout
-            android:id="@+id/nv_content"
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:id="@+id/nv_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="center"
-            android:layout_marginTop="?actionBarSize"
-            android:layout_marginBottom="?actionBarSize"
-            android:orientation="vertical" />
+            android:paddingTop="24dp"
+            android:paddingBottom="48dp">
 
-        <com.google.android.material.bottomappbar.BottomAppBar
-            android:id="@+id/nv_bottomAppBar"
-            style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            app:fabAlignmentMode="end" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/nv_floatingActionButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:focusable="true"
-            app:backgroundTint="?colorAccent"
-            app:layout_anchor="@id/nv_bottomAppBar"
-            tools:srcCompat="@android:drawable/ic_lock_lock" />
-
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-    <androidx.coordinatorlayout.widget.CoordinatorLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:translationZ="10dp">
-
-        <View
-            android:id="@+id/nv_scrim"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="#99000000"
-            android:visibility="invisible"
-            tools:visibility="visible" />
-
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/nv_bottomSheet"
-            style="@style/width_max_600dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            app:behavior_hideable="true"
-            app:behavior_peekHeight="500dp"
-            app:layout_behavior="@string/bottom_sheet_behavior">
+            <com.google.android.material.appbar.MaterialToolbar
+                android:id="@+id/nv_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?nv_actionBarBackground"
+                android:elevation="4dp"
+                app:title="@string/app_name"
+                tools:targetApi="lollipop" />
 
             <LinearLayout
+                android:id="@+id/nv_content"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/bottom_sheet_background"
-                android:paddingStart="8dp"
-                android:paddingEnd="8dp">
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:layout_marginTop="?actionBarSize"
+                android:layout_marginBottom="?actionBarSize"
+                android:orientation="vertical">
 
-                <include
-                    layout="@layout/bottom_sheet_fragment_theme_info"
+                <SeekBar
+                    android:id="@+id/nv_elevation"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content" />
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:max="20"
+                    android:progress="4" />
+
+                <TextView
+                    android:id="@+id/textView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Set toolbar elevation" />
             </LinearLayout>
 
-        </androidx.core.widget.NestedScrollView>
+            <com.google.android.material.bottomappbar.BottomAppBar
+                android:id="@+id/nv_bottomAppBar"
+                style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                app:fabAlignmentMode="end" />
 
-    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/nv_floatingActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:focusable="true"
+                app:backgroundTint="?colorAccent"
+                app:layout_anchor="@id/nv_bottomAppBar"
+                tools:srcCompat="@android:drawable/ic_lock_lock" />
 
-</FrameLayout>
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+        <androidx.coordinatorlayout.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:translationZ="10dp"
+            tools:targetApi="lollipop">
+
+            <View
+                android:id="@+id/nv_scrim"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#99000000"
+                android:visibility="invisible"
+                tools:visibility="gone" />
+
+            <androidx.core.widget.NestedScrollView
+                android:id="@+id/nv_bottomSheet"
+                style="@style/width_max_600dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                app:behavior_hideable="true"
+                app:behavior_peekHeight="auto"
+                app:layout_behavior="@string/bottom_sheet_behavior"
+                tools:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bottom_sheet_background"
+                    android:paddingStart="8dp"
+                    android:paddingEnd="8dp">
+
+                    <include
+                        layout="@layout/bottom_sheet_fragment_theme_info"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content" />
+                </LinearLayout>
+
+            </androidx.core.widget.NestedScrollView>
+
+        </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+</merge>

@@ -1,23 +1,26 @@
 package pl.szczodrzynski.navlib
 
 import android.content.Context
+import android.os.Build
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.MotionEvent
-import android.view.MotionEvent.INVALID_POINTER_ID
 import android.view.View
 import android.view.ViewGroup
+import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.TextView
-import androidx.core.view.MotionEventCompat
+import android.widget.SeekBar
+import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.*
 import androidx.core.widget.NestedScrollView
-import androidx.customview.widget.ViewDragHelper
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
 import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.nav_view.view.*
 
 class NavView : FrameLayout {
 
@@ -35,6 +38,35 @@ class NavView : FrameLayout {
     private val configuration by lazy { context.resources.configuration }
     private val displayWidth: Int by lazy { configuration.screenWidthDp }
     private val displayHeight: Int by lazy { configuration.screenHeightDp }
+
+    fun getTopInset(view: View): Float {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            (view.rootWindowInsets?.systemWindowInsetTop ?: 24)
+        } else {
+            24
+        }*displayMetrics.density
+    }
+    fun getLeftInset(view: View): Float {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            (view.rootWindowInsets?.systemWindowInsetLeft ?: 0)
+        } else {
+            0
+        } * displayMetrics.density
+    }
+    fun getRightInset(view: View): Float {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            (view.rootWindowInsets?.systemWindowInsetRight ?: 0)
+        } else {
+            0
+        } * displayMetrics.density
+    }
+    fun getBottomInset(view: View): Float {
+        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            (view.rootWindowInsets?.systemWindowInsetBottom ?: 48)
+        } else {
+            48
+        } * displayMetrics.density
+    }
 
     constructor(context: Context) : super(context) {
         init(null, 0)
@@ -63,6 +95,8 @@ class NavView : FrameLayout {
 
         //findViewById<TextView>(R.id.textView).text = "${displayWidth}dp x ${displayHeight}dp"
 
+        // TODO add vars for status/navigation bar background
+
         bottomAppBar = findViewById(R.id.nv_bottomAppBar)
         floatingActionButton = findViewById(R.id.nv_floatingActionButton)
         scrimView = findViewById(R.id.nv_scrim)
@@ -70,10 +104,24 @@ class NavView : FrameLayout {
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
 
         bottomSheetBehavior.state = STATE_HIDDEN
+        bottomSheetBehavior.peekHeight = displayHeight
+
+        nv_main.setPadding(
+            getLeftInset(nv_main).toInt(),
+            getTopInset(nv_main).toInt(),
+            getRightInset(nv_main).toInt(),
+            getBottomInset(nv_main).toInt()
+        )
+        nv_statusBarBackground.layoutParams.height = getTopInset(nv_main).toInt()
+        nv_navigationBarBackground.layoutParams.height = getBottomInset(nv_main).toInt()
+
 
         bottomAppBar.setOnTouchListener { v, event ->
+            val location = IntArray(2)
+            bottomSheet.getLocationOnScreen(location)
+            event.setLocation(event.rawX - location[0], event.rawY - location[1])
             bottomSheet.dispatchTouchEvent(event)
-            false
+            true
         }
 
         scrimView.setOnTouchListener { v, event ->
@@ -89,6 +137,7 @@ class NavView : FrameLayout {
                 if (newState == STATE_HIDDEN && bottomSheetVisible) {
                     bottomSheetVisible = false
                     Anim.fadeOut(scrimView, 300, null)
+                    bottomSheet.scrollTo(0, 0)
                 }
                 else if (!bottomSheetVisible) {
                     bottomSheetVisible = true
@@ -106,14 +155,15 @@ class NavView : FrameLayout {
             }
         }
 
-
-
+        nv_elevation.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
+                textView.text = "Set toolbar elevation ${progress}dp"
+                nv_toolbar.elevation = progress * displayMetrics.density
+            }
+            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
+            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
+        })
     }
-
-
-
-
-
 
     override fun addView(child: View?, index: Int, params: ViewGroup.LayoutParams?) {
         if (contentView == null) {
