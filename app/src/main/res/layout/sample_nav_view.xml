@@ -140,7 +140,7 @@
                     android:id="@+id/appFullscreen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="false"
+                    android:checked="true"
                     android:text="App is fullscreen" />
 
                 <TextView
@@ -292,11 +292,16 @@
                     android:checked="false"
                     android:text="SB color mode - translucent (not transparent)" />
 
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="(used for Huawei with EMUI Lollipop)"/>
+
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/navigationBarTransparent"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:checked="true"
+                    android:checked="false"
                     android:text="Nav bar fully transparent" />
 
             </LinearLayout>

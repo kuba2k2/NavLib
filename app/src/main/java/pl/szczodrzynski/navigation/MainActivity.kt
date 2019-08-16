@@ -34,10 +34,10 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.sample_nav_view)
 
-        appFullscreen.isChecked = getSharedPreferences("prefs", Context.MODE_PRIVATE).getBoolean("appFullscreen", false)
+        appFullscreen.isChecked = getSharedPreferences("prefs", Context.MODE_PRIVATE).getBoolean("appFullscreen", true)
         statusBarDarker.isChecked = getSharedPreferences("prefs", Context.MODE_PRIVATE).getBoolean("statusBarDarker", false)
         statusBarTranslucent.isChecked = getSharedPreferences("prefs", Context.MODE_PRIVATE).getBoolean("statusBarTranslucent", false)
-        navigationBarTransparent.isChecked = getSharedPreferences("prefs", Context.MODE_PRIVATE).getBoolean("navigationBarTransparent", true)
+        navigationBarTransparent.isChecked = getSharedPreferences("prefs", Context.MODE_PRIVATE).getBoolean("navigationBarTransparent", false)
 
         statusBarColor.check(when (getSharedPreferences("prefs", Context.MODE_PRIVATE).getString("statusBarColor", "colorBackground")) {
             "colorPrimaryDark" -> R.id.colorPrimaryDark
