@@ -1,86 +1,55 @@
 package pl.szczodrzynski.navlib
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.os.Build
 import android.util.AttributeSet
-import android.util.Log
-import android.view.LayoutInflater
-import android.view.MotionEvent
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.widget.FrameLayout
-import android.widget.LinearLayout
-import android.widget.SeekBar
+import android.widget.*
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.view.*
-import androidx.core.widget.NestedScrollView
-import com.google.android.material.bottomappbar.BottomAppBar
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_COLLAPSED
-import com.google.android.material.bottomsheet.BottomSheetBehavior.STATE_HIDDEN
+import androidx.core.view.ViewCompat
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.mikepenz.materialdrawer.Drawer
+import com.mikepenz.materialdrawer.DrawerBuilder
+import com.mikepenz.materialdrawer.model.DividerDrawerItem
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
+import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
 import kotlinx.android.synthetic.main.nav_view.view.*
+import pl.szczodrzynski.navlib.bottomsheet.NavBottomSheet
 
 class NavView : FrameLayout {
 
     private var contentView: LinearLayout? = null
-    private lateinit var bottomAppBar: BottomAppBar
+
+    private lateinit var statusBarBackground: View
+    private lateinit var navigationBarBackground: View
+    private lateinit var mainView: CoordinatorLayout
     private lateinit var floatingActionButton: FloatingActionButton
-    private lateinit var scrimView: View
-    private lateinit var bottomSheet: NestedScrollView
-    private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
-    private var bottomSheetVisible = false
+    private lateinit var extendedFloatingActionButton: ExtendedFloatingActionButton
 
-    private val displayMetrics by lazy {
-        context.resources.displayMetrics
-    }
-    private val configuration by lazy { context.resources.configuration }
-    private val displayWidth: Int by lazy { configuration.screenWidthDp }
-    private val displayHeight: Int by lazy { configuration.screenHeightDp }
+    var drawer: Drawer? = null
+    lateinit var topBar: NavToolbar
+    lateinit var bottomBar: NavBottomBar
+    lateinit var bottomSheet: NavBottomSheet
 
-    fun getTopInset(view: View): Float {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            (view.rootWindowInsets?.systemWindowInsetTop ?: 24)
-        } else {
-            24
-        }*displayMetrics.density
-    }
-    fun getLeftInset(view: View): Float {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            (view.rootWindowInsets?.systemWindowInsetLeft ?: 0)
-        } else {
-            0
-        } * displayMetrics.density
-    }
-    fun getRightInset(view: View): Float {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            (view.rootWindowInsets?.systemWindowInsetRight ?: 0)
-        } else {
-            0
-        } * displayMetrics.density
-    }
-    fun getBottomInset(view: View): Float {
-        return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            (view.rootWindowInsets?.systemWindowInsetBottom ?: 48)
-        } else {
-            48
-        } * displayMetrics.density
-    }
+
 
     constructor(context: Context) : super(context) {
-        init(null, 0)
+        create(null, 0)
     }
 
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
-        init(attrs, 0)
+        create(attrs, 0)
     }
 
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(context, attrs, defStyle) {
-        init(attrs, defStyle)
+        create(attrs, defStyle)
     }
 
-    private fun init(attrs: AttributeSet?, defStyle: Int) {
+    private fun create(attrs: AttributeSet?, defStyle: Int) {
         // Load attributes
         val a = context.obtainStyledAttributes(attrs, R.styleable.NavView, defStyle, 0)
         /*_exampleString = a.getString(
@@ -93,76 +62,115 @@ class NavView : FrameLayout {
 
         contentView = findViewById<LinearLayout>(R.id.nv_content)
 
-        //findViewById<TextView>(R.id.textView).text = "${displayWidth}dp x ${displayHeight}dp"
-
-        // TODO add vars for status/navigation bar background
-
-        bottomAppBar = findViewById(R.id.nv_bottomAppBar)
+        statusBarBackground = findViewById(R.id.nv_statusBarBackground)
+        navigationBarBackground = findViewById(R.id.nv_navigationBarBackground)
+        mainView = findViewById(R.id.nv_main)
         floatingActionButton = findViewById(R.id.nv_floatingActionButton)
-        scrimView = findViewById(R.id.nv_scrim)
+        extendedFloatingActionButton = findViewById(R.id.nv_extendedFloatingActionButton)
+
+        topBar = findViewById(R.id.nv_toolbar)
+        bottomBar = findViewById(R.id.nv_bottomBar)
         bottomSheet = findViewById(R.id.nv_bottomSheet)
-        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
 
-        bottomSheetBehavior.state = STATE_HIDDEN
-        bottomSheetBehavior.peekHeight = displayHeight
+        bottomBar.drawer = drawer
+        bottomBar.bottomSheet = bottomSheet
+        bottomBar.fabView = floatingActionButton
+        bottomBar.fabExtendedView = extendedFloatingActionButton
 
-        nv_main.setPadding(
-            getLeftInset(nv_main).toInt(),
-            getTopInset(nv_main).toInt(),
-            getRightInset(nv_main).toInt(),
-            getBottomInset(nv_main).toInt()
-        )
-        nv_statusBarBackground.layoutParams.height = getTopInset(nv_main).toInt()
-        nv_navigationBarBackground.layoutParams.height = getBottomInset(nv_main).toInt()
-
-
-        bottomAppBar.setOnTouchListener { v, event ->
-            val location = IntArray(2)
-            bottomSheet.getLocationOnScreen(location)
-            event.setLocation(event.rawX - location[0], event.rawY - location[1])
-            bottomSheet.dispatchTouchEvent(event)
-            true
-        }
-
-        scrimView.setOnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_UP && bottomSheetBehavior.state != STATE_HIDDEN) {
-                bottomSheetBehavior.state = STATE_HIDDEN
-            }
-            true
-        }
-
-        bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onSlide(v: View, p1: Float) {}
-            override fun onStateChanged(v: View, newState: Int) {
-                if (newState == STATE_HIDDEN && bottomSheetVisible) {
-                    bottomSheetVisible = false
-                    Anim.fadeOut(scrimView, 300, null)
-                    bottomSheet.scrollTo(0, 0)
-                }
-                else if (!bottomSheetVisible) {
-                    bottomSheetVisible = true
-                    Anim.fadeIn(scrimView, 300, null)
-                }
-            }
-        })
-
-        floatingActionButton.setOnClickListener {
-            if (bottomSheetBehavior.state == STATE_HIDDEN) {
-                bottomSheetBehavior.state = STATE_COLLAPSED
-            }
-            else {
-                bottomSheetBehavior.state = STATE_HIDDEN
-            }
-        }
+        //bottomSheetBehavior.peekHeight = displayHeight
 
         nv_elevation.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
             override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
                 textView.text = "Set toolbar elevation ${progress}dp"
-                nv_toolbar.elevation = progress * displayMetrics.density
+                nv_toolbar.elevation = progress * context.resources.displayMetrics.density
             }
             override fun onStartTrackingTouch(seekBar: SeekBar?) {}
             override fun onStopTrackingTouch(seekBar: SeekBar?) {}
         })
+    }
+
+    fun configSystemBarsUtil(systemBarsUtil: SystemBarsUtil) {
+        systemBarsUtil.statusBarBgView = statusBarBackground
+        systemBarsUtil.navigationBarBgView = navigationBarBackground
+        systemBarsUtil.statusBarDarkView = nv_statusBarDarker
+        //systemBarsUtil.navigationBarDarkView = navigationBarBackground
+        systemBarsUtil.paddingBySystemBars = mainView
+        systemBarsUtil.paddingByNavigationBar = bottomSheet.getContentView()
+    }
+
+
+    var enableBottomSheet = true
+    var enableBottomSheetDrag = true
+
+    var bottomBarEnable = true
+        get() = bottomBar.enable
+        set(value) {
+            field = value
+            bottomBar.enable = value
+            setContentMargins() // TODO combine bottomBarEnable and bottomBar.enable
+        }
+
+    /**
+     * Shows the toolbar and sets the contentView's margin to be
+     * below the toolbar.
+     */
+    var showToolbar = true; set(value) {
+        topBar.visibility = if (value) View.VISIBLE else View.GONE
+        field = value
+        setContentMargins()
+    }
+
+    /**
+     * Set the FAB's on click listener
+     */
+    fun setFabOnClickListener(onClickListener: OnClickListener) {
+        floatingActionButton.setOnClickListener(onClickListener)
+        extendedFloatingActionButton.setOnClickListener(onClickListener)
+    }
+
+
+
+
+    @SuppressLint("ClickableViewAccessibility")
+    fun init(activity: Activity) {
+
+    }
+
+    private fun setContentMargins() {
+        val layoutParams = CoordinatorLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+        val actionBarSize = 56 * context.resources.displayMetrics.density
+        layoutParams.topMargin = if (showToolbar) actionBarSize.toInt() else 0
+        layoutParams.bottomMargin = if (bottomBarEnable) actionBarSize.toInt() else 0
+        contentView?.layoutParams = layoutParams
+    }
+
+    fun addDrawer(activity: Activity) {
+        //if you want to update the items at a later time it is recommended to keep it in a variable
+        val item1 = PrimaryDrawerItem().withIdentifier(1).withName("Home")
+        val item2 = SecondaryDrawerItem().withIdentifier(2).withName("Settings")
+
+        drawer = DrawerBuilder(activity)
+            .withDrawerLayout(R.layout.material_drawer_fits_not)
+            .withRootView(R.id.nv_drawerContainer)
+            .withFullscreen(true)
+            .withTranslucentStatusBar(false)
+            .withTranslucentNavigationBar(false)
+            .withTranslucentNavigationBarProgrammatically(false)
+            .withToolbar(topBar)
+            .withDisplayBelowStatusBar(true)
+            .withActionBarDrawerToggleAnimated(true)
+            .addDrawerItems(
+                item1,
+                DividerDrawerItem(),
+                item2,
+                SecondaryDrawerItem().withName("Settings")
+            )
+            .withOnDrawerItemClickListener { view, position, drawerItem ->
+                true
+            }
+            .build()
+
+        bottomBar.drawer = drawer
     }
 
     override fun addView(child: View?, index: Int, params: ViewGroup.LayoutParams?) {

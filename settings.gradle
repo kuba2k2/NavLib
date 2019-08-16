@@ -1,1 +1,1 @@
-include ':app', ':MaterialDrawer', ':navlib'
+include ':app', ':navlib'

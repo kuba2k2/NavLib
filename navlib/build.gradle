@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 android {
     compileSdkVersion 28
@@ -23,6 +24,13 @@ android {
         }
     }
 
+    dataBinding {
+        enabled = true
+    }
+
+    packagingOptions {
+        exclude 'META-INF/library-core_release.kotlin_module'
+    }
 }
 
 dependencies {
@@ -32,4 +40,14 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.0.2'
     implementation 'com.google.android.material:material:1.1.0-alpha09'
     implementation "androidx.legacy:legacy-support-v4:1.0.0"
+
+    implementation "com.mikepenz:materialdrawer:6.1.2"
+    implementation "com.mikepenz:iconics-core:4.0.1-b01"
+    implementation 'com.mikepenz:community-material-typeface:3.5.95.1-kotlin@aar'
+
+    implementation "androidx.appcompat:appcompat:${androidXAppCompat}"
+    implementation "androidx.recyclerview:recyclerview:${androidXRecyclerView}"
+    implementation "androidx.annotation:annotation:1.1.0"
+    implementation "com.google.android.material:material:${googleMaterial}"
+    implementation "androidx.constraintlayout:constraintlayout:${androidXConstraintLayout}"
 }

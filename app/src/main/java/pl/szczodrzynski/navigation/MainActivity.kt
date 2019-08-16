@@ -1,21 +1,20 @@
 package pl.szczodrzynski.navigation
 
+import android.annotation.SuppressLint
 import android.content.Context
-import android.content.SharedPreferences
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
-import android.widget.Switch
-import com.google.android.material.bottomsheet.BottomSheetBehavior
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import android.widget.Toast
-import androidx.core.widget.NestedScrollView
-import com.google.android.material.bottomappbar.BottomAppBar
-import android.view.WindowManager
-import android.os.Build
+import android.view.Gravity
 import kotlinx.android.synthetic.main.sample_nav_view.*
+import pl.szczodrzynski.navlib.SystemBarsUtil
+import pl.szczodrzynski.navlib.SystemBarsUtil.Companion.COLOR_DO_NOT_CHANGE
+import pl.szczodrzynski.navlib.SystemBarsUtil.Companion.COLOR_HALF_TRANSPARENT
+import pl.szczodrzynski.navlib.SystemBarsUtil.Companion.COLOR_PRIMARY_DARK
+import pl.szczodrzynski.navlib.getColorFromAttr
 
 
 class MainActivity : AppCompatActivity() {
@@ -23,8 +22,7 @@ class MainActivity : AppCompatActivity() {
         var darkTheme: Boolean? = null
     }
 
-    var showing = false
-
+    @SuppressLint("ApplySharedPref")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -36,19 +34,30 @@ class MainActivity : AppCompatActivity() {
 
         setContentView(R.layout.sample_nav_view)
 
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN or (when {
-            darkTheme == true -> 0
-            Build.VERSION.SDK_INT >= Build.VERSION_CODES.M -> View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
-            else -> 0
-        })
+        appFullscreen.isChecked = getSharedPreferences("prefs", Context.MODE_PRIVATE).getBoolean("appFullscreen", false)
+        statusBarDarker.isChecked = getSharedPreferences("prefs", Context.MODE_PRIVATE).getBoolean("statusBarDarker", false)
+        statusBarTranslucent.isChecked = getSharedPreferences("prefs", Context.MODE_PRIVATE).getBoolean("statusBarTranslucent", false)
+        navigationBarTransparent.isChecked = getSharedPreferences("prefs", Context.MODE_PRIVATE).getBoolean("navigationBarTransparent", true)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            val w = window // in Activity's onCreate() for instance
-            w.setFlags(
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS,
-                WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-            )
-        }
+        statusBarColor.check(when (getSharedPreferences("prefs", Context.MODE_PRIVATE).getString("statusBarColor", "colorBackground")) {
+            "colorPrimaryDark" -> R.id.colorPrimaryDark
+            "colorPrimary" -> R.id.colorPrimary
+            "colorAccent" -> R.id.colorAccent
+            "colorBackground" -> R.id.colorBackground
+            else -> R.id.colorBackground
+        })
+        statusBarFallbackLight.check(when (getSharedPreferences("prefs", Context.MODE_PRIVATE).getString("statusBarFallbackLight", "lightHalfTransparent")) {
+            "lightHalfTransparent" -> R.id.lightHalfTransparent
+            "lightPrimaryDark" -> R.id.lightPrimaryDark
+            "lightDoNotChange" -> R.id.lightDoNotChange
+            else -> R.id.lightHalfTransparent
+        })
+        statusBarFallbackGradient.check(when (getSharedPreferences("prefs", Context.MODE_PRIVATE).getString("statusBarFallbackGradient", "gradientDoNotChange")) {
+            "gradientHalfTransparent" -> R.id.gradientHalfTransparent
+            "gradientPrimaryDark" -> R.id.gradientPrimaryDark
+            "gradientDoNotChange" -> R.id.gradientDoNotChange
+            else -> R.id.gradientDoNotChange
+        })
 
         button.setOnClickListener {
             // use commit instead of apply because of recreating the activity
@@ -57,62 +66,136 @@ class MainActivity : AppCompatActivity() {
             recreate()
         }
 
-        /*val dim = findViewById<View>(R.id.view)
 
-        val nestedScrollView = findViewById<View>(R.id.nestedScrollView)
-        val bottomSheetBehavior = BottomSheetBehavior.from(nestedScrollView)
+        //navView.init(this)
 
-        bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+        // init the drawer before SystemBarsUtil
+        navView.addDrawer(activity = this)
 
-        val fab = findViewById<FloatingActionButton>(R.id.floatingActionButton)
-        fab.setOnClickListener {
-            if (bottomSheetBehavior.state == BottomSheetBehavior.STATE_HIDDEN) {
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_COLLAPSED
+        SystemBarsUtil(this).apply {
+            paddingByKeyboard = navView
+            appFullscreen = this@MainActivity.appFullscreen.isChecked
+            statusBarColor = when (this@MainActivity.statusBarColor.checkedRadioButtonId) {
+                R.id.colorPrimaryDark -> COLOR_PRIMARY_DARK
+                R.id.colorPrimary -> getColorFromAttr(this@MainActivity, R.attr.colorPrimary)
+                R.id.colorAccent -> getColorFromAttr(this@MainActivity, R.attr.colorAccent)
+                R.id.colorBackground -> getColorFromAttr(this@MainActivity, android.R.attr.colorBackground)
+                else -> 0xffff00ff.toInt()
             }
-            else {
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
+            statusBarDarker = this@MainActivity.statusBarDarker.isChecked
+            statusBarFallbackLight = when (this@MainActivity.statusBarFallbackLight.checkedRadioButtonId) {
+                R.id.lightHalfTransparent -> COLOR_HALF_TRANSPARENT
+                R.id.lightPrimaryDark -> COLOR_PRIMARY_DARK
+                R.id.lightDoNotChange -> COLOR_DO_NOT_CHANGE
+                else -> 0xff00ffff.toInt()
             }
+            statusBarFallbackGradient = when (this@MainActivity.statusBarFallbackGradient.checkedRadioButtonId) {
+                R.id.gradientHalfTransparent -> COLOR_HALF_TRANSPARENT
+                R.id.gradientPrimaryDark -> COLOR_PRIMARY_DARK
+                R.id.gradientDoNotChange -> COLOR_DO_NOT_CHANGE
+                else -> 0xffffff00.toInt()
+            }
+            statusBarTranslucent = this@MainActivity.statusBarTranslucent.isChecked
+            navigationBarTransparent = this@MainActivity.navigationBarTransparent.isChecked
+
+            navView.configSystemBarsUtil(this)
+
+            commit()
         }
 
-        dim.setOnClickListener {
-
+        appFullscreen.setOnCheckedChangeListener { _, isChecked ->
+            getSharedPreferences("prefs", Context.MODE_PRIVATE).edit().putBoolean("appFullscreen", isChecked).commit()
+            recreate()
         }
-        dim.setOnTouchListener { v, event ->
-            if (event.action == MotionEvent.ACTION_UP) {
-                bottomSheetBehavior.state = BottomSheetBehavior.STATE_HIDDEN
-            }
-            true
+        statusBarDarker.setOnCheckedChangeListener { _, isChecked ->
+            getSharedPreferences("prefs", Context.MODE_PRIVATE).edit().putBoolean("statusBarDarker", isChecked).commit()
+            recreate()
+        }
+        statusBarTranslucent.setOnCheckedChangeListener { _, isChecked ->
+            getSharedPreferences("prefs", Context.MODE_PRIVATE).edit().putBoolean("statusBarTranslucent", isChecked).commit()
+            recreate()
+        }
+        navigationBarTransparent.setOnCheckedChangeListener { _, isChecked ->
+            getSharedPreferences("prefs", Context.MODE_PRIVATE).edit().putBoolean("navigationBarTransparent", isChecked).commit()
+            recreate()
         }
 
-        val bottomAppBar = findViewById<BottomAppBar>(R.id.bottomAppBar)
-        bottomAppBar.setOnTouchListener { v, event ->
-            Log.d("Main", "Y: ${event.y}, Raw Y: ${event.rawY}")
-            event.setLocation(event.rawX, event.rawY)
-            nestedScrollView.dispatchTouchEvent(event)
+        statusBarColor.setOnCheckedChangeListener { _, checkedId ->
+            getSharedPreferences("prefs", Context.MODE_PRIVATE).edit().putString("statusBarColor",
+                when (checkedId) {
+                    R.id.colorPrimaryDark -> "colorPrimaryDark"
+                    R.id.colorPrimary -> "colorPrimary"
+                    R.id.colorAccent -> "colorAccent"
+                    R.id.colorBackground -> "colorBackground"
+                    else -> "colorBackground"
+                }).commit()
+            recreate()
+        }
+        statusBarFallbackLight.setOnCheckedChangeListener { _, checkedId ->
+            getSharedPreferences("prefs", Context.MODE_PRIVATE).edit().putString("statusBarFallbackLight",
+                when (checkedId) {
+                    R.id.lightHalfTransparent -> "lightHalfTransparent"
+                    R.id.lightPrimaryDark -> "lightPrimaryDark"
+                    R.id.lightDoNotChange -> "lightDoNotChange"
+                    else -> "lightHalfTransparent"
+                }).commit()
+            recreate()
+        }
+        statusBarFallbackGradient.setOnCheckedChangeListener { _, checkedId ->
+            getSharedPreferences("prefs", Context.MODE_PRIVATE).edit().putString("statusBarFallbackGradient",
+                when (checkedId) {
+                    R.id.gradientHalfTransparent -> "gradientHalfTransparent"
+                    R.id.gradientPrimaryDark -> "gradientPrimaryDark"
+                    R.id.gradientDoNotChange -> "gradientDoNotChange"
+                    else -> "gradientDoNotChange"
+                }).commit()
+            recreate()
         }
 
-        bottomSheetBehavior.setBottomSheetCallback(object : BottomSheetBehavior.BottomSheetCallback() {
-            override fun onSlide(bottomSheet: View, slideOffset: Float) {
+        navView.enableBottomSheetDrag = true
+        navView.enableBottomSheet = true
 
-            }
+        switchToolbar.setOnCheckedChangeListener { _, isChecked ->
+            navView.showToolbar = isChecked
+        }
+        switchBottomAppBar.setOnCheckedChangeListener { _, isChecked ->
+            navView.bottomBarEnable = isChecked
+        }
+        switchFab.setOnCheckedChangeListener { _, isChecked ->
+            navView.bottomBar.fabEnable = isChecked
+        }
+        extendFab.setOnCheckedChangeListener { _, isChecked ->
+            navView.bottomBar.fabExtended = isChecked
+        }
 
-            override fun onStateChanged(bottomSheet: View, newState: Int) {
-                when (newState) {
-                    BottomSheetBehavior.STATE_HIDDEN -> {
-                        if (showing) {
-                            showing = false
-                            Anim.fadeOut(dim, 300, null)
-                        }
-                    }
-                    else -> {
-                        if (!showing) {
-                            showing = true
-                            Anim.fadeIn(dim, 300, null)
-                        }
-                    }
-                }
-                //Toast.makeText(this@MainActivity, "Bottom Sheet State Changed to: $state", Toast.LENGTH_SHORT).show()
-            }
-        })*/
+        navView.setFabOnClickListener(View.OnClickListener {
+            Toast.makeText(this, "FAB clicked", Toast.LENGTH_SHORT).show()
+        })
+
+        scrimClose.setOnCheckedChangeListener { _, isChecked ->
+            navView.bottomSheet.scrimViewTapToClose = isChecked
+        }
+
+        scrimEnable.setOnCheckedChangeListener {_, isChecked ->
+            navView.bottomSheet.scrimViewEnabled = isChecked
+        }
+
+        fabPosition.setOnCheckedChangeListener { _, checkedId ->
+            navView.bottomBar.fabGravity = if (checkedId == R.id.fabCenter) Gravity.CENTER else Gravity.END
+        }
+
+        extendable.setOnCheckedChangeListener { _, isChecked ->
+            navView.bottomBar.fabExtendable = isChecked
+        }
+
+        bsEnable.setOnCheckedChangeListener {_, isChecked ->
+            navView.bottomSheet.enable = isChecked
+        }
+        bsDrag.setOnCheckedChangeListener {_, isChecked ->
+            navView.bottomSheet.enableDragToOpen = isChecked
+        }
+
+        navView.bottomBar.fabExtendedText = "Compose"
+        navView.bottomBar.fabExtended = false
     }
 }

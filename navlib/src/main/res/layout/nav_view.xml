@@ -10,25 +10,32 @@
     <View
         android:id="@+id/nv_statusBarBackground"
         android:layout_width="match_parent"
-        android:layout_height="25dp"
+        android:layout_height="0dp"
+        tools:layout_height="25dp"
         android:background="?android:windowBackground" />
 
     <View
         android:id="@+id/nv_navigationBarBackground"
         android:layout_width="match_parent"
-        android:layout_height="48dp"
+        android:layout_height="0dp"
+        tools:layout_height="48dp"
         android:layout_gravity="bottom"
-        android:background="?colorPrimaryDark"
+        android:background="?colorPrimaryVariant"
         tools:background="?colorPrimaryVariant" />
+
+    <FrameLayout
+        android:id="@+id/nv_drawerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <androidx.coordinatorlayout.widget.CoordinatorLayout
             android:id="@+id/nv_main"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingTop="24dp"
-            android:paddingBottom="48dp">
+            tools:paddingTop="24dp"
+            tools:paddingBottom="48dp">
 
-            <com.google.android.material.appbar.MaterialToolbar
+            <pl.szczodrzynski.navlib.NavToolbar
                 android:id="@+id/nv_toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
@@ -52,74 +59,67 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="24dp"
                     android:max="20"
-                    android:progress="4" />
+                    android:progress="4"
+                    android:visibility="gone" />
 
                 <TextView
                     android:id="@+id/textView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Set toolbar elevation" />
+                    android:text="Set toolbar elevation"
+                    android:visibility="gone" />
             </LinearLayout>
 
-            <com.google.android.material.bottomappbar.BottomAppBar
-                android:id="@+id/nv_bottomAppBar"
+            <pl.szczodrzynski.navlib.NavBottomBar
+                android:id="@+id/nv_bottomBar"
                 style="@style/Widget.MaterialComponents.BottomAppBar.Colored"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                app:fabAlignmentMode="end" />
+                android:visibility="visible"
+                app:fabAlignmentMode="center"
+                app:fabAnimationMode="scale" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/nv_floatingActionButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_margin="16dp"
                 android:clickable="true"
                 android:focusable="true"
+                android:visibility="gone"
+                app:layout_anchor="@id/nv_bottomBar"
                 app:backgroundTint="?colorAccent"
-                app:layout_anchor="@id/nv_bottomAppBar"
-                tools:srcCompat="@android:drawable/ic_lock_lock" />
+                app:srcCompat="@android:drawable/ic_menu_edit"/>
 
-        </androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-        <androidx.coordinatorlayout.widget.CoordinatorLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:translationZ="10dp"
-            tools:targetApi="lollipop">
-
-            <View
-                android:id="@+id/nv_scrim"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="#99000000"
-                android:visibility="invisible"
-                tools:visibility="gone" />
-
-            <androidx.core.widget.NestedScrollView
-                android:id="@+id/nv_bottomSheet"
-                style="@style/width_max_600dp"
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/nv_extendedFloatingActionButton"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                app:behavior_hideable="true"
-                app:behavior_peekHeight="auto"
-                app:layout_behavior="@string/bottom_sheet_behavior"
-                tools:visibility="gone">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/bottom_sheet_background"
-                    android:paddingStart="8dp"
-                    android:paddingEnd="8dp">
-
-                    <include
-                        layout="@layout/bottom_sheet_fragment_theme_info"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
-                </LinearLayout>
-
-            </androidx.core.widget.NestedScrollView>
+                android:layout_margin="16dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:visibility="visible"
+                android:text=""
+                app:backgroundTint="?colorAccent"
+                app:icon="@android:drawable/ic_menu_edit"
+                app:layout_anchor="@+id/nv_bottomBar"
+                app:layout_anchorGravity="center|top"/>
 
         </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+    </FrameLayout>
+
+    <pl.szczodrzynski.navlib.bottomsheet.NavBottomSheet
+        android:id="@+id/nv_bottomSheet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <View
+        android:id="@+id/nv_statusBarDarker"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        tools:layout_height="25dp"
+        android:background="#22000000" />
 
 </merge>

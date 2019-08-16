@@ -1,26 +1,34 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
+    <style name="AppTheme.Widget" />
+
+    <style name="AppTheme.Widget.ExtendedFloatingActionButton" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
+        <item name="android:textColor">?colorOnSecondary</item>
+        <item name="android:iconTint" tools:targetApi="o">?colorSecondaryVariant</item>
+        <item name="iconTint">?colorSecondaryVariant</item>
+    </style>
+
     <!-- Base application theme. -->
     <style name="AppTheme" parent="NavView">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#64b5f6</item>
         <item name="colorPrimaryDark">#1976d2</item>
-        <item name="colorPrimaryVariant">#1976d2</item>
-        <item name="colorAccent">#ff6e40</item>
-        <item name="colorSecondary">#ff6e40</item>
-        <item name="colorSecondaryVariant">#ff3d00</item>
+        <item name="colorPrimaryVariant">#2196f3</item>
+        <item name="colorAccent">#ffb300</item>
+        <item name="colorSecondary">?colorAccent</item>
+        <item name="colorSecondaryVariant">#fff59d</item>
         <item name="android:colorBackground">@color/black</item>
         <item name="android:windowBackground">?android:colorBackground</item>
         <item name="colorSurface">#1f1f1f</item>
 
-        <item name="android:statusBarColor" tools:targetApi="lollipop">@android:color/transparent</item>
+        <!--<item name="android:statusBarColor" tools:targetApi="lollipop">@android:color/transparent</item>
         <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">false</item>
 
-        <item name="android:navigationBarColor" tools:targetApi="lollipop">@android:color/transparent</item>
-        <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">false</item>
+        &lt;!&ndash;<item name="android:navigationBarColor" tools:targetApi="lollipop">@android:color/transparent</item>&ndash;&gt;
+        <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">true</item>-->
 
-        <item name="colorOnPrimary">#000000</item>
-        <item name="colorOnSecondary">#000000</item>
+        <item name="colorOnPrimary">#ffffff</item>
+        <item name="colorOnSecondary">#ffffff</item>
         <item name="colorOnBackground">#ffffff</item>
         <item name="colorOnSurface">#ffffff</item>
 
@@ -28,35 +36,37 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
 
-
+        <item name="extendedFloatingActionButtonStyle">@style/AppTheme.Widget.ExtendedFloatingActionButton</item>
     </style>
 
     <style name="AppTheme.Light" parent="NavView.Light">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#2196f3</item>
         <item name="colorPrimaryDark">#1976d2</item>
-        <item name="colorPrimaryVariant">#90caf9</item>
-        <item name="colorAccent">#ff6e40</item>
-        <item name="colorSecondary">#ff6e40</item>
-        <item name="colorSecondaryVariant">#ff3d00</item>
+        <item name="colorPrimaryVariant">#2196f3</item>
+        <item name="colorAccent">#ffb300</item>
+        <item name="colorSecondary">?colorAccent</item>
+        <item name="colorSecondaryVariant">#fff59d</item>
         <item name="android:colorBackground">@color/white</item>
         <item name="android:windowBackground">?android:colorBackground</item>
         <item name="colorSurface">#ffffff</item>
 
-        <item name="android:statusBarColor" tools:targetApi="lollipop">@android:color/transparent</item>
+        <!--<item name="android:statusBarColor" tools:targetApi="lollipop">@android:color/transparent</item>
         <item name="android:windowTranslucentStatus" tools:targetApi="kitkat">false</item>
 
-        <item name="android:navigationBarColor" tools:targetApi="lollipop">@android:color/transparent</item>
-        <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">false</item>
+        &lt;!&ndash;<item name="android:navigationBarColor" tools:targetApi="lollipop">@android:color/transparent</item>&ndash;&gt;
+        <item name="android:windowTranslucentNavigation" tools:targetApi="kitkat">true</item>-->
 
-        <item name="colorOnPrimary">#000000</item>
-        <item name="colorOnSecondary">#000000</item>
+        <item name="colorOnPrimary">#ffffff</item>
+        <item name="colorOnSecondary">#ffffff</item>
         <item name="colorOnBackground">#000000</item>
         <item name="colorOnSurface">#000000</item>
 
         <item name="nv_actionBarBackground">?colorSurface</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+
+        <item name="extendedFloatingActionButtonStyle">@style/AppTheme.Widget.ExtendedFloatingActionButton</item>
     </style>
 
 </resources>
