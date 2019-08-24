@@ -7,13 +7,16 @@ import android.graphics.Color
 import android.os.Build.VERSION.SDK_INT
 import android.os.Build.VERSION_CODES.*
 import android.util.Log
-import android.view.*
+import android.view.View
 import android.view.View.*
+import android.view.Window
+import android.view.WindowManager
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.ViewCompat
 import com.mikepenz.materialize.util.KeyboardUtil
 
-class SystemBarsUtil(val activity: Activity) {
+
+class SystemBarsUtil(private val activity: Activity) {
     companion object {
         private const val COLOR_TRANSPARENT = Color.TRANSPARENT
         /**
@@ -310,9 +313,7 @@ class SystemBarsUtil(val activity: Activity) {
 
 
                     var navigationBarSize = 0
-                    val hasMenuKey = ViewConfiguration.get(activity).hasPermanentMenuKey()
-                    val hasBackKey = KeyCharacterMap.deviceHasKey(KeyEvent.KEYCODE_BACK)
-                    if (!hasMenuKey && !hasBackKey && targetAppFullscreen) {
+                    if (hasNavigationBar(resources) && targetAppFullscreen) {
                         val orientation = resources.configuration.orientation
 
                         val navigationBarRes = when {
