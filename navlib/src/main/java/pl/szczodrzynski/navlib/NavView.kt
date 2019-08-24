@@ -3,15 +3,18 @@ package pl.szczodrzynski.navlib
 import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
-import android.os.Build
 import android.util.AttributeSet
-import android.view.*
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.widget.*
+import android.widget.FrameLayout
+import android.widget.LinearLayout
+import android.widget.SeekBar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
-import androidx.core.view.ViewCompat
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.DrawerBuilder
 import com.mikepenz.materialdrawer.model.DividerDrawerItem
@@ -146,8 +149,8 @@ class NavView : FrameLayout {
 
     fun addDrawer(activity: Activity) {
         //if you want to update the items at a later time it is recommended to keep it in a variable
-        val item1 = PrimaryDrawerItem().withIdentifier(1).withName("Home")
-        val item2 = SecondaryDrawerItem().withIdentifier(2).withName("Settings")
+        val item1 = PrimaryDrawerItem().withIdentifier(1).withName("Home").withIcon(CommunityMaterial.Icon.cmd_google_home)
+        val item2 = SecondaryDrawerItem().withIdentifier(2).withName("Settings").withIcon(CommunityMaterial.Icon2.cmd_settings)
 
         drawer = DrawerBuilder(activity)
             .withDrawerLayout(R.layout.material_drawer_fits_not)
@@ -156,7 +159,7 @@ class NavView : FrameLayout {
             .withTranslucentStatusBar(false)
             .withTranslucentNavigationBar(false)
             .withTranslucentNavigationBarProgrammatically(false)
-            .withToolbar(topBar)
+            .withToolbar(bottomBar)
             .withDisplayBelowStatusBar(true)
             .withActionBarDrawerToggleAnimated(true)
             .addDrawerItems(
@@ -165,9 +168,9 @@ class NavView : FrameLayout {
                 item2,
                 SecondaryDrawerItem().withName("Settings")
             )
-            .withOnDrawerItemClickListener { view, position, drawerItem ->
+            /*.withOnDrawerItemClickListener { view, position, drawerItem ->
                 true
-            }
+            }*/
             .build()
 
         bottomBar.drawer = drawer

@@ -11,6 +11,7 @@ import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.sizeDp
@@ -85,6 +86,15 @@ class NavBottomBar : BottomAppBar {
                 fabExtendedView?.shrink()
         }
     /**
+     * Set the FAB's icon.
+     */
+    var fabIcon: IIcon = CommunityMaterial.Icon.cmd_android
+        set(value) {
+            field = value
+            fabView?.setImageDrawable(IconicsDrawable(context, value).colorInt(R.attr.colorFabIcon).sizeDp(24))
+            fabExtendedView?.icon = IconicsDrawable(context, value).colorInt(R.attr.colorFabIcon).sizeDp(24)
+        }
+    /**
      * Set the ExtendedFAB's text.
      */
     var fabExtendedText
@@ -100,6 +110,8 @@ class NavBottomBar : BottomAppBar {
             bottomSheet?.dispatchBottomBarEvent(event)
             true
         }
+
+        elevation = 0f
 
         navigationIcon = IconicsDrawable(context)
             .icon(CommunityMaterial.Icon2.cmd_menu)

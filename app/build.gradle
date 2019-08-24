@@ -24,6 +24,10 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
+    packagingOptions {
+        exclude 'META-INF/library-core_release.kotlin_module'
+    }
 }
 
 dependencies {
@@ -31,8 +35,8 @@ dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.0.2'
     implementation "androidx.legacy:legacy-support-v4:1.0.0"
-    implementation "com.mikepenz:materialdrawer:6.1.2"
-    implementation "com.mikepenz:crossfader:1.6.0" // do not update
+    //implementation "com.mikepenz:materialdrawer:7.0.0-rc05"
+    //implementation "com.mikepenz:crossfader:1.6.0" // do not update
     implementation "com.mikepenz:iconics-core:${iconics}" // do not update. >3.1.0 Breaks jelly bean
     implementation "com.mikepenz:iconics-views:${iconics}" // do not update
     implementation "com.mikepenz:community-material-typeface:3.5.95.1-kotlin@aar"

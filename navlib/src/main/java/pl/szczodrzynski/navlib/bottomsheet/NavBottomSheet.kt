@@ -4,30 +4,46 @@ import android.app.Activity
 import android.content.Context
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import android.graphics.drawable.Drawable
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
-import android.view.View.OnClickListener
+import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.view.inputmethod.InputMethodManager
 import android.widget.LinearLayout
-import android.widget.Toast
+import android.widget.TextView
+import androidx.annotation.DrawableRes
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.widget.NestedScrollView
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
+import com.google.android.material.button.MaterialButton
+import com.google.android.material.button.MaterialButtonToggleGroup
+import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
-import kotlinx.android.synthetic.main.nav_bottom_sheet.view.*
+import com.mikepenz.iconics.utils.paddingDp
+import com.mikepenz.iconics.utils.sizeDp
 import pl.szczodrzynski.navlib.Anim
-import pl.szczodrzynski.navlib.bottomsheet.items.EditTextFilledItem
+import pl.szczodrzynski.navlib.R
 import pl.szczodrzynski.navlib.bottomsheet.items.IBottomSheetItem
-import pl.szczodrzynski.navlib.bottomsheet.items.PrimaryItem
 import pl.szczodrzynski.navlib.bottomsheet.items.SeparatorItem
-import pl.szczodrzynski.navlib.bottomsheet.listeners.OnItemInputListener
-import pl.szczodrzynski.navlib.getColorFromAttr
+import pl.szczodrzynski.navlib.elevateSurface
+import pl.szczodrzynski.navlib.getDrawableFromRes
 
 
 class NavBottomSheet : CoordinatorLayout {
+    companion object {
+        const val TOGGLE_GROUP_SINGLE_SELECTION = 0
+        const val TOGGLE_GROUP_MULTIPLE_SELECTION = 1
+        const val TOGGLE_GROUP_SORTING_ORDER = 2
+
+        const val SORT_MODE_ASCENDING = 0
+        const val SORT_MODE_DESCENDING = 1
+    }
+
     constructor(context: Context) : super(context) {
         create(null, 0)
     }
@@ -42,11 +58,18 @@ class NavBottomSheet : CoordinatorLayout {
 
     private lateinit var scrimView: View
     private lateinit var bottomSheet: NestedScrollView
-    private lateinit var bottomSheetContent: LinearLayout
-    private lateinit var bottomSheetDragBar: View
+    private lateinit var content: LinearLayout
+    private lateinit var dragBar: View
+    private lateinit var toggleGroupContainer: LinearLayout
+    private lateinit var toggleGroup: MaterialButtonToggleGroup
+    private lateinit var toggleGroupTitleView: TextView
+    private lateinit var list: RecyclerView
 
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     private var bottomSheetVisible = false
+
+    val items = ArrayList<IBottomSheetItem<*>>()
+    private val adapter = BottomSheetAdapter(items)
 
     /**
      * Enable the bottom sheet.
@@ -87,12 +110,16 @@ class NavBottomSheet : CoordinatorLayout {
 
     private fun create(attrs: AttributeSet?, defStyle: Int) {
         val layoutInflater = LayoutInflater.from(context)
-        layoutInflater.inflate(pl.szczodrzynski.navlib.R.layout.nav_bottom_sheet, this)
+        layoutInflater.inflate(R.layout.nav_bottom_sheet, this)
 
-        scrimView = findViewById(pl.szczodrzynski.navlib.R.id.nv_scrim)
-        bottomSheet = findViewById(pl.szczodrzynski.navlib.R.id.nv_bottomSheetView)
-        bottomSheetContent = findViewById(pl.szczodrzynski.navlib.R.id.nv_bottomSheetContent)
-        bottomSheetDragBar = findViewById(pl.szczodrzynski.navlib.R.id.nv_bottomSheetDragBar)
+        scrimView = findViewById(R.id.bs_scrim)
+        bottomSheet = findViewById(R.id.bs_view)
+        content = findViewById(R.id.bs_content)
+        dragBar = findViewById(R.id.bs_dragBar)
+        toggleGroupContainer = findViewById(R.id.bs_toggleGroupContainer)
+        toggleGroup = findViewById(R.id.bs_toggleGroup)
+        toggleGroupTitleView = findViewById(R.id.bs_toggleGroupTitle)
+        list = findViewById(R.id.bs_list)
 
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet)
 
@@ -116,7 +143,7 @@ class NavBottomSheet : CoordinatorLayout {
                     if (scrimViewEnabled)
                         Anim.fadeOut(scrimView, 300, null)
                     // steal the focus from any EditTexts
-                    bottomSheetDragBar.requestFocus()
+                    dragBar.requestFocus()
                     hideKeyboard()
                 }
                 else if (!bottomSheetVisible) {
@@ -127,58 +154,169 @@ class NavBottomSheet : CoordinatorLayout {
             }
         })
 
-        bottomSheetContent.background.colorFilter = PorterDuffColorFilter(
-            getColorFromAttr(
-                context,
-                pl.szczodrzynski.navlib.R.attr.colorBackgroundFloating
-            ), PorterDuff.Mode.SRC_ATOP)
+        content.background.colorFilter = PorterDuffColorFilter(
+            elevateSurface(context, dp = 8),
+            PorterDuff.Mode.SRC_ATOP
+        )
 
         // steal the focus from any EditTexts
-        bottomSheetDragBar.requestFocus()
+        dragBar.requestFocus()
 
-        val items = ArrayList<IBottomSheetItem<*>>()
-
-        items += EditTextFilledItem(true).apply {
-            id = 0
-            hint = "Search"
-            helperText = "0 results found"
-            onItemInputListener = object : OnItemInputListener {
-                override fun onItemInput(itemId: Int, item: EditTextFilledItem, text: CharSequence) {
-                    item.helperText = "${text.length} results found"
-                    bs_list.adapter?.notifyItemChanged(itemId)
-                }
-            }
-        }
-
-        items += PrimaryItem(true)
-            .withId(1)
-            .withTitle("Compose")
-            .withIcon(CommunityMaterial.Icon2.cmd_pencil)
-            .withOnClickListener(OnClickListener {
-                Toast.makeText(context, "Compose message", Toast.LENGTH_SHORT).show()
-            })
-        // TODO add separator item
-        items += SeparatorItem(true)
-        items += PrimaryItem(true)
-            .withId(3)
-            .withTitle("Synchronise")
-            .withIcon(CommunityMaterial.Icon2.cmd_sync)
-            .withOnClickListener(OnClickListener {
-                Toast.makeText(context, "Synchronising...", Toast.LENGTH_SHORT).show()
-            })
-        items += PrimaryItem(true)
-            .withId(4)
-            .withTitle("Help")
-            .withIcon(CommunityMaterial.Icon2.cmd_help)
-            .withOnClickListener(OnClickListener {
-                Toast.makeText(context, "Want some help?", Toast.LENGTH_SHORT).show()
-            })
-        bs_list.apply {
+        list.apply {
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(context)
-            adapter = BottomSheetAdapter(items)
+            adapter = this@NavBottomSheet.adapter
+        }
+
+        toggleGroup.addOnButtonCheckedListener(toggleGroupCheckedListener)
+    }
+
+    /*    _____ _                                    _       _
+         |_   _| |                       ___        | |     | |
+           | | | |_ ___ _ __ ___  ___   ( _ )     __| | __ _| |_ __ _
+           | | | __/ _ \ '_ ` _ \/ __|  / _ \/\  / _` |/ _` | __/ _` |
+          _| |_| ||  __/ | | | | \__ \ | (_>  < | (_| | (_| | || (_| |
+         |_____|\__\___|_| |_| |_|___/  \___/\/  \__,_|\__,_|\__\__,*/
+
+    operator fun plusAssign(item: IBottomSheetItem<*>) {
+        appendItem(item)
+    }
+    fun appendItem(item: IBottomSheetItem<*>) {
+        items += item
+        adapter.notifyItemInserted(items.size - 1)
+    }
+    fun prependItem(item: IBottomSheetItem<*>) {
+        items.add(0, item)
+        adapter.notifyItemInserted(0)
+    }
+    fun addItemAt(index: Int, item: IBottomSheetItem<*>) {
+        items.add(index, item)
+        adapter.notifyItemInserted(index)
+    }
+    fun removeItemAt(index: Int) {
+        items.removeAt(index)
+        adapter.notifyItemRemoved(index)
+    }
+    fun removeAllItems() {
+        items.clear()
+        adapter.notifyDataSetChanged()
+    }
+    fun removeAllStatic() {
+        items.filter { it.isContextual }
+        adapter.notifyDataSetChanged()
+    }
+    fun removeAllContextual() {
+        items.filter { !it.isContextual }
+        adapter.notifyDataSetChanged()
+    }
+    fun removeSeparators() {
+        items.filterNot { it is SeparatorItem }
+        adapter.notifyDataSetChanged()
+    }
+
+    var toggleGroupTitle
+        get() = toggleGroupTitleView.text.toString()
+        set(value) { toggleGroupTitleView.text = value }
+    var toggleGroupSelectionMode: Int = TOGGLE_GROUP_SORTING_ORDER
+        set(value) {
+            field = value
+            toggleGroup.isSingleSelection = value != TOGGLE_GROUP_MULTIPLE_SELECTION
+        }
+
+    private fun toggleGroupGetIconicsDrawable(context: Context, icon: IIcon?): Drawable? {
+        if (icon == null)
+            return null
+        return IconicsDrawable(context, icon).sizeDp(24).paddingDp(4)
+    }
+
+    fun toggleGroupAddItem(id: Int, text: String, @DrawableRes icon: Int, defaultSortOrder: Int = SORT_MODE_ASCENDING) {
+        toggleGroupAddItem(id, text, context.getDrawableFromRes(icon), defaultSortOrder)
+    }
+    fun toggleGroupAddItem(id: Int, text: String, icon: IIcon, defaultSortOrder: Int = SORT_MODE_ASCENDING) {
+        toggleGroupAddItem(id, text, toggleGroupGetIconicsDrawable(context, icon), defaultSortOrder)
+    }
+    fun toggleGroupAddItem(id: Int, text: String, icon: Drawable?, defaultSortOrder: Int = SORT_MODE_ASCENDING) {
+        if (id < 0)
+            throw IllegalArgumentException("ID cannot be less than 0")
+        toggleGroup.addView(MaterialButton(context, null, R.attr.materialButtonOutlinedStyle).apply {
+            this.id = id + 1
+            this.tag = defaultSortOrder
+            this.text = text
+            this.icon = icon
+        }, WRAP_CONTENT, WRAP_CONTENT)
+    }
+    fun toggleGroupCheck(id: Int) {
+        toggleGroup.check(id)
+    }
+    fun toggleGroupRemoveItems() {
+        toggleGroup.removeAllViews()
+    }
+
+    private val toggleGroupCheckedListener = MaterialButtonToggleGroup.OnButtonCheckedListener { group, checkedId, isChecked ->
+        if (group.checkedButtonId == View.NO_ID) {
+            group.check(checkedId)
+            return@OnButtonCheckedListener
+        }
+        /* TAG bit order
+         * bit 0 = default sorting mode
+         * bit 1 = is checked
+         * bit 2 = current sorting mode
+         */
+        if (toggleGroupSelectionMode == TOGGLE_GROUP_SORTING_ORDER) {
+            val button = group.findViewById<MaterialButton>(checkedId)
+            var tag = button.tag as Int
+            var sortingMode: Int? = null
+            if (isChecked) {
+                sortingMode = if (tag and 0b010 == 1 shl 1) {
+                    /* the view is checked and clicked once again */
+                    if (tag and 0b100 == SORT_MODE_ASCENDING shl 2) SORT_MODE_DESCENDING else SORT_MODE_ASCENDING
+                } else {
+                    /* the view is first clicked so use the default sorting mode */
+                    if (tag and 0b001 == SORT_MODE_ASCENDING) SORT_MODE_ASCENDING else SORT_MODE_DESCENDING
+                }
+                tag = tag and 0b001 /* retain only default sorting mode */
+                tag = tag or 0b010 /* set as checked */
+                tag = tag or (sortingMode shl 2) /* set new sorting mode */
+            }
+            else {
+                tag = tag and 0b001 /* retain only default sorting mode */
+            }
+            button.tag = tag
+            button.icon = toggleGroupGetIconicsDrawable(context, when (sortingMode) {
+                SORT_MODE_ASCENDING -> CommunityMaterial.Icon2.cmd_sort_ascending
+                SORT_MODE_DESCENDING -> CommunityMaterial.Icon2.cmd_sort_descending
+                else -> null
+            })
+            if (sortingMode != null) {
+                toggleGroupSortingOrderListener?.onSortingOrder(checkedId, sortingMode)
+            }
+        }
+        else if (toggleGroup.isSingleSelection && isChecked) {
+            toggleGroupSingleSelectionListener?.onSingleSelection(checkedId - 1)
+        }
+        else {
+            toggleGroupMultipleSelectionListener?.onMultipleSelection(checkedId - 1, isChecked)
         }
     }
+
+    interface OnToggleGroupChangeListener {
+        fun onSingleSelection(id: Int)
+    }
+    var toggleGroupSingleSelectionListener: OnToggleGroupChangeListener? = null
+
+    interface OnToggleGroupCheckedListener {
+        fun onMultipleSelection(id: Int, checked: Boolean)
+    }
+    var toggleGroupMultipleSelectionListener: OnToggleGroupCheckedListener? = null
+
+    interface OnToggleGroupSortingListener {
+        fun onSortingOrder(id: Int, sortMode: Int)
+    }
+    var toggleGroupSortingOrderListener: OnToggleGroupSortingListener? = null
+
+
+
+
 
     fun dispatchBottomBarEvent(event: MotionEvent) {
         val location = IntArray(2)
@@ -188,9 +326,9 @@ class NavBottomSheet : CoordinatorLayout {
     }
 
     fun setContentPadding(left: Int, top: Int, right: Int, bottom: Int) {
-        bottomSheetContent.setPadding(left, top, right, bottom)
+        content.setPadding(left, top, right, bottom)
     }
-    fun getContentView() = bottomSheetContent
+    fun getContentView() = content
 
     var isOpen
         get() = bottomSheetBehavior.state != BottomSheetBehavior.STATE_HIDDEN

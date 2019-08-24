@@ -1,9 +1,83 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
-    <style name="NavView" parent="Theme.MaterialComponents.NoActionBar">
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <style name="NavView" />
+    <style name="NavView.Widget" />
+
+    <style name="NavView.Widget.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
+        <item name="backgroundTint">?colorFab</item>
+        <item name="android:textColor">?colorOnFab</item>
     </style>
+    <style name="NavView.Widget.ExtendedFloatingActionButton" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
+        <item name="backgroundTint">?colorFab</item>
+        <item name="android:textColor">?colorOnFab</item>
+    </style>
+
+
+
+
     <style name="NavView.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="android:colorBackground">@color/background_light</item>
+        <item name="android:windowBackground">?android:colorBackground</item>
+        <item name="colorSurface">#ffffff</item>
+        <item name="elevationOverlayColor">#ffffff</item>
+
+        <item name="colorOnBackground">#000000</item>
+        <item name="colorOnSurface">#000000</item>
+
+        <item name="nv_actionBarBackground">?colorSurface</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <item name="floatingActionButtonStyle">@style/NavView.Widget.FloatingActionButton</item>
+        <item name="extendedFloatingActionButtonStyle">@style/NavView.Widget.ExtendedFloatingActionButton</item>
+
+        <item name="material_drawer_background">?android:colorBackground</item>
+        <item name="material_drawer_primary_text">#242424</item>
+        <item name="material_drawer_primary_icon">#5F6368</item>
+        <item name="material_drawer_secondary_text">@color/material_drawer_secondary_text</item>
+        <item name="material_drawer_hint_text">@color/material_drawer_hint_text</item>
+        <item name="material_drawer_divider">@color/material_drawer_divider</item>
+        <item name="material_drawer_selected">@color/material_drawer_selected</item> <!-- Material 2 defines 12% alpha, primary color -->
+        <item name="material_drawer_selected_text">#242424</item>
+        <item name="material_drawer_header_selection_text">@color/material_drawer_header_selection_text</item>
+        <item name="material_drawer_header_selection_subtext">@color/material_drawer_dark_header_selection_subtext</item>
     </style>
+
+    <style name="NavView.Dark" parent="Theme.MaterialComponents.NoActionBar">
+        <item name="android:colorBackground">@color/background_dark</item>
+        <item name="android:windowBackground">?android:colorBackground</item>
+        <item name="colorSurface">#303030</item>
+
+        <item name="colorOnBackground">#ffffff</item>
+        <item name="colorOnSurface">#ffffff</item>
+
+        <item name="nv_actionBarBackground">?colorSurface</item>
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <item name="floatingActionButtonStyle">@style/NavView.Widget.FloatingActionButton</item>
+        <item name="extendedFloatingActionButtonStyle">@style/NavView.Widget.ExtendedFloatingActionButton</item>
+
+        <item name="material_drawer_background">?android:colorBackground</item>
+        <item name="material_drawer_primary_text">#FFFFFF</item>
+        <item name="material_drawer_primary_icon">#9AA0A6</item>
+        <item name="material_drawer_secondary_text">@color/material_drawer_dark_secondary_text</item>
+        <item name="material_drawer_hint_text">@color/material_drawer_dark_hint_text</item>
+        <item name="material_drawer_divider">@color/material_drawer_dark_divider</item>
+        <item name="material_drawer_selected">@color/material_drawer_dark_selected</item> <!-- Material 2 defines 12% alpha, primary color -->
+        <item name="material_drawer_selected_text">#FFFFFF</item>
+        <item name="material_drawer_header_selection_text">@color/material_drawer_dark_header_selection_text</item>
+        <item name="material_drawer_header_selection_subtext">@color/material_drawer_dark_header_selection_subtext</item>
+    </style>
+
+    <style name="NavView.Black" parent="NavView.Dark">
+        <item name="android:colorBackground">@color/background_black</item>
+        <item name="android:windowBackground">?android:colorBackground</item>
+        <item name="colorSurface">#121212</item>
+    </style>
+
+
 
     <style name="width_max_600dp">
         <item name="android:layout_width">match_parent</item>

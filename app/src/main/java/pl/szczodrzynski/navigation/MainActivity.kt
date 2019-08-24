@@ -2,18 +2,24 @@ package pl.szczodrzynski.navigation
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.graphics.Color
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.Gravity
 import android.view.View
 import android.widget.Toast
-import android.view.Gravity
+import androidx.appcompat.app.AppCompatActivity
+import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import kotlinx.android.synthetic.main.sample_nav_view.*
 import pl.szczodrzynski.navlib.SystemBarsUtil
 import pl.szczodrzynski.navlib.SystemBarsUtil.Companion.COLOR_DO_NOT_CHANGE
 import pl.szczodrzynski.navlib.SystemBarsUtil.Companion.COLOR_HALF_TRANSPARENT
 import pl.szczodrzynski.navlib.SystemBarsUtil.Companion.COLOR_PRIMARY_DARK
+import pl.szczodrzynski.navlib.bottomsheet.NavBottomSheet
+import pl.szczodrzynski.navlib.bottomsheet.NavBottomSheet.Companion.SORT_MODE_ASCENDING
+import pl.szczodrzynski.navlib.bottomsheet.NavBottomSheet.Companion.SORT_MODE_DESCENDING
+import pl.szczodrzynski.navlib.bottomsheet.NavBottomSheet.Companion.TOGGLE_GROUP_SORTING_ORDER
+import pl.szczodrzynski.navlib.bottomsheet.items.PrimaryItem
+import pl.szczodrzynski.navlib.bottomsheet.items.SeparatorItem
 import pl.szczodrzynski.navlib.getColorFromAttr
 
 
@@ -195,7 +201,55 @@ class MainActivity : AppCompatActivity() {
             navView.bottomSheet.enableDragToOpen = isChecked
         }
 
+        navView.bottomBar.fabIcon = CommunityMaterial.Icon2.cmd_pencil
         navView.bottomBar.fabExtendedText = "Compose"
         navView.bottomBar.fabExtended = false
+
+
+
+
+
+        navView.bottomSheet.apply {
+            this += PrimaryItem(true)
+                .withId(1)
+                .withTitle("Compose")
+                .withIcon(CommunityMaterial.Icon2.cmd_pencil)
+                .withOnClickListener(View.OnClickListener {
+                    Toast.makeText(this@MainActivity, "Compose message", Toast.LENGTH_SHORT).show()
+                })
+            this += SeparatorItem(false)
+            this += PrimaryItem(false)
+                .withId(3)
+                .withTitle("Synchronise")
+                .withIcon(CommunityMaterial.Icon2.cmd_sync)
+                .withOnClickListener(View.OnClickListener {
+                    Toast.makeText(this@MainActivity, "Synchronising...", Toast.LENGTH_SHORT).show()
+                })
+            this += PrimaryItem(false)
+                .withId(4)
+                .withTitle("Help")
+                .withIcon(CommunityMaterial.Icon2.cmd_help)
+                .withOnClickListener(View.OnClickListener {
+                    Toast.makeText(this@MainActivity, "Want some help?", Toast.LENGTH_SHORT).show()
+                })
+
+            toggleGroupTitle = "Sort by"
+            toggleGroupRemoveItems()
+            toggleGroupSelectionMode = TOGGLE_GROUP_SORTING_ORDER
+            toggleGroupAddItem(0, "By date", null, SORT_MODE_DESCENDING)
+            toggleGroupAddItem(1, "By subject", null, SORT_MODE_ASCENDING)
+            toggleGroupAddItem(2, "By sender", null, SORT_MODE_ASCENDING)
+            toggleGroupAddItem(3, "By android", null, SORT_MODE_ASCENDING)
+            toggleGroupSortingOrderListener = object : NavBottomSheet.OnToggleGroupSortingListener {
+                override fun onSortingOrder(id: Int, sortMode: Int) {
+                    Toast.makeText(
+                        this@MainActivity,
+                        "Sort mode $id ${if (sortMode == SORT_MODE_ASCENDING) "ascending" else "descending"}",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            toggleGroupCheck(1)
+        }
     }
 }

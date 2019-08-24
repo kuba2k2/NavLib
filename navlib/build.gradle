@@ -41,7 +41,7 @@ dependencies {
     implementation 'com.google.android.material:material:1.1.0-alpha09'
     implementation "androidx.legacy:legacy-support-v4:1.0.0"
 
-    implementation "com.mikepenz:materialdrawer:6.1.2"
+    implementation "com.mikepenz:materialdrawer:7.0.0-rc05"
     implementation "com.mikepenz:iconics-core:4.0.1-b01"
     implementation 'com.mikepenz:community-material-typeface:3.5.95.1-kotlin@aar'
 
@@ -50,4 +50,5 @@ dependencies {
     implementation "androidx.annotation:annotation:1.1.0"
     implementation "com.google.android.material:material:${googleMaterial}"
     implementation "androidx.constraintlayout:constraintlayout:${androidXConstraintLayout}"
+    implementation 'androidx.gridlayout:gridlayout:1.0.0'
 }

@@ -12,6 +12,8 @@ import com.mikepenz.iconics.typeface.library.community.material.CommunityMateria
 import com.mikepenz.iconics.utils.sizeDp
 import com.mikepenz.materialize.holder.ImageHolder
 import pl.szczodrzynski.navlib.R
+import pl.szczodrzynski.navlib.colorAttr
+import pl.szczodrzynski.navlib.getColorFromAttr
 
 data class PrimaryItem(override val isContextual: Boolean = true) : IBottomSheetItem<PrimaryItem.ViewHolder> {
 
@@ -37,9 +39,11 @@ data class PrimaryItem(override val isContextual: Boolean = true) : IBottomSheet
     override fun bindViewHolder(viewHolder: ViewHolder) {
         viewHolder.root.setOnClickListener(onClickListener)
         viewHolder.text.text = title
+        viewHolder.text.setTextColor(getColorFromAttr(viewHolder.text.context, R.attr.material_drawer_primary_text))
         viewHolder.text.setCompoundDrawables(
             IconicsDrawable(viewHolder.text.context)
                 .icon(iconicsIcon?:CommunityMaterial.Icon.cmd_android)
+                .colorAttr(viewHolder.text.context, R.attr.material_drawer_primary_icon)
                 .sizeDp(20),
             null,
             null,
