@@ -4,7 +4,6 @@
         <item name="colorPrimary">#64b5f6</item>
         <item name="colorPrimaryDark">#1976d2</item>
         <item name="colorPrimaryVariant">#2196f3</item>
-        <!--<item name="colorAccent">#ffb300</item>-->
         <item name="colorAccent">#2962ff</item>
         <item name="colorSecondary">?colorAccent</item>
 
@@ -20,7 +19,6 @@
         <item name="colorPrimary">#2196f3</item>
         <item name="colorPrimaryDark">#1976d2</item>
         <item name="colorPrimaryVariant">#2196f3</item>
-        <!--<item name="colorAccent">#ffb300</item>-->
         <item name="colorAccent">#2962ff</item>
         <item name="colorSecondary">?colorAccent</item>
 

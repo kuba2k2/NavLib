@@ -1,44 +1,46 @@
 package pl.szczodrzynski.navlib
 
-import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
+import android.content.res.Configuration
+import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.util.AttributeSet
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import android.widget.LinearLayout
-import android.widget.SeekBar
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
-import com.mikepenz.materialdrawer.Drawer
-import com.mikepenz.materialdrawer.DrawerBuilder
-import com.mikepenz.materialdrawer.model.DividerDrawerItem
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
-import com.mikepenz.materialdrawer.model.SecondaryDrawerItem
 import kotlinx.android.synthetic.main.nav_view.view.*
+import pl.szczodrzynski.edziennik.utils.SwipeRefreshLayoutNoTouch
 import pl.szczodrzynski.navlib.bottomsheet.NavBottomSheet
+import pl.szczodrzynski.navlib.drawer.NavDrawer
+
 
 class NavView : FrameLayout {
+    companion object {
+        const val SOURCE_OTHER = 0
+        const val SOURCE_DRAWER = 1
+        const val SOURCE_BOTTOM_SHEET = 1
+    }
 
     private var contentView: LinearLayout? = null
 
     private lateinit var statusBarBackground: View
     private lateinit var navigationBarBackground: View
-    private lateinit var mainView: CoordinatorLayout
+    private lateinit var mainView: LinearLayout
     private lateinit var floatingActionButton: FloatingActionButton
     private lateinit var extendedFloatingActionButton: ExtendedFloatingActionButton
 
-    var drawer: Drawer? = null
-    lateinit var topBar: NavToolbar
+    lateinit var drawer: NavDrawer
+    lateinit var toolbar: NavToolbar
     lateinit var bottomBar: NavBottomBar
     lateinit var bottomSheet: NavBottomSheet
 
-
+    var navigationLoader: NavigationLoader? = null
 
     constructor(context: Context) : super(context) {
         create(null, 0)
@@ -71,9 +73,19 @@ class NavView : FrameLayout {
         floatingActionButton = findViewById(R.id.nv_floatingActionButton)
         extendedFloatingActionButton = findViewById(R.id.nv_extendedFloatingActionButton)
 
-        topBar = findViewById(R.id.nv_toolbar)
+        drawer = NavDrawer(
+            context,
+            findViewById(R.id.nv_drawerContainer),
+            findViewById(R.id.nv_fixedDrawerContainer),
+            findViewById(R.id.nv_miniDrawerContainerLandscape),
+            findViewById(R.id.nv_miniDrawerContainerPortrait)
+        )
+        toolbar = findViewById(R.id.nv_toolbar)
         bottomBar = findViewById(R.id.nv_bottomBar)
         bottomSheet = findViewById(R.id.nv_bottomSheet)
+
+        drawer.toolbar = toolbar
+        drawer.bottomBar = bottomBar
 
         bottomBar.drawer = drawer
         bottomBar.bottomSheet = bottomSheet
@@ -81,23 +93,16 @@ class NavView : FrameLayout {
         bottomBar.fabExtendedView = extendedFloatingActionButton
 
         //bottomSheetBehavior.peekHeight = displayHeight
-
-        nv_elevation.setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
-            override fun onProgressChanged(seekBar: SeekBar?, progress: Int, fromUser: Boolean) {
-                textView.text = "Set toolbar elevation ${progress}dp"
-                nv_toolbar.elevation = progress * context.resources.displayMetrics.density
-            }
-            override fun onStartTrackingTouch(seekBar: SeekBar?) {}
-            override fun onStopTrackingTouch(seekBar: SeekBar?) {}
-        })
     }
 
     fun configSystemBarsUtil(systemBarsUtil: SystemBarsUtil) {
+        this.systemBarsUtil = systemBarsUtil
         systemBarsUtil.statusBarBgView = statusBarBackground
         systemBarsUtil.navigationBarBgView = navigationBarBackground
         systemBarsUtil.statusBarDarkView = nv_statusBarDarker
         //systemBarsUtil.navigationBarDarkView = navigationBarBackground
-        systemBarsUtil.paddingBySystemBars = mainView
+        systemBarsUtil.insetsListener = nv_drawerContainer
+        systemBarsUtil.marginBySystemBars = mainView
         systemBarsUtil.paddingByNavigationBar = bottomSheet.getContentView()
     }
 
@@ -118,7 +123,7 @@ class NavView : FrameLayout {
      * below the toolbar.
      */
     var showToolbar = true; set(value) {
-        topBar.visibility = if (value) View.VISIBLE else View.GONE
+        toolbar.visibility = if (value) View.VISIBLE else View.GONE
         field = value
         setContentMargins()
     }
@@ -131,13 +136,7 @@ class NavView : FrameLayout {
         extendedFloatingActionButton.setOnClickListener(onClickListener)
     }
 
-
-
-
-    @SuppressLint("ClickableViewAccessibility")
-    fun init(activity: Activity) {
-
-    }
+    var systemBarsUtil: SystemBarsUtil? = null
 
     private fun setContentMargins() {
         val layoutParams = CoordinatorLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
@@ -147,33 +146,37 @@ class NavView : FrameLayout {
         contentView?.layoutParams = layoutParams
     }
 
-    fun addDrawer(activity: Activity) {
-        //if you want to update the items at a later time it is recommended to keep it in a variable
-        val item1 = PrimaryDrawerItem().withIdentifier(1).withName("Home").withIcon(CommunityMaterial.Icon.cmd_google_home)
-        val item2 = SecondaryDrawerItem().withIdentifier(2).withName("Settings").withIcon(CommunityMaterial.Icon2.cmd_settings)
+    override fun onConfigurationChanged(newConfig: Configuration?) {
+        super.onConfigurationChanged(newConfig)
 
-        drawer = DrawerBuilder(activity)
-            .withDrawerLayout(R.layout.material_drawer_fits_not)
-            .withRootView(R.id.nv_drawerContainer)
-            .withFullscreen(true)
-            .withTranslucentStatusBar(false)
-            .withTranslucentNavigationBar(false)
-            .withTranslucentNavigationBarProgrammatically(false)
-            .withToolbar(bottomBar)
-            .withDisplayBelowStatusBar(true)
-            .withActionBarDrawerToggleAnimated(true)
-            .addDrawerItems(
-                item1,
-                DividerDrawerItem(),
-                item2,
-                SecondaryDrawerItem().withName("Settings")
-            )
-            /*.withOnDrawerItemClickListener { view, position, drawerItem ->
-                true
-            }*/
-            .build()
+        Log.d(
+            "NavLib",
+            "CONFIGURATION CHANGED: ${newConfig?.screenWidthDp}x${newConfig?.screenHeightDp} "+if (newConfig?.orientation == ORIENTATION_PORTRAIT) "portrait" else "landscape"
+        )
 
-        bottomBar.drawer = drawer
+        systemBarsUtil?.commit()
+
+        drawer.decideDrawerMode(
+            newConfig?.orientation ?: ORIENTATION_PORTRAIT,
+            newConfig?.screenWidthDp ?: 0,
+            newConfig?.screenHeightDp ?: 0
+        )
+    }
+
+    fun onBackPressed(): Boolean {
+        if (drawer.isOpen) {
+            if (drawer.profileSelectionIsOpen) {
+                drawer.profileSelectionClose()
+                return true
+            }
+            drawer.close()
+            return true
+        }
+        if (bottomSheet.isOpen) {
+            bottomSheet.close()
+            return true
+        }
+        return false
     }
 
     override fun addView(child: View?, index: Int, params: ViewGroup.LayoutParams?) {

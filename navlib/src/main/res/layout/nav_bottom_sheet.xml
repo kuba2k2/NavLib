@@ -43,19 +43,41 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="16dp"
                     android:focusable="true"
                     android:focusableInTouchMode="true"
                     app:srcCompat="@drawable/bottom_sheet_control_bar"
                     tools:ignore="ContentDescription" />
 
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/bs_textInputLayout"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.Dense"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="16dp"
+                    app:boxBackgroundColor="?boxBackgroundColor"
+                    app:endIconMode="clear_text"
+                    tools:startIconDrawable="@drawable/ic_android"
+                    tools:helperText="0 messages found"
+                    tools:hint="Search">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/bs_textInputEditText"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:singleLine="true"
+                        tools:text="John" />
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <LinearLayout
                     android:id="@+id/bs_toggleGroupContainer"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:orientation="vertical">
+                    android:layout_marginBottom="16dp"
+                    android:orientation="vertical"
+                    android:visibility="gone"
+                    tools:visibility="visible">
 
                     <TextView
                         android:id="@+id/bs_toggleGroupTitle"
@@ -64,56 +86,11 @@
                         android:layout_marginTop="8dp"
                         android:text="Sorting order" />
 
-                    <androidx.gridlayout.widget.GridLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:visibility="gone">
-
-                        <com.google.android.material.button.MaterialButton
-                            style="?materialButtonOutlinedStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="By date"
-                            app:icon="@drawable/ic_android" />
-
-                        <com.google.android.material.button.MaterialButton
-                            style="?materialButtonOutlinedStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="By subject" />
-
-                        <com.google.android.material.button.MaterialButton
-                            style="?materialButtonOutlinedStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="By sender" />
-
-                        <com.google.android.material.button.MaterialButton
-                            style="?materialButtonOutlinedStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="By date"
-                            app:icon="@drawable/ic_android" />
-
-                        <com.google.android.material.button.MaterialButton
-                            style="?materialButtonOutlinedStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="By subject" />
-
-                        <com.google.android.material.button.MaterialButton
-                            style="?materialButtonOutlinedStyle"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="By sender" />
-
-                    </androidx.gridlayout.widget.GridLayout>
-
                     <com.google.android.material.button.MaterialButtonToggleGroup
                         android:id="@+id/bs_toggleGroup"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        app:singleSelection="true"/>
+                        app:singleSelection="true" />
 
                 </LinearLayout>
 

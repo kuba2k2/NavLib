@@ -1,7 +1,6 @@
 package pl.szczodrzynski.navlib
 
 import android.content.Context
-import android.system.Os.close
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.MenuItem
@@ -15,8 +14,8 @@ import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.sizeDp
-import com.mikepenz.materialdrawer.Drawer
 import pl.szczodrzynski.navlib.bottomsheet.NavBottomSheet
+import pl.szczodrzynski.navlib.drawer.NavDrawer
 
 class NavBottomBar : BottomAppBar {
     constructor(context: Context) : super(context) {
@@ -31,7 +30,7 @@ class NavBottomBar : BottomAppBar {
         create(attrs, defStyle)
     }
 
-    var drawer: Drawer? = null
+    var drawer: NavDrawer? = null
     var bottomSheet: NavBottomSheet? = null
     var fabView: FloatingActionButton? = null
     var fabExtendedView: ExtendedFloatingActionButton? = null
@@ -127,10 +126,7 @@ class NavBottomBar : BottomAppBar {
             .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
 
         setNavigationOnClickListener {
-            if (drawer?.isDrawerOpen == true)
-                drawer?.closeDrawer()
-            else
-                drawer?.openDrawer()
+            drawer?.toggle()
         }
 
         super.setOnMenuItemClickListener {

@@ -12,26 +12,72 @@
         <item name="backgroundTint">?colorFab</item>
         <item name="android:textColor">?colorOnFab</item>
     </style>
+    <!-- default body text -->
+    <style name="NavView.TextView" parent="Widget.MaterialComponents.TextView">
+        <item name="android:textAppearance">?attr/textAppearanceBody2</item>
+    </style>
+    <!-- title text -->
+    <style name="NavView.TextView.Title" parent="TextAppearance.AppCompat.Title">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+    <!-- subtitle text, smaller than medium -->
+    <style name="NavView.TextView.Subtitle" parent="TextAppearance.AppCompat.Subhead">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+    <!-- large body text -->
+    <style name="NavView.TextView.Large" parent="TextAppearance.AppCompat.Large">
+    </style>
+    <!-- medium body text -->
+    <style name="NavView.TextView.Medium" parent="TextAppearance.AppCompat.Medium">
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
+    </style>
+    <!-- small (helper) body text -->
+    <style name="NavView.TextView.Small" parent="TextAppearance.AppCompat.Small">
+    </style>
 
 
-
+    <!--<item name="colorAccent">#ffb300</item>-->
 
     <style name="NavView.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <!-- primary styling -->
+        <item name="colorPrimary">#6200EE</item>
+        <item name="colorPrimaryDark">#3700B3</item>
+        <item name="colorPrimaryVariant">#6200EE</item>
+        <item name="colorAccent">#03DAC6</item>
+        <item name="colorSecondary">?colorAccent</item>
+        <item name="colorSecondaryVariant">#018786</item>
+
+        <!-- window colors -->
         <item name="android:colorBackground">@color/background_light</item>
         <item name="android:windowBackground">?android:colorBackground</item>
         <item name="colorSurface">#ffffff</item>
-        <item name="elevationOverlayColor">#ffffff</item>
 
+        <!-- FAB styling -->
+        <item name="colorFab">?colorAccent</item>
+        <item name="colorFabIcon">?colorOnSecondary</item>
+        <item name="colorOnFab">?colorOnSecondary</item>
+
+        <!-- text colors -->
+        <item name="colorOnPrimary">#ffffff</item>
+        <item name="colorOnSecondary">#ffffff</item>
         <item name="colorOnBackground">#000000</item>
         <item name="colorOnSurface">#000000</item>
 
-        <item name="nv_actionBarBackground">?colorSurface</item>
+        <item name="elevationOverlayColor">#ffffff</item>
+
+        <!-- system bars config -->
+        <item name="actionBarBackground">?colorSurface</item>
+        <item name="navigationBarBackground">?colorPrimaryVariant</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
 
+        <!-- component styling -->
         <item name="floatingActionButtonStyle">@style/NavView.Widget.FloatingActionButton</item>
         <item name="extendedFloatingActionButtonStyle">@style/NavView.Widget.ExtendedFloatingActionButton</item>
+        <item name="boxBackgroundColor" tools:ignore="PrivateResource">@color/mtrl_filled_background_color</item>
+        <item name="android:textViewStyle">@style/NavView.TextView</item>
 
+        <!-- drawer & bottom sheet styling -->
         <item name="material_drawer_background">?android:colorBackground</item>
         <item name="material_drawer_primary_text">#242424</item>
         <item name="material_drawer_primary_icon">#5F6368</item>
@@ -45,20 +91,43 @@
     </style>
 
     <style name="NavView.Dark" parent="Theme.MaterialComponents.NoActionBar">
+        <!-- primary styling -->
+        <item name="colorPrimary">#BB86FC</item>
+        <item name="colorPrimaryDark">#3700B3</item>
+        <item name="colorPrimaryVariant">#6200EE</item>
+        <item name="colorAccent">#03DAC6</item>
+        <item name="colorSecondary">?colorAccent</item>
+        <item name="colorSecondaryVariant">?colorAccent</item>
+
+        <!-- window colors -->
         <item name="android:colorBackground">@color/background_dark</item>
         <item name="android:windowBackground">?android:colorBackground</item>
         <item name="colorSurface">#303030</item>
 
+        <!-- FAB styling -->
+        <item name="colorFab">?colorAccent</item>
+        <item name="colorFabIcon">?colorOnSecondary</item>
+        <item name="colorOnFab">?colorOnSecondary</item>
+
+        <!-- text colors -->
+        <item name="colorOnPrimary">#ffffff</item>
+        <item name="colorOnSecondary">#ffffff</item>
         <item name="colorOnBackground">#ffffff</item>
         <item name="colorOnSurface">#ffffff</item>
 
-        <item name="nv_actionBarBackground">?colorSurface</item>
+        <!-- system bars config -->
+        <item name="actionBarBackground">?colorSurface</item>
+        <item name="navigationBarBackground">?colorPrimaryVariant</item>
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
 
+        <!-- component styling -->
         <item name="floatingActionButtonStyle">@style/NavView.Widget.FloatingActionButton</item>
         <item name="extendedFloatingActionButtonStyle">@style/NavView.Widget.ExtendedFloatingActionButton</item>
+        <item name="boxBackgroundColor">@color/text_input_layout_background</item>
+        <item name="android:textViewStyle">@style/NavView.TextView</item>
 
+        <!-- drawer & bottom sheet styling -->
         <item name="material_drawer_background">?android:colorBackground</item>
         <item name="material_drawer_primary_text">#FFFFFF</item>
         <item name="material_drawer_primary_icon">#9AA0A6</item>
@@ -75,6 +144,8 @@
         <item name="android:colorBackground">@color/background_black</item>
         <item name="android:windowBackground">?android:colorBackground</item>
         <item name="colorSurface">#121212</item>
+
+        <item name="colorBackgroundFloating">#2D2D2D</item>
     </style>
 
 

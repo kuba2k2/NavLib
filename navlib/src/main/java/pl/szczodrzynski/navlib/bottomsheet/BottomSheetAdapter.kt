@@ -3,10 +3,9 @@ package pl.szczodrzynski.navlib.bottomsheet
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import pl.szczodrzynski.navlib.R
-import pl.szczodrzynski.navlib.bottomsheet.items.EditTextFilledItem
 import pl.szczodrzynski.navlib.bottomsheet.items.IBottomSheetItem
-import pl.szczodrzynski.navlib.bottomsheet.items.PrimaryItem
-import pl.szczodrzynski.navlib.bottomsheet.items.SeparatorItem
+import pl.szczodrzynski.navlib.bottomsheet.items.BottomSheetPrimaryItem
+import pl.szczodrzynski.navlib.bottomsheet.items.BottomSheetSeparatorItem
 
 class BottomSheetAdapter(val items: List<IBottomSheetItem<*>>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -14,13 +13,10 @@ class BottomSheetAdapter(val items: List<IBottomSheetItem<*>>) : RecyclerView.Ad
 
     init {
         viewHolderProvider.registerViewHolderFactory(1, R.layout.nav_bs_item_primary) { itemView ->
-            PrimaryItem.ViewHolder(itemView)
+            BottomSheetPrimaryItem.ViewHolder(itemView)
         }
         viewHolderProvider.registerViewHolderFactory(2, R.layout.nav_bs_item_separator) { itemView ->
-            SeparatorItem.ViewHolder(itemView)
-        }
-        viewHolderProvider.registerViewHolderFactory(3, R.layout.nav_bs_item_edittext_filled) { itemView ->
-            EditTextFilledItem.ViewHolder(itemView)
+            BottomSheetSeparatorItem.ViewHolder(itemView)
         }
     }
 

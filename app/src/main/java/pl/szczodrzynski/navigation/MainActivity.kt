@@ -8,7 +8,16 @@ import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.mikepenz.iconics.IconicsColor
+import com.mikepenz.iconics.IconicsDrawable
+import com.mikepenz.iconics.IconicsSize
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
+import com.mikepenz.materialdrawer.Drawer
+import com.mikepenz.materialdrawer.holder.StringHolder
+import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
+import com.mikepenz.materialdrawer.model.ProfileDrawerItem
+import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import kotlinx.android.synthetic.main.sample_nav_view.*
 import pl.szczodrzynski.navlib.SystemBarsUtil
 import pl.szczodrzynski.navlib.SystemBarsUtil.Companion.COLOR_DO_NOT_CHANGE
@@ -18,8 +27,10 @@ import pl.szczodrzynski.navlib.bottomsheet.NavBottomSheet
 import pl.szczodrzynski.navlib.bottomsheet.NavBottomSheet.Companion.SORT_MODE_ASCENDING
 import pl.szczodrzynski.navlib.bottomsheet.NavBottomSheet.Companion.SORT_MODE_DESCENDING
 import pl.szczodrzynski.navlib.bottomsheet.NavBottomSheet.Companion.TOGGLE_GROUP_SORTING_ORDER
-import pl.szczodrzynski.navlib.bottomsheet.items.PrimaryItem
-import pl.szczodrzynski.navlib.bottomsheet.items.SeparatorItem
+import pl.szczodrzynski.navlib.bottomsheet.items.BottomSheetPrimaryItem
+import pl.szczodrzynski.navlib.bottomsheet.items.BottomSheetSeparatorItem
+import pl.szczodrzynski.navlib.drawer.IDrawerProfile
+import pl.szczodrzynski.navlib.drawer.items.DrawerPrimaryItem
 import pl.szczodrzynski.navlib.getColorFromAttr
 
 
@@ -37,6 +48,8 @@ class MainActivity : AppCompatActivity() {
 
         Log.d("MainActivity", "Dark theme $darkTheme")
         setTheme(if (darkTheme == true) R.style.AppTheme else R.style.AppTheme_Light)
+
+        Log.d("NavLib", "ACTIVITY created")
 
         setContentView(R.layout.sample_nav_view)
 
@@ -65,18 +78,21 @@ class MainActivity : AppCompatActivity() {
             else -> R.id.gradientDoNotChange
         })
 
-        button.setOnClickListener {
+        themeButton.setOnClickListener {
             // use commit instead of apply because of recreating the activity
             darkTheme = (darkTheme == false)
             getSharedPreferences("prefs", Context.MODE_PRIVATE).edit().putBoolean("darkTheme", darkTheme == true).commit()
             recreate()
         }
 
+        commitButton.setOnClickListener {
+            navView.systemBarsUtil?.commit()
+        }
 
         //navView.init(this)
 
         // init the drawer before SystemBarsUtil
-        navView.addDrawer(activity = this)
+        navView.drawer.init(this)
 
         SystemBarsUtil(this).apply {
             paddingByKeyboard = navView
@@ -206,26 +222,150 @@ class MainActivity : AppCompatActivity() {
         navView.bottomBar.fabExtended = false
 
 
+        navView.drawer.apply {
 
+            addUnreadCounterType(type = 10, drawerItem = 1)
+            addUnreadCounterType(type = 20, drawerItem = 2)
+            addUnreadCounterType(type = 30, drawerItem = 60)
+            addUnreadCounterType(type = 40, drawerItem = 62)
+
+            appendItems(
+                DrawerPrimaryItem()
+                    .withAppTitle("Navigation")
+                    .withName("Home")
+                    .withSelected(true)
+                    .withIdentifier(1)
+                    .withBadgeStyle(badgeStyle)
+                    .withIcon(CommunityMaterial.Icon.cmd_google_home),
+
+                DrawerPrimaryItem()
+                    .withIdentifier(2)
+                    .withName("Settings")
+                    .withBadgeStyle(badgeStyle)
+                    .withIcon(CommunityMaterial.Icon2.cmd_settings),
+
+                DrawerPrimaryItem().withName("iOS")
+                    .withIdentifier(60)
+                    .withBadgeStyle(badgeStyle)
+                    .withIcon(CommunityMaterial.Icon.cmd_apple),
+
+                DrawerPrimaryItem().withName("School bell")
+                    .withDescription("why not?")
+                    .withIdentifier(61)
+                    .withBadgeStyle(badgeStyle)
+                    .withIcon(CommunityMaterial.Icon.cmd_alarm_bell),
+
+                DrawerPrimaryItem().withName("Lock screen")
+                    .withIdentifier(62)
+                    .withBadgeStyle(badgeStyle)
+                    .withIcon(CommunityMaterial.Icon.cmd_fingerprint),
+
+                DrawerPrimaryItem().withName("HDR enable/disable")
+                    .withTag(0)
+                    .withIdentifier(63)
+                    .withBadgeStyle(badgeStyle)
+                    .withSelectable(false)
+                    .withIcon(CommunityMaterial.Icon2.cmd_hdr),
+
+                DrawerPrimaryItem().withName("AdBlockPlus")
+                    .withDescription("Because we all hate ads")
+                    .withIdentifier(64)
+                    .withBadgeStyle(badgeStyle)
+                    .withIcon(CommunityMaterial.Icon.cmd_adchoices),
+
+                DrawerPrimaryItem().withName("Wonderful browsing experience and this is a long string")
+                    .withIdentifier(65)
+                    .withBadgeStyle(badgeStyle)
+                    .withIcon(CommunityMaterial.Icon2.cmd_internet_explorer)
+            )
+
+            setUnreadCount(2, 20, 30) // phil swift has 30 unreads on "Settings item"
+            setUnreadCount(4, 40, 1000) // mark has 99+ unreads on "Lock screen item"
+
+            setAccountHeaderBackground("/sdcard/ban.gif")
+
+            appendProfiles(
+                IDrawerProfile(1, "Think Pad", "think with a pad", "/sdcard/thinkpad.gif"),
+                IDrawerProfile(2, "Phil Swift", "I sawed this boat in half!!!", "/sdcard/phil.jpg"),
+                IDrawerProfile(3, "The meme bay", "Visit my amazing website", "/sdcard/loader.gif"),
+                IDrawerProfile(4, "Mark Zuckerberg", "", null),
+                IDrawerProfile(5, "I love GDPR", "spotify:user:popjustice:playlist:5Pe51v0sHLybSEkX0m0JRf", "/sdcard/tenor2.gif"),
+                IDrawerProfile(6, "Gandalf", "http://sax.hol.es/", "/sdcard/facepalm.gif")
+            )
+
+            addProfileSettings(
+                ProfileSettingDrawerItem()
+                    .withName("Add Account")
+                    .withDescription("Add new GitHub Account")
+                    .withIcon(
+                        IconicsDrawable(context, CommunityMaterial.Icon2.cmd_plus)
+                            .actionBar()
+                            .padding(IconicsSize.dp(5))
+                            .color(IconicsColor.colorRes(pl.szczodrzynski.navlib.R.color.material_drawer_dark_primary_text))
+                    )
+                    .withOnDrawerItemClickListener(object : Drawer.OnDrawerItemClickListener {
+                        override fun onItemClick(view: View?, position: Int, drawerItem: IDrawerItem<*>): Boolean {
+                            Toast.makeText(context, "Add account", Toast.LENGTH_SHORT).show()
+                            return true
+                        }
+                    }),
+                ProfileSettingDrawerItem()
+                    .withName("Manage Account")
+                    .withIcon(CommunityMaterial.Icon2.cmd_settings)
+            )
+
+            drawerItemSelectedListener = { id, position, drawerItem ->
+                if (id == 1 || id == 2) {
+                    getItemById(id) {
+                        if (it is DrawerPrimaryItem) {
+                            if (it.tag !is Int) {
+                                it.tag = 0
+                            }
+                            it.tag = (it.tag as Int) + 1
+                            // TODO 2019-08-27 allow string to be passed as name
+                            it.name = StringHolder("Home ${it.tag as Int}")
+                            // do not set item.badge unless you're not using Unread Counters
+                            // because this *may* disappear/be overridden on profile change
+                            // (if UnreadCounterList have at least one counter with matching
+                            // drawer item ID)
+                            // See with "Settings" when it.badge AND UnreadCounter is present.
+                            //
+                            // just do not do this.
+                            it.badge = StringHolder("${it.tag as Int * 10}")
+                        }
+                    }
+                }
+                if (id == 63) {
+                    getItemById(id) {
+                        if (it is DrawerPrimaryItem) {
+                            it.tag = if (it.tag as Int == 1) 0 else 1
+                            it.withIcon(if (it.tag as Int == 1) CommunityMaterial.Icon2.cmd_hdr_off else CommunityMaterial.Icon2.cmd_hdr)
+                        }
+                    }
+                }
+                // you cannot select apple
+                id != 60
+            }
+        }
 
 
         navView.bottomSheet.apply {
-            this += PrimaryItem(true)
+            this += BottomSheetPrimaryItem(true)
                 .withId(1)
                 .withTitle("Compose")
                 .withIcon(CommunityMaterial.Icon2.cmd_pencil)
                 .withOnClickListener(View.OnClickListener {
                     Toast.makeText(this@MainActivity, "Compose message", Toast.LENGTH_SHORT).show()
                 })
-            this += SeparatorItem(false)
-            this += PrimaryItem(false)
+            this += BottomSheetSeparatorItem(false)
+            this += BottomSheetPrimaryItem(false)
                 .withId(3)
                 .withTitle("Synchronise")
                 .withIcon(CommunityMaterial.Icon2.cmd_sync)
                 .withOnClickListener(View.OnClickListener {
                     Toast.makeText(this@MainActivity, "Synchronising...", Toast.LENGTH_SHORT).show()
                 })
-            this += PrimaryItem(false)
+            this += BottomSheetPrimaryItem(false)
                 .withId(4)
                 .withTitle("Help")
                 .withIcon(CommunityMaterial.Icon2.cmd_help)
@@ -233,6 +373,7 @@ class MainActivity : AppCompatActivity() {
                     Toast.makeText(this@MainActivity, "Want some help?", Toast.LENGTH_SHORT).show()
                 })
 
+            toggleGroupEnabled = true
             toggleGroupTitle = "Sort by"
             toggleGroupRemoveItems()
             toggleGroupSelectionMode = TOGGLE_GROUP_SORTING_ORDER
@@ -240,16 +381,31 @@ class MainActivity : AppCompatActivity() {
             toggleGroupAddItem(1, "By subject", null, SORT_MODE_ASCENDING)
             toggleGroupAddItem(2, "By sender", null, SORT_MODE_ASCENDING)
             toggleGroupAddItem(3, "By android", null, SORT_MODE_ASCENDING)
-            toggleGroupSortingOrderListener = object : NavBottomSheet.OnToggleGroupSortingListener {
-                override fun onSortingOrder(id: Int, sortMode: Int) {
-                    Toast.makeText(
-                        this@MainActivity,
-                        "Sort mode $id ${if (sortMode == SORT_MODE_ASCENDING) "ascending" else "descending"}",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
+            toggleGroupSortingOrderListener = { id, sortMode ->
+                Toast.makeText(
+                    this@MainActivity,
+                    "Sort mode $id ${if (sortMode == SORT_MODE_ASCENDING) "ascending" else "descending"}",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
             toggleGroupCheck(1)
+
+            textInputEnabled = true
+            textInputHint = "Search"
+            textInputHelperText = "0 messages found"
+            textInputIcon = CommunityMaterial.Icon2.cmd_magnify
+            textInputChangedListener = object : NavBottomSheet.OnTextInputChangedListener {
+                override fun onTextChanged(s: String, start: Int, before: Int, count: Int) {
+                    navView.toolbar.subtitle = s
+                    textInputError = if (s.length > 10) "Too many messages" else null
+                    textInputHelperText = "${s.length} messages found"
+                }
+            }
         }
+    }
+
+    override fun onBackPressed() {
+        if (!navView.onBackPressed())
+            super.onBackPressed()
     }
 }

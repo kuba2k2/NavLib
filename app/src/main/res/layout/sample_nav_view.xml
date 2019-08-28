@@ -8,6 +8,9 @@
         android:id="@+id/navView"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+        <pl.szczodrzynski.edziennik.utils.SwipeRefreshLayoutNoTouch
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
         <ScrollView
             android:layout_width="match_parent"
@@ -18,19 +21,25 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                tools:ignore="HardcodedText">
 
                 <Button
-                    android:id="@+id/button"
+                    android:id="@+id/themeButton"
                     android:layout_width="wrap_content"
                     android:layout_height="48dp"
                     android:text="Switch theme" />
+                <Button
+                    android:id="@+id/commitButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:text="Commit SystemBarsUtil" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="NavView config"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                    android:textAppearance="@style/NavView.TextView.Large" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/switchToolbar"
@@ -71,7 +80,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="FAB config"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                    android:textAppearance="@style/NavView.TextView.Large" />
 
                 <RadioGroup
                     android:id="@+id/fabPosition"
@@ -99,7 +108,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="BottomSheet config"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                    android:textAppearance="@style/NavView.TextView.Large" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/bsEnable"
@@ -134,7 +143,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="System bars config"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Large" />
+                    android:textAppearance="@style/NavView.TextView.Large" />
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/appFullscreen"
@@ -147,12 +156,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Status bar color"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                    android:textAppearance="@style/NavView.TextView.Medium" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="5.0+ with dark SB color, 6.0+" />
+                    android:text="5.0+ with dark SB color, 6.0+"
+                    android:textAppearance="@style/NavView.TextView.Small"/>
 
                 <RadioGroup
                     android:id="@+id/statusBarColor"
@@ -205,12 +215,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Status bar fallback if light"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                    android:textAppearance="@style/NavView.TextView.Medium" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="5.0 with SB color white, TouchWiz 4.1-4.3" />
+                    android:text="5.0 with SB color white, TouchWiz 4.1-4.3"
+                    android:textAppearance="@style/NavView.TextView.Small"/>
 
                 <RadioGroup
                     android:id="@+id/statusBarFallbackLight"
@@ -247,12 +258,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="Status bar fallback if gradient"
-                    android:textAppearance="@style/TextAppearance.AppCompat.Medium" />
+                    android:textAppearance="@style/NavView.TextView.Medium" />
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="4.4, 5.0 Huawei" />
+                    android:text="4.4, 5.0 Huawei"
+                    android:textAppearance="@style/NavView.TextView.Small"/>
 
                 <RadioGroup
                     android:id="@+id/statusBarFallbackGradient"
@@ -290,12 +302,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:checked="false"
-                    android:text="SB color mode - translucent (not transparent)" />
+                    android:text="SB color mode - translucent (not transparent)"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="(used for Huawei with EMUI Lollipop)"/>
+                    android:text="(used for Huawei with EMUI Lollipop)"
+                    android:textAppearance="@style/NavView.TextView.Small"/>
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/navigationBarTransparent"
@@ -304,9 +317,254 @@
                     android:checked="false"
                     android:text="Nav bar fully transparent" />
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="NavView text appearances"
+                    android:textAppearance="@style/NavView.TextView.Large"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Default text appearance"
+                    android:ellipsize="end"
+                    android:maxLines="1"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="NavView.TextView.Title"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/NavView.TextView.Title"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="NavView.TextView.Subtitle"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/NavView.TextView.Subtitle"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="NavView.TextView.Large"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/NavView.TextView.Large"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="NavView.TextView.Medium"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/NavView.TextView.Medium"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="NavView.TextView.Small"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/NavView.TextView.Small"/>
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="This is a list of predefined text appearances"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.AppCompat:"
+                    android:textAppearance="?textAppearanceHeadline6"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.AppCompat.Title"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Title"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.AppCompat.Subhead"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Subhead"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.AppCompat.Large"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Large"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.AppCompat.Medium"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Medium"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.AppCompat.Small"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.AppCompat.Small"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.MaterialComponents:"
+                    android:textAppearance="?textAppearanceHeadline6"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.MaterialComponents.Subtitle1"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle1"/>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.MaterialComponents.Subtitle2"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Subtitle2" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.MaterialComponents.Body1"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body1" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.MaterialComponents.Body2"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Body2" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.MaterialComponents.Button"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Button" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.MaterialComponents.Caption"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Caption" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.MaterialComponents.Headline1"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline1" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.MaterialComponents.Headline2"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline2" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.MaterialComponents.Headline3"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.MaterialComponents.Headline4"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline4" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.MaterialComponents.Headline5"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.MaterialComponents.Headline6"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.MaterialComponents.Overline"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Overline" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.Design.Error"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.Design.Error" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.Design.Tab"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.Design.Tab" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.Design.HelperText"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.Design.HelperText" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.Design.Hint"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.Design.Hint" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.Design.Counter"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.Design.Counter" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.Design.Counter.Overflow"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.Design.Counter.Overflow" />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="TextAppearance.MaterialComponents.Badge"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:textAppearance="@style/TextAppearance.MaterialComponents.Badge" />
+
             </LinearLayout>
 
         </ScrollView>
+
+        </pl.szczodrzynski.edziennik.utils.SwipeRefreshLayoutNoTouch>
 
     </pl.szczodrzynski.navlib.NavView>
 

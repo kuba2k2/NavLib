@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <attr name="nv_actionBarBackground" format="color" />
+    <attr name="actionBarBackground" format="color" />
+    <attr name="navigationBarBackground" format="color" />
     <attr name="colorFab" format="color" />
     <attr name="colorFabIcon" format="color" />
     <attr name="colorOnFab" format="color" />

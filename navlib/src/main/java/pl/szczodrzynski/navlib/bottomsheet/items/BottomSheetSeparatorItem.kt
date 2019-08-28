@@ -4,7 +4,7 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import pl.szczodrzynski.navlib.R
 
-data class SeparatorItem(override val isContextual: Boolean = true) : IBottomSheetItem<SeparatorItem.ViewHolder> {
+data class BottomSheetSeparatorItem(override val isContextual: Boolean = true) : IBottomSheetItem<BottomSheetSeparatorItem.ViewHolder> {
 
     /*_                             _
      | |                           | |

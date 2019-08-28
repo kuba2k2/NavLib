@@ -13,6 +13,18 @@ import androidx.annotation.DrawableRes
 import com.google.android.material.elevation.ElevationOverlayProvider
 import com.mikepenz.iconics.IconicsColor
 import com.mikepenz.iconics.IconicsDrawable
+import android.util.DisplayMetrics
+import android.view.Display
+import android.view.WindowManager
+import android.R.attr.y
+import android.R.attr.x
+import android.graphics.Point
+import com.mikepenz.materialdrawer.Drawer
+import com.mikepenz.materialdrawer.holder.StringHolder
+import com.mikepenz.materialdrawer.model.BaseDrawerItem
+import com.mikepenz.materialdrawer.model.interfaces.Badgeable
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
+import pl.szczodrzynski.navlib.drawer.items.DrawerPrimaryItem
 
 
 /*private val displayMetrics by lazy {
@@ -90,9 +102,27 @@ fun isTablet(c: Context): Boolean {
     return (c.resources.configuration.screenLayout and Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE
 }
 
-fun hasNavigationBar(resources: Resources): Boolean {
-    val id = resources.getIdentifier("config_showNavigationBar", "bool", "android")
-    var hasNavigationBar = id > 0 && resources.getBoolean(id)
+fun hasNavigationBar(context: Context): Boolean {
+    val id = context.resources.getIdentifier("config_showNavigationBar", "bool", "android")
+    var hasNavigationBar = id > 0 && context.resources.getBoolean(id)
+
+    if (!hasNavigationBar && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        val d = (context.getSystemService(Context.WINDOW_SERVICE) as WindowManager).defaultDisplay
+
+        val realDisplayMetrics = DisplayMetrics()
+        d.getRealMetrics(realDisplayMetrics)
+
+        val realHeight = realDisplayMetrics.heightPixels
+        val realWidth = realDisplayMetrics.widthPixels
+
+        val displayMetrics = DisplayMetrics()
+        d.getMetrics(displayMetrics)
+
+        val displayHeight = displayMetrics.heightPixels
+        val displayWidth = displayMetrics.widthPixels
+
+        hasNavigationBar = realWidth - displayWidth > 0 || realHeight - displayHeight > 0
+    }
 
     // Allow a system property to override this. Used by the emulator.
     // See also hasNavigationBar().
@@ -112,5 +142,13 @@ fun Context.getDrawableFromRes(@DrawableRes id: Int): Drawable {
     }
     else {
         resources.getDrawable(id)
+    }
+}
+
+fun Drawer.updateBadge(identifier: Long, badge: StringHolder?) {
+    val drawerItem = getDrawerItem(identifier)
+    if (drawerItem is Badgeable<*>) {
+        drawerItem.withBadge(badge)
+        updateItem(drawerItem)
     }
 }

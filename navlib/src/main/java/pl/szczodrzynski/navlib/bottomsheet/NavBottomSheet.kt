@@ -5,6 +5,9 @@ import android.content.Context
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
+import android.system.Os.close
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.MotionEvent
@@ -21,17 +24,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.button.MaterialButtonToggleGroup
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.paddingDp
 import com.mikepenz.iconics.utils.sizeDp
-import pl.szczodrzynski.navlib.Anim
-import pl.szczodrzynski.navlib.R
+import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
+import pl.szczodrzynski.navlib.*
 import pl.szczodrzynski.navlib.bottomsheet.items.IBottomSheetItem
-import pl.szczodrzynski.navlib.bottomsheet.items.SeparatorItem
-import pl.szczodrzynski.navlib.elevateSurface
-import pl.szczodrzynski.navlib.getDrawableFromRes
+import pl.szczodrzynski.navlib.bottomsheet.items.BottomSheetSeparatorItem
 
 
 class NavBottomSheet : CoordinatorLayout {
@@ -60,6 +63,8 @@ class NavBottomSheet : CoordinatorLayout {
     private lateinit var bottomSheet: NestedScrollView
     private lateinit var content: LinearLayout
     private lateinit var dragBar: View
+    private lateinit var textInputLayout: TextInputLayout
+    private lateinit var textInputEditText: TextInputEditText
     private lateinit var toggleGroupContainer: LinearLayout
     private lateinit var toggleGroup: MaterialButtonToggleGroup
     private lateinit var toggleGroupTitleView: TextView
@@ -68,7 +73,7 @@ class NavBottomSheet : CoordinatorLayout {
     private lateinit var bottomSheetBehavior: BottomSheetBehavior<View>
     private var bottomSheetVisible = false
 
-    val items = ArrayList<IBottomSheetItem<*>>()
+    private val items = ArrayList<IBottomSheetItem<*>>()
     private val adapter = BottomSheetAdapter(items)
 
     /**
@@ -116,6 +121,8 @@ class NavBottomSheet : CoordinatorLayout {
         bottomSheet = findViewById(R.id.bs_view)
         content = findViewById(R.id.bs_content)
         dragBar = findViewById(R.id.bs_dragBar)
+        textInputLayout = findViewById(R.id.bs_textInputLayout)
+        textInputEditText = findViewById(R.id.bs_textInputEditText)
         toggleGroupContainer = findViewById(R.id.bs_toggleGroupContainer)
         toggleGroup = findViewById(R.id.bs_toggleGroup)
         toggleGroupTitleView = findViewById(R.id.bs_toggleGroupTitle)
@@ -169,15 +176,15 @@ class NavBottomSheet : CoordinatorLayout {
         }
 
         toggleGroup.addOnButtonCheckedListener(toggleGroupCheckedListener)
+        textInputEditText.addTextChangedListener(textInputWatcher)
     }
 
-    /*    _____ _                                    _       _
-         |_   _| |                       ___        | |     | |
-           | | | |_ ___ _ __ ___  ___   ( _ )     __| | __ _| |_ __ _
-           | | | __/ _ \ '_ ` _ \/ __|  / _ \/\  / _` |/ _` | __/ _` |
-          _| |_| ||  __/ | | | | \__ \ | (_>  < | (_| | (_| | || (_| |
-         |_____|\__\___|_| |_| |_|___/  \___/\/  \__,_|\__,_|\__\__,*/
-
+    /*    _____ _
+         |_   _| |
+           | | | |_ ___ _ __ ___  ___
+           | | | __/ _ \ '_ ` _ \/ __|
+          _| |_| ||  __/ | | | | \__ \
+         |_____|\__\___|_| |_| |_|__*/
     operator fun plusAssign(item: IBottomSheetItem<*>) {
         appendItem(item)
     }
@@ -192,6 +199,9 @@ class NavBottomSheet : CoordinatorLayout {
     fun addItemAt(index: Int, item: IBottomSheetItem<*>) {
         items.add(index, item)
         adapter.notifyItemInserted(index)
+    }
+    fun removeItemById(id: Int) {
+        items.filterNot { it.id == id }
     }
     fun removeItemAt(index: Int) {
         items.removeAt(index)
@@ -210,10 +220,37 @@ class NavBottomSheet : CoordinatorLayout {
         adapter.notifyDataSetChanged()
     }
     fun removeSeparators() {
-        items.filterNot { it is SeparatorItem }
+        items.filterNot { it is BottomSheetSeparatorItem }
         adapter.notifyDataSetChanged()
     }
 
+    fun getItemById(id: Int, run: (it: IBottomSheetItem<*>?) -> Unit) {
+        items.singleOrNull { it.id == id }.also {
+            run(it)
+            if (it != null)
+                adapter.notifyItemChanged(items.indexOf(it))
+        }
+    }
+    fun getItemByIndex(index: Int, run: (it: IBottomSheetItem<*>?) -> Unit) {
+        items.getOrNull(index).also {
+            run(it)
+            if (it != null)
+                adapter.notifyItemChanged(index)
+        }
+    }
+
+
+    /*    _______                _
+         |__   __|              | |
+            | | ___   __ _  __ _| | ___    __ _ _ __ ___  _   _ _ __
+            | |/ _ \ / _` |/ _` | |/ _ \  / _` | '__/ _ \| | | | '_ \
+            | | (_) | (_| | (_| | |  __/ | (_| | | | (_) | |_| | |_) |
+            |_|\___/ \__, |\__, |_|\___|  \__, |_|  \___/ \__,_| .__/
+                      __/ | __/ |          __/ |               | |
+                     |___/ |___/          |___/                |*/
+    var toggleGroupEnabled
+        get() = toggleGroupContainer.visibility == View.VISIBLE
+        set(value) { toggleGroupContainer.visibility = if (value) View.VISIBLE else View.GONE }
     var toggleGroupTitle
         get() = toggleGroupTitleView.text.toString()
         set(value) { toggleGroupTitleView.text = value }
@@ -288,33 +325,68 @@ class NavBottomSheet : CoordinatorLayout {
                 else -> null
             })
             if (sortingMode != null) {
-                toggleGroupSortingOrderListener?.onSortingOrder(checkedId, sortingMode)
+                toggleGroupSortingOrderListener?.invoke(checkedId, sortingMode)
             }
         }
         else if (toggleGroup.isSingleSelection && isChecked) {
-            toggleGroupSingleSelectionListener?.onSingleSelection(checkedId - 1)
+            toggleGroupSingleSelectionListener?.invoke(checkedId - 1)
         }
         else {
-            toggleGroupMultipleSelectionListener?.onMultipleSelection(checkedId - 1, isChecked)
+            toggleGroupMultipleSelectionListener?.invoke(checkedId - 1, isChecked)
         }
     }
 
-    interface OnToggleGroupChangeListener {
-        fun onSingleSelection(id: Int)
+    var toggleGroupSingleSelectionListener: ((id: Int) -> Unit)? = null
+    var toggleGroupMultipleSelectionListener: ((id: Int, checked: Boolean) -> Unit)? = null
+    var toggleGroupSortingOrderListener: ((id: Int, sortMode: Int) -> Unit)? = null
+
+
+    /*    _______        _     _                   _
+         |__   __|      | |   (_)                 | |
+            | | _____  _| |_   _ _ __  _ __  _   _| |_
+            | |/ _ \ \/ / __| | | '_ \| '_ \| | | | __|
+            | |  __/>  <| |_  | | | | | |_) | |_| | |_
+            |_|\___/_/\_\\__| |_|_| |_| .__/ \__,_|\__|
+                                      | |
+                                      |*/
+    var textInputEnabled
+        get() = textInputLayout.visibility == View.VISIBLE
+        set(value) { textInputLayout.visibility = if (value) View.VISIBLE else View.GONE }
+    var textInputText
+        get() = textInputEditText.text.toString()
+        set(value) { textInputEditText.setText(value) }
+    var textInputHint
+        get() = textInputLayout.hint.toString()
+        set(value) { textInputLayout.hint = value }
+    var textInputHelperText
+        get() = textInputLayout.helperText.toString()
+        set(value) { textInputLayout.helperText = value }
+    var textInputError
+        get() = textInputLayout.error
+        set(value) { textInputLayout.error = value }
+    var textInputIcon: Any?
+        get() = textInputLayout.startIconDrawable
+        set(value) {
+            textInputLayout.startIconDrawable = when (value) {
+                is Drawable -> value
+                is IIcon -> IconicsDrawable(context, value).sizeDp(24)/*.colorInt(Color.BLACK)*/
+                is Int -> context.getDrawableFromRes(value)
+                else -> null
+            }
+        }
+
+    private var textInputWatcher = object : TextWatcher {
+        override fun afterTextChanged(s: Editable?) {}
+        override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+        override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            textInputChangedListener?.onTextChanged(s?.toString() ?: "", start, before, count)
+        }
     }
-    var toggleGroupSingleSelectionListener: OnToggleGroupChangeListener? = null
 
-    interface OnToggleGroupCheckedListener {
-        fun onMultipleSelection(id: Int, checked: Boolean)
+    interface OnTextInputChangedListener {
+        fun onTextChanged(s: String, start: Int, before: Int, count: Int)
     }
-    var toggleGroupMultipleSelectionListener: OnToggleGroupCheckedListener? = null
-
-    interface OnToggleGroupSortingListener {
-        fun onSortingOrder(id: Int, sortMode: Int)
-    }
-    var toggleGroupSortingOrderListener: OnToggleGroupSortingListener? = null
-
-
+    var textInputChangedListener: OnTextInputChangedListener? = null
 
 
 
@@ -336,7 +408,7 @@ class NavBottomSheet : CoordinatorLayout {
             bottomSheetBehavior.state = if (value) BottomSheetBehavior.STATE_EXPANDED else BottomSheetBehavior.STATE_HIDDEN
         }
     fun open() { isOpen = true }
-    fun close() { isOpen = true }
+    fun close() { isOpen = false }
     fun toggle() {
         if (!enable)
             return

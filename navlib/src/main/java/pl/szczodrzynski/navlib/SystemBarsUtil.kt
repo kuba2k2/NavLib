@@ -11,6 +11,7 @@ import android.view.View
 import android.view.View.*
 import android.view.Window
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.ViewCompat
 import com.mikepenz.materialize.util.KeyboardUtil
@@ -36,8 +37,6 @@ class SystemBarsUtil(private val activity: Activity) {
          */
         const val COLOR_DO_NOT_CHANGE = -3
 
-        private const val COLOR_DARK_OVERLAY = 0x22000000
-
         private const val TARGET_MODE_NORMAL = 0
         private const val TARGET_MODE_LIGHT = 1
         private const val TARGET_MODE_GRADIENT = 2
@@ -59,7 +58,7 @@ class SystemBarsUtil(private val activity: Activity) {
      *
      * This means it will display under the system bars
      * and you should probably provide [statusBarBgView],
-     * [navigationBarBgView] and [paddingBySystemBars].
+     * [navigationBarBgView] and [marginBySystemBars].
      */
     var appFullscreen = false
 
@@ -126,13 +125,17 @@ class SystemBarsUtil(private val activity: Activity) {
     var navigationBarDarkView: View? = null
 
     /**
-     * A view which will have the padding added not to overlap with the status/nav bar.
+     * A view which will have the margin added not to overlap with the status/nav bar.
      */
-    var paddingBySystemBars: View? = null
+    var marginBySystemBars: View? = null
+    /**
+     * A view which will listen to the inset applying.
+     */
+    var insetsListener: View? = null
     /**
      * A view which will have the padding added not to overlap with the nav bar.
      * Useful for persistent bottom sheets.
-     * Requires [paddingBySystemBars].
+     * Requires [marginBySystemBars].
      */
     var paddingByNavigationBar: View? = null
 
@@ -140,6 +143,8 @@ class SystemBarsUtil(private val activity: Activity) {
     private var insetsApplied = false
 
     fun commit() {
+        Log.d("NavLib", "SystemBarsUtil applying")
+        insetsApplied = false
         if (paddingByKeyboard != null) {
             // thanks mikepenz for this life-saving class
             keyboardUtil = KeyboardUtil(activity, paddingByKeyboard)
@@ -289,11 +294,14 @@ class SystemBarsUtil(private val activity: Activity) {
             }
 
             // PADDING
-            if (paddingBySystemBars != null) {
+            if (insetsListener != null) {
                 if (SDK_INT >= LOLLIPOP) {
-                    ViewCompat.setOnApplyWindowInsetsListener(paddingBySystemBars!!) { _, insets ->
+                    ViewCompat.setOnApplyWindowInsetsListener(insetsListener!!) { _, insets ->
+                        Toast.makeText(activity, "Insets applied ", Toast.LENGTH_SHORT).show()
+                        Log.d("NavLib", "Got insets left = ${insets.systemWindowInsetLeft}, top = ${insets.systemWindowInsetTop}, right = ${insets.systemWindowInsetRight}, bottom = ${insets.systemWindowInsetBottom}")
                         if (insetsApplied)
                             return@setOnApplyWindowInsetsListener insets.consumeSystemWindowInsets()
+                        Log.d("NavLib", "Applied insets left = ${insets.systemWindowInsetLeft}, top = ${insets.systemWindowInsetTop}, right = ${insets.systemWindowInsetRight}, bottom = ${insets.systemWindowInsetBottom}")
                         insetsApplied = true
                         applyPadding(
                             insets.systemWindowInsetLeft,
@@ -313,7 +321,7 @@ class SystemBarsUtil(private val activity: Activity) {
 
 
                     var navigationBarSize = 0
-                    if (hasNavigationBar(resources) && targetAppFullscreen) {
+                    if (hasNavigationBar(activity) && targetAppFullscreen) {
                         val orientation = resources.configuration.orientation
 
                         val navigationBarRes = when {
@@ -346,7 +354,7 @@ class SystemBarsUtil(private val activity: Activity) {
     }
 
     private fun applyPadding(left: Int, top: Int, right: Int, bottom: Int) {
-        paddingBySystemBars?.setPadding(left, top, right, bottom)
+        marginBySystemBars?.setPadding(left, top, right, bottom)
 
         statusBarBgView?.layoutParams?.height = top
         navigationBarBgView?.layoutParams?.height = bottom

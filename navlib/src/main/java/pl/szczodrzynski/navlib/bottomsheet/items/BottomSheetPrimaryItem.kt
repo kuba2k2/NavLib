@@ -15,7 +15,7 @@ import pl.szczodrzynski.navlib.R
 import pl.szczodrzynski.navlib.colorAttr
 import pl.szczodrzynski.navlib.getColorFromAttr
 
-data class PrimaryItem(override val isContextual: Boolean = true) : IBottomSheetItem<PrimaryItem.ViewHolder> {
+data class BottomSheetPrimaryItem(override val isContextual: Boolean = true) : IBottomSheetItem<BottomSheetPrimaryItem.ViewHolder> {
 
     /*_                             _
      | |                           | |
@@ -67,47 +67,47 @@ data class PrimaryItem(override val isContextual: Boolean = true) : IBottomSheet
     var iconicsIcon: IIcon? = null
     var onClickListener: View.OnClickListener? = null
 
-    fun withId(id: Int): PrimaryItem {
+    fun withId(id: Int): BottomSheetPrimaryItem {
         this.id = id
         return this
     }
 
-    fun withTitle(title: CharSequence): PrimaryItem {
+    fun withTitle(title: CharSequence): BottomSheetPrimaryItem {
         this.title = title
         this.titleRes = null
         return this
     }
-    fun withTitle(@StringRes title: Int): PrimaryItem {
+    fun withTitle(@StringRes title: Int): BottomSheetPrimaryItem {
         this.title = null
         this.titleRes = title
         return this
     }
 
-    fun withDescription(description: CharSequence): PrimaryItem {
+    fun withDescription(description: CharSequence): BottomSheetPrimaryItem {
         this.description = description
         this.descriptionRes = null
         return this
     }
-    fun withDescription(@StringRes description: Int): PrimaryItem {
+    fun withDescription(@StringRes description: Int): BottomSheetPrimaryItem {
         this.description = null
         this.descriptionRes = description
         return this
     }
 
-    fun withIcon(icon: Drawable): PrimaryItem {
+    fun withIcon(icon: Drawable): BottomSheetPrimaryItem {
         this.icon = ImageHolder(icon)
         return this
     }
-    fun withIcon(@DrawableRes icon: Int): PrimaryItem {
+    fun withIcon(@DrawableRes icon: Int): BottomSheetPrimaryItem {
         this.icon = ImageHolder(icon)
         return this
     }
-    fun withIcon(icon: IIcon): PrimaryItem {
+    fun withIcon(icon: IIcon): BottomSheetPrimaryItem {
         this.iconicsIcon = icon
         return this
     }
 
-    fun withOnClickListener(onClickListener: View.OnClickListener): PrimaryItem {
+    fun withOnClickListener(onClickListener: View.OnClickListener): BottomSheetPrimaryItem {
         this.onClickListener = onClickListener
         return this
     }
