@@ -2,6 +2,7 @@ package pl.szczodrzynski.navlib.bottomsheet.items
 
 import android.graphics.drawable.Drawable
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.annotation.StringRes
@@ -9,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
+import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.sizeDp
 import com.mikepenz.materialize.holder.ImageHolder
 import pl.szczodrzynski.navlib.R
@@ -33,22 +35,31 @@ data class BottomSheetPrimaryItem(override val isContextual: Boolean = true) : I
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val root = itemView.findViewById<View>(R.id.item_root)
+        val image = itemView.findViewById<ImageView>(R.id.item_icon)
         val text = itemView.findViewById<TextView>(R.id.item_text)
+        val description = itemView.findViewById<TextView>(R.id.item_description)
     }
 
     override fun bindViewHolder(viewHolder: ViewHolder) {
         viewHolder.root.setOnClickListener(onClickListener)
-        viewHolder.text.text = title
-        viewHolder.text.setTextColor(getColorFromAttr(viewHolder.text.context, R.attr.material_drawer_primary_text))
-        viewHolder.text.setCompoundDrawables(
-            IconicsDrawable(viewHolder.text.context)
-                .icon(iconicsIcon?:CommunityMaterial.Icon.cmd_android)
+
+        viewHolder.image.setImageDrawable(IconicsDrawable(viewHolder.text.context)
+                .icon(iconicsIcon ?: CommunityMaterial.Icon.cmd_android)
                 .colorAttr(viewHolder.text.context, R.attr.material_drawer_primary_icon)
-                .sizeDp(20),
-            null,
-            null,
-            null
-        )
+                .sizeDp(24))
+
+        viewHolder.description.visibility = View.VISIBLE
+        when {
+            descriptionRes != null -> viewHolder.description.setText(descriptionRes!!)
+            description != null -> viewHolder.description.text = description
+            else -> viewHolder.description.visibility = View.GONE
+        }
+
+        when {
+            titleRes != null -> viewHolder.text.setText(titleRes!!)
+            else -> viewHolder.text.text = title
+        }
+        viewHolder.text.setTextColor(getColorFromAttr(viewHolder.text.context, R.attr.material_drawer_primary_text))
     }
 
     /*_____        _

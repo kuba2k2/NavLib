@@ -85,10 +85,6 @@ class MainActivity : AppCompatActivity() {
             recreate()
         }
 
-        commitButton.setOnClickListener {
-            navView.systemBarsUtil?.commit()
-        }
-
         //navView.init(this)
 
         // init the drawer before SystemBarsUtil
@@ -285,12 +281,12 @@ class MainActivity : AppCompatActivity() {
             setAccountHeaderBackground("/sdcard/ban.gif")
 
             appendProfiles(
-                IDrawerProfile(1, "Think Pad", "think with a pad", "/sdcard/thinkpad.gif"),
-                IDrawerProfile(2, "Phil Swift", "I sawed this boat in half!!!", "/sdcard/phil.jpg"),
-                IDrawerProfile(3, "The meme bay", "Visit my amazing website", "/sdcard/loader.gif"),
-                IDrawerProfile(4, "Mark Zuckerberg", "", null),
-                IDrawerProfile(5, "I love GDPR", "spotify:user:popjustice:playlist:5Pe51v0sHLybSEkX0m0JRf", "/sdcard/tenor2.gif"),
-                IDrawerProfile(6, "Gandalf", "http://sax.hol.es/", "/sdcard/facepalm.gif")
+                DrawerProfile(1, "Think Pad", "think with a pad", "/sdcard/thinkpad.gif"),
+                DrawerProfile(2, "Phil Swift", "I sawed this boat in half!!!", "/sdcard/phil.jpg"),
+                DrawerProfile(3, "The meme bay", "Visit my amazing website", "/sdcard/loader.gif"),
+                DrawerProfile(4, "Mark Zuckerberg", "", null),
+                DrawerProfile(5, "I love GDPR", "spotify:user:popjustice:playlist:5Pe51v0sHLybSEkX0m0JRf", "/sdcard/tenor2.gif"),
+                DrawerProfile(6, "Gandalf", "http://sax.hol.es/", "/sdcard/facepalm.gif")
             )
 
             addProfileSettings(

@@ -78,7 +78,8 @@ class NavView : FrameLayout {
             findViewById(R.id.nv_drawerContainer),
             findViewById(R.id.nv_fixedDrawerContainer),
             findViewById(R.id.nv_miniDrawerContainerLandscape),
-            findViewById(R.id.nv_miniDrawerContainerPortrait)
+            findViewById(R.id.nv_miniDrawerContainerPortrait),
+            findViewById(R.id.nv_miniDrawerElevation)
         )
         toolbar = findViewById(R.id.nv_toolbar)
         bottomBar = findViewById(R.id.nv_bottomBar)
@@ -86,6 +87,8 @@ class NavView : FrameLayout {
 
         drawer.toolbar = toolbar
         drawer.bottomBar = bottomBar
+
+        toolbar.toolbarImage = findViewById(R.id.nv_toolbar_image)
 
         bottomBar.drawer = drawer
         bottomBar.bottomSheet = bottomSheet
@@ -96,14 +99,15 @@ class NavView : FrameLayout {
     }
 
     fun configSystemBarsUtil(systemBarsUtil: SystemBarsUtil) {
-        this.systemBarsUtil = systemBarsUtil
-        systemBarsUtil.statusBarBgView = statusBarBackground
-        systemBarsUtil.navigationBarBgView = navigationBarBackground
-        systemBarsUtil.statusBarDarkView = nv_statusBarDarker
-        //systemBarsUtil.navigationBarDarkView = navigationBarBackground
-        systemBarsUtil.insetsListener = nv_drawerContainer
-        systemBarsUtil.marginBySystemBars = mainView
-        systemBarsUtil.paddingByNavigationBar = bottomSheet.getContentView()
+        this.systemBarsUtil = systemBarsUtil.apply {
+            this.statusBarBgView = statusBarBackground
+            this.navigationBarBgView = navigationBarBackground
+            this.statusBarDarkView = nv_statusBarDarker
+            //this.navigationBarDarkView = navigationBarBackground
+            this.insetsListener = nv_drawerContainer
+            this.marginBySystemBars = mainView
+            this.paddingByNavigationBar = bottomSheet.getContentView()
+        }
     }
 
 
@@ -136,7 +140,7 @@ class NavView : FrameLayout {
         extendedFloatingActionButton.setOnClickListener(onClickListener)
     }
 
-    var systemBarsUtil: SystemBarsUtil? = null
+    internal var systemBarsUtil: SystemBarsUtil? = null
 
     private fun setContentMargins() {
         val layoutParams = CoordinatorLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)

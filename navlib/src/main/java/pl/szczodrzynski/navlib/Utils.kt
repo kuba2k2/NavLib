@@ -3,7 +3,6 @@ package pl.szczodrzynski.navlib
 import android.app.Activity
 import android.content.Context
 import android.content.res.Configuration
-import android.content.res.Resources
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.TypedValue
@@ -14,17 +13,12 @@ import com.google.android.material.elevation.ElevationOverlayProvider
 import com.mikepenz.iconics.IconicsColor
 import com.mikepenz.iconics.IconicsDrawable
 import android.util.DisplayMetrics
-import android.view.Display
 import android.view.WindowManager
-import android.R.attr.y
-import android.R.attr.x
-import android.graphics.Point
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
 import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.holder.StringHolder
-import com.mikepenz.materialdrawer.model.BaseDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.Badgeable
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
-import pl.szczodrzynski.navlib.drawer.items.DrawerPrimaryItem
 
 
 /*private val displayMetrics by lazy {
@@ -61,12 +55,6 @@ fun getBottomInset(context: Context, view: View): Float {
     } else {
         48
     } * context.resources.displayMetrics.density
-}
-
-fun getColorFromAttr(context: Context, @AttrRes color: Int): Int {
-    val typedValue = TypedValue()
-    context.theme.resolveAttribute(color, typedValue, true)
-    return typedValue.data
 }
 
 fun View.getActivity(): Activity {
@@ -136,6 +124,12 @@ fun hasNavigationBar(context: Context): Boolean {
 
 fun IconicsDrawable.colorAttr(context: Context, @AttrRes attrRes: Int) = color(IconicsColor.colorInt(getColorFromAttr(context, attrRes)))
 
+fun getColorFromAttr(context: Context, @AttrRes color: Int): Int {
+    val typedValue = TypedValue()
+    context.theme.resolveAttribute(color, typedValue, true)
+    return typedValue.data
+}
+
 fun Context.getDrawableFromRes(@DrawableRes id: Int): Drawable {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
         resources.getDrawable(id, theme)
@@ -145,10 +139,34 @@ fun Context.getDrawableFromRes(@DrawableRes id: Int): Drawable {
     }
 }
 
+@ColorInt
+fun Context.getColorFromRes(@ColorRes id: Int): Int {
+    return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+        resources.getColor(id, theme)
+    }
+    else {
+        resources.getColor(id)
+    }
+}
+
 fun Drawer.updateBadge(identifier: Long, badge: StringHolder?) {
     val drawerItem = getDrawerItem(identifier)
     if (drawerItem is Badgeable<*>) {
         drawerItem.withBadge(badge)
         updateItem(drawerItem)
     }
+}
+
+fun crc16(buffer: String): Int {
+    /* Note the change here */
+    var crc = 0x1D0F
+    for (j in buffer) {
+        crc = crc.ushr(8) or (crc shl 8) and 0xffff
+        crc = crc xor (j.toInt() and 0xff)//byte to int, trunc sign
+        crc = crc xor (crc and 0xff shr 4)
+        crc = crc xor (crc shl 12 and 0xffff)
+        crc = crc xor (crc and 0xFF shl 5 and 0xffff)
+    }
+    crc = crc and 0xffff
+    return crc
 }

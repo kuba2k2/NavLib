@@ -99,7 +99,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:overScrollMode="never"
-                    android:minHeight="50dp"
+                    tools:minHeight="50dp"
                     tools:listitem="@layout/nav_bs_item_primary"/>
 
             </LinearLayout>

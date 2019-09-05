@@ -1,6 +1,17 @@
 package pl.szczodrzynski.navlib.drawer
 
-data class IDrawerProfile(var id: Int,
-                          var name: String,
-                          var subname: String?,
-                          var image: String?)
+import android.content.Context
+import android.graphics.drawable.Drawable
+import android.widget.ImageView
+import pl.szczodrzynski.navlib.ImageHolder
+
+interface IDrawerProfile {
+    var id: Int
+    var name: String?
+    var subname: String?
+    var image: String?
+
+    fun getImageDrawable(context: Context): Drawable?
+    fun getImageHolder(context: Context): ImageHolder?
+    fun applyImageTo(imageView: ImageView)
+}

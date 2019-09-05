@@ -3,10 +3,12 @@ package pl.szczodrzynski.navlib
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.PorterDuff
+import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.view.View
 import android.widget.ImageView
+import androidx.annotation.ColorInt
 import androidx.annotation.DrawableRes
 import androidx.appcompat.content.res.AppCompatResources
 import com.mikepenz.iconics.IconicsColor
@@ -33,8 +35,20 @@ open class ImageHolder : com.mikepenz.materialdrawer.holder.ImageHolder {
 
     constructor(@DrawableRes iconRes: Int) : super(iconRes) {}
 
+    constructor(@DrawableRes iconRes: Int, colorFilter: Int?) : super(iconRes) {
+        this.colorFilter = colorFilter
+    }
+
     constructor(iicon: IIcon) : super(null as Bitmap?) {
         this.iIcon = iicon
+    }
+
+    @ColorInt
+    var colorFilter: Int? = null
+    var colorFilterMode: PorterDuff.Mode = PorterDuff.Mode.DST_OVER
+
+    override fun applyTo(imageView: ImageView): Boolean {
+        return applyTo(imageView, null)
     }
 
     /**
@@ -69,6 +83,11 @@ open class ImageHolder : com.mikepenz.materialdrawer.holder.ImageHolder {
             imageView.setImageBitmap(null)
             return false
         }
+
+        if (colorFilter != null) {
+            imageView.colorFilter = PorterDuffColorFilter(colorFilter!!, colorFilterMode)
+        }
+
         return true
     }
 }

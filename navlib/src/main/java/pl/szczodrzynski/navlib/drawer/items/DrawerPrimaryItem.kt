@@ -9,3 +9,10 @@ class DrawerPrimaryItem : PrimaryDrawerItem() {
         return this
     }
 }
+
+fun PrimaryDrawerItem.withAppTitle(appTitle: String?): PrimaryDrawerItem {
+    if (this !is DrawerPrimaryItem)
+        return this
+    this.appTitle = appTitle
+    return this
+}

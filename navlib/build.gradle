@@ -3,14 +3,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-kapt'
 apply plugin: 'kotlin-android-extensions'
 android {
-    compileSdkVersion 28
-
+    compileSdkVersion setup.compileSdk
 
     defaultConfig {
-        minSdkVersion 16
-        targetSdkVersion 28
-        versionCode 300
-        versionName "0.3.0"
+        minSdkVersion setup.minSdk
+        targetSdkVersion setup.targetSdk
+        versionCode release.versionCode
+        versionName release.versionName
 
         consumerProguardFiles 'consumer-rules.pro'
 
@@ -35,21 +34,20 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.appcompat:appcompat:1.0.2'
-    implementation 'androidx.core:core-ktx:1.0.2'
-    implementation 'com.google.android.material:material:1.1.0-alpha09'
-    implementation "androidx.legacy:legacy-support-v4:1.0.0"
 
-    implementation "com.mikepenz:materialdrawer:7.0.0-rc05"
-    implementation "com.mikepenz:iconics-core:4.0.1-b01"
-    implementation 'com.mikepenz:community-material-typeface:3.5.95.1-kotlin@aar'
-    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.15'
+    implementation "androidx.annotation:annotation:${versions.annotation}"
+    implementation "androidx.appcompat:appcompat:${versions.appcompat}"
+    implementation "androidx.constraintlayout:constraintlayout:${versions.constraintLayout}"
+    implementation "androidx.core:core-ktx:${versions.ktx}"
+    implementation "androidx.gridlayout:gridlayout:1.0.0"
+    implementation "androidx.legacy:legacy-support-v4:${versions.legacy}"
+    implementation "androidx.recyclerview:recyclerview:${versions.recyclerView}"
+    implementation "com.google.android.material:material:${versions.material}"
 
-    implementation "androidx.appcompat:appcompat:${androidXAppCompat}"
-    implementation "androidx.recyclerview:recyclerview:${androidXRecyclerView}"
-    implementation "androidx.annotation:annotation:1.1.0"
-    implementation "com.google.android.material:material:${googleMaterial}"
-    implementation "androidx.constraintlayout:constraintlayout:${androidXConstraintLayout}"
-    implementation 'androidx.gridlayout:gridlayout:1.0.0'
+    api "com.github.kuba2k2.MaterialDrawer:library:${versions.materialdrawer}"
+    api "com.mikepenz:community-material-typeface:${versions.font_cmd}@aar"
+    api "com.mikepenz:iconics-core:${versions.iconics}"
+    implementation "com.mikepenz:itemanimators:1.1.0"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
+    implementation "pl.droidsonroids.gif:android-gif-drawable:${versions.gifdrawable}"
 }

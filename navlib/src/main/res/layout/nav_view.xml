@@ -53,7 +53,20 @@
                         android:background="?actionBarBackground"
                         android:elevation="4dp"
                         app:title="@string/app_name"
-                        tools:targetApi="lollipop" />
+                        tools:targetApi="lollipop">
+
+                        <com.mikepenz.materialdrawer.view.BezelImageView
+                            android:id="@+id/nv_toolbar_image"
+                            android:layout_width="30dp"
+                            android:layout_height="30dp"
+                            android:layout_gravity="end"
+                            android:layout_marginEnd="13dp"
+                            android:layout_marginRight="13dp"
+                            android:scaleType="centerCrop"
+                            app:biv_selectorOnPress="#80ffffff"
+                            tools:src="@tools:sample/backgrounds/scenic" />
+
+                    </pl.szczodrzynski.navlib.NavToolbar>
 
                     <View
                         android:id="@+id/nv_toolbarElevation"

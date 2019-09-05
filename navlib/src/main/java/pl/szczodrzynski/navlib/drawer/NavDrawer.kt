@@ -6,8 +6,7 @@ import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Color
-import android.graphics.drawable.Drawable
-import android.net.Uri
+import android.graphics.PorterDuff
 import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
@@ -15,12 +14,7 @@ import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import androidx.customview.widget.ViewDragHelper
 import androidx.drawerlayout.widget.DrawerLayout
-import com.mikepenz.iconics.IconicsColor
-import com.mikepenz.iconics.IconicsColor.Companion.colorRes
-import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.IconicsSize
-import com.mikepenz.iconics.IconicsSize.Companion.dp
-import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
+import com.mikepenz.itemanimators.AlphaCrossFadeAnimator
 import com.mikepenz.materialdrawer.*
 import com.mikepenz.materialdrawer.holder.BadgeStyle
 import com.mikepenz.materialdrawer.holder.StringHolder
@@ -29,8 +23,6 @@ import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IProfile
-import pl.droidsonroids.gif.GifDrawable
-import pl.droidsonroids.gif.MultiCallback
 import pl.szczodrzynski.navlib.*
 import pl.szczodrzynski.navlib.R
 import pl.szczodrzynski.navlib.drawer.items.DrawerPrimaryItem
@@ -40,7 +32,8 @@ class NavDrawer(
     val drawerContainer: LinearLayout,
     val fixedDrawerContainer: FrameLayout,
     val miniDrawerContainerLandscape: FrameLayout,
-    val miniDrawerContainerPortrait: FrameLayout
+    val miniDrawerContainerPortrait: FrameLayout,
+    val miniDrawerElevation: View
 ) {
     companion object {
         private const val DRAWER_MODE_NORMAL = 0
@@ -82,57 +75,61 @@ class NavDrawer(
             .withColorRes(R.color.md_red_700)
 
         val drawerBuilder = DrawerBuilder()
-            .withActivity(activity)
-            .withDrawerLayout(R.layout.material_drawer_fits_not)
-            .withRootView(drawerContainer)
-            .withFullscreen(true)
-            .withTranslucentStatusBar(false)
-            .withTranslucentNavigationBar(true)
-            .withTranslucentNavigationBarProgrammatically(false)
-            .withToolbar(bottomBar)
-            .withDisplayBelowStatusBar(true)
-            .withActionBarDrawerToggleAnimated(true)
-            .withGenerateMiniDrawer(true /* if it is not showing on screen, clicking items throws an exception */)
-            .withOnDrawerListener(object : Drawer.OnDrawerListener {
-                override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
-                override fun onDrawerOpened(drawerView: View) {
-                    drawerOpenedListener?.invoke()
-                }
-                override fun onDrawerClosed(drawerView: View) {
-                    drawerClosedListener?.invoke()
-                    profileSelectionClose()
-                }
-            })
-            .withOnDrawerItemClickListener { _, position, drawerItem ->
-                if (drawerItem.identifier.toInt() == selection) {
-                    return@withOnDrawerItemClickListener false
-                }
-                when (drawerItemSelectedListener?.invoke(drawerItem.identifier.toInt(), position, drawerItem)) {
-                    true -> {
-                        when {
-                            !drawerItem.isSelectable ->  {
-                                setSelection(selection, false)
-                                return@withOnDrawerItemClickListener false
+                .withActivity(activity)
+                .withDrawerLayout(R.layout.material_drawer_fits_not)
+                .withHasStableIds(true)
+                .withItemAnimator(AlphaCrossFadeAnimator())
+                .withRootView(drawerContainer)
+                .withFullscreen(true)
+                .withTranslucentStatusBar(false)
+                .withTranslucentNavigationBar(true)
+                .withTranslucentNavigationBarProgrammatically(false)
+                .withToolbar(bottomBar)
+                .withDisplayBelowStatusBar(true)
+                .withActionBarDrawerToggleAnimated(true)
+                .withShowDrawerOnFirstLaunch(true)
+                .withShowDrawerUntilDraggedOpened(true)
+                .withGenerateMiniDrawer(true /* if it is not showing on screen, clicking items throws an exception */)
+                .withOnDrawerListener(object : Drawer.OnDrawerListener {
+                    override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
+                    override fun onDrawerOpened(drawerView: View) {
+                        drawerOpenedListener?.invoke()
+                    }
+                    override fun onDrawerClosed(drawerView: View) {
+                        drawerClosedListener?.invoke()
+                        profileSelectionClose()
+                    }
+                })
+                .withOnDrawerItemClickListener { _, position, drawerItem ->
+                    if (drawerItem.identifier.toInt() == selection) {
+                        return@withOnDrawerItemClickListener false
+                    }
+                    when (drawerItemSelectedListener?.invoke(drawerItem.identifier.toInt(), position, drawerItem)) {
+                        true -> {
+                            when {
+                                !drawerItem.isSelectable ->  {
+                                    setSelection(selection, false)
+                                    return@withOnDrawerItemClickListener false
+                                }
+                                drawerItem is DrawerPrimaryItem -> toolbar.title = drawerItem.appTitle ?: drawerItem.name?.getText(context) ?: ""
+                                drawerItem is BaseDrawerItem<*, *> -> toolbar.title = drawerItem.name?.getText(context) ?: ""
                             }
-                            drawerItem is DrawerPrimaryItem -> toolbar.title = drawerItem.appTitle ?: drawerItem.name?.text ?: ""
-                            drawerItem is BaseDrawerItem<*, *> -> toolbar.title = drawerItem.name?.text ?: ""
+                            //setSelection(drawerItem.identifier.toInt(), false)
+                            return@withOnDrawerItemClickListener false
                         }
-                        setSelection(drawerItem.identifier.toInt(), false)
-                        return@withOnDrawerItemClickListener false
+                        false -> {
+                            setSelection(selection, false)
+                            return@withOnDrawerItemClickListener true
+                        }
+                        else -> {
+                            return@withOnDrawerItemClickListener false
+                        }
                     }
-                    false -> {
-                        setSelection(selection, false)
-                        return@withOnDrawerItemClickListener true
-                    }
-                    else -> {
-                        return@withOnDrawerItemClickListener false
-                    }
-                }
 
-            }
-            .withOnDrawerItemLongClickListener { _, position, drawerItem ->
-                drawerItemLongClickListener?.invoke(drawerItem.identifier.toInt(), position, drawerItem) ?: true
-            }
+                }
+                .withOnDrawerItemLongClickListener { _, position, drawerItem ->
+                    drawerItemLongClickListener?.invoke(drawerItem.identifier.toInt(), position, drawerItem) ?: true
+                }
 
 
         val accountHeaderBuilder = AccountHeaderBuilder()
@@ -144,11 +141,13 @@ class NavDrawer(
                 }
                 updateBadges()
                 if (current) {
-                    profileSelectionClose()
                     close()
+                    profileSelectionClose()
                     return@withOnAccountHeaderListener true
                 }
-                drawerProfileSelectedListener?.invoke(profile.identifier.toInt(), profile, current, view) ?: false
+                (drawerProfileSelectedListener?.invoke(profile.identifier.toInt(), profile, current, view) ?: false).also {
+                    setToolbarProfileImage(profileList.singleOrNull { it.id == profile.identifier.toInt() })
+                }
             }
             .withOnAccountHeaderItemLongClickListener { view, profile, current ->
                 if (profile is ProfileSettingDrawerItem) {
@@ -182,12 +181,18 @@ class NavDrawer(
             }
             return@withOnMiniDrawerItemClickListener false
         }
+        miniDrawer?.withIncludeSecondaryDrawerItems(false)
 
         // TODO 2019-08-27 build miniDrawerView only if needed
         // building in decideDrawerMode causes an exception when clicking drawer items
         // also update method updateMiniDrawer...
         miniDrawerView = miniDrawer?.build(context)
         updateMiniDrawer()
+
+        toolbar.profileImageClickListener = {
+            profileSelectionOpen()
+            open()
+        }
 
         val configuration = context.resources.configuration
         decideDrawerMode(
@@ -258,6 +263,12 @@ class NavDrawer(
                 drawer?.updateItem(it)
             updateMiniDrawer()
         }
+    }
+
+    fun setItems(vararg items: IDrawerItem<*>) {
+        drawer?.removeAllItems()
+        drawer?.addItems(*items)
+        updateMiniDrawer()
     }
 
     /*    _____      _            _                        _   _               _
@@ -377,6 +388,8 @@ class NavDrawer(
                 Log.d("NavLib", "- slider enabled")
             }
         }
+
+        miniDrawerElevation.visibility = if (drawerMode == DRAWER_MODE_MINI) View.VISIBLE else View.GONE
     }
 
     private fun updateMiniDrawer() {
@@ -434,13 +447,25 @@ class NavDrawer(
 
     fun miniDrawerEnabled(): Boolean = drawerMode == DRAWER_MODE_MINI
     fun fixedDrawerEnabled(): Boolean = drawerMode == DRAWER_MODE_FIXED
+
     fun setSelection(id: Int, fireOnClick: Boolean = true) {
+        Log.d("NavDebug", "setSelection(id = $id, fireOnClick = $fireOnClick)")
+        // seems that this cannot be open, because the itemAdapter has Profile items
+        // instead of normal Drawer items...
+        profileSelectionClose()
         selection = id
-        if (drawer?.currentSelection != id.toLong())
+
+        if (drawer?.currentSelection != id.toLong()) {
+
+        }
+
+        if (drawer?.currentSelection != id.toLong() || !fireOnClick)
             drawer?.setSelection(id.toLong(), fireOnClick)
+
         if (drawerMode == DRAWER_MODE_MINI)
             miniDrawer?.setSelection(id.toLong())
     }
+    fun getSelection(): Int = selection
 
     // TODO 2019-08-27 add methods for Drawable, @DrawableRes
     fun setAccountHeaderBackground(path: String?) {
@@ -457,7 +482,7 @@ class NavDrawer(
          |  ___/ '__/ _ \|  _| | |/ _ \/ __|
          | |   | | | (_) | | | | |  __/\__ \
          |_|   |_|  \___/|_| |_|_|\___||__*/
-    private var profileList = arrayListOf<IDrawerProfile>()
+    private var profileList: MutableList<IDrawerProfile> = mutableListOf()
 
     fun addProfileSettings(vararg items: ProfileSettingDrawerItem) {
         accountHeader?.profiles?.addAll(items)
@@ -465,47 +490,40 @@ class NavDrawer(
 
     private fun updateProfileList() {
         // remove all profile items
-        accountHeader?.profiles?.filterNot { it is ProfileDrawerItem }
+        val profiles = accountHeader?.profiles?.filterNot { it is ProfileDrawerItem } as MutableList<IProfile<*>>?
 
         if (profileList.isEmpty())
             drawerProfileListEmptyListener?.invoke()
 
         profileList.forEachIndexed { index, profile ->
-            val image = if (profile.image != null) {
-                try {
-                    ImageHolder(profile.image ?: "")
-                }
-                catch (_: Exception) {
-                    ImageHolder(R.drawable.profile4)
-                }
-            }
-            else {
-                ImageHolder(R.drawable.profile4)
-            }
+            val image = profile.getImageHolder(context)
             ProfileDrawerItem()
                 .withIdentifier(profile.id.toLong())
                 .withName(profile.name)
                 .withEmail(profile.subname)
                 .also { it.icon = image }
                 .withNameShown(true)
-                .also { accountHeader?.profiles?.add(index, it) }
+                .also { profiles?.add(index, it) }
         }
 
-        accountHeader?.profiles = accountHeader?.profiles
+        accountHeader?.profiles = profiles
 
         updateMiniDrawer()
     }
 
-    fun setProfileList(profiles: ArrayList<IDrawerProfile>) {
-        profileList = profiles
+    fun setProfileList(profiles: MutableList<out IDrawerProfile>) {
+        profileList = profiles as MutableList<IDrawerProfile>
         updateProfileList()
-        /*profileList.clear()
-        profileList.addAll(profiles)*/
     }
+    val profileListEmpty: Boolean
+        get() = profileList.isEmpty()
     var currentProfile: Int
         get() = accountHeader?.activeProfile?.identifier?.toInt() ?: -1
         set(value) {
-            accountHeader?.setActiveProfile(value.toLong(), true)
+            Log.d("NavDebug", "currentProfile = $value")
+            accountHeader?.setActiveProfile(value.toLong(), false)
+            setToolbarProfileImage(profileList.singleOrNull { it.id == value })
+            updateBadges()
         }
     fun appendProfile(profile: IDrawerProfile) {
         profileList.add(profile)
@@ -532,7 +550,7 @@ class NavDrawer(
         updateProfileList()
     }
     fun removeProfileById(id: Int) {
-        profileList.filterNot { it.id == id }
+        profileList = profileList.filterNot { it.id == id }.toMutableList()
         updateProfileList()
     }
     fun removeProfileAt(index: Int) {
@@ -542,6 +560,9 @@ class NavDrawer(
     fun removeAllProfile() {
         profileList.clear()
         updateProfileList()
+    }
+    fun removeAllProfileSettings() {
+        accountHeader?.profiles = accountHeader?.profiles?.filterNot { it is ProfileSettingDrawerItem }?.toMutableList()
     }
 
     fun getProfileById(id: Int, run: (it: IDrawerProfile?) -> Unit) {
@@ -557,6 +578,10 @@ class NavDrawer(
         }
     }
 
+    private fun setToolbarProfileImage(profile: IDrawerProfile?) {
+        toolbar.profileImage = profile?.getImageDrawable(context)
+    }
+
 
     /*    ____            _
          |  _ \          | |
@@ -566,10 +591,11 @@ class NavDrawer(
          |____/ \__,_|\__,_|\__, |\___||___/
                              __/ |
                             |__*/
-    private var unreadCounterList = arrayListOf<IUnreadCounter>()
+    private var unreadCounterList: MutableList<IUnreadCounter> = mutableListOf()
     private val unreadCounterTypeMap = mutableMapOf<Int, Int>()
 
     fun updateBadges() {
+        Log.d("NavDebug", "updateBadges()")
         unreadCounterList.map {
             it.drawerItemId = unreadCounterTypeMap[it.type]
         }
@@ -577,9 +603,11 @@ class NavDrawer(
             if (it.drawerItemId == null)
                 return@forEach
             if (it.profileId != currentProfile) {
+                Log.d("NavDebug", "- Remove badge for ${it.drawerItemId}")
                 drawer?.updateBadge(it.drawerItemId?.toLong() ?: 0, null)
                 return@forEach
             }
+            Log.d("NavDebug", "- Set badge ${it.count} for ${it.drawerItemId}")
             drawer?.updateBadge(
                 it.drawerItemId?.toLong() ?: 0,
                 when {
@@ -592,14 +620,21 @@ class NavDrawer(
         updateMiniDrawer()
     }
 
-    fun setUnreadCounterList(unreadCounterList: ArrayList<IUnreadCounter>) {
-        this.unreadCounterList = unreadCounterList
+    fun setUnreadCounterList(unreadCounterList: MutableList<out IUnreadCounter>) {
+        this.unreadCounterList = unreadCounterList as MutableList<IUnreadCounter>
         updateBadges()
     }
 
     fun addUnreadCounterType(type: Int, drawerItem: Int) {
         unreadCounterTypeMap[type] = drawerItem
     }
+
+    data class UnreadCounter(
+            override var profileId: Int,
+            override var type: Int,
+            override var drawerItemId: Int?,
+            override var count: Int
+    ) : IUnreadCounter
 
     fun setUnreadCount(profileId: Int, type: Int, count: Int) {
         val item = unreadCounterList.singleOrNull {
@@ -610,7 +645,7 @@ class NavDrawer(
             updateBadges()
         }
         else {
-            unreadCounterList.add(IUnreadCounter(profileId, type, null, count))
+            unreadCounterList.add(UnreadCounter(profileId, type, null, count))
         }
     }
 }

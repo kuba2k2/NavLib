@@ -152,6 +152,7 @@ class NavBottomSheet : CoordinatorLayout {
                     // steal the focus from any EditTexts
                     dragBar.requestFocus()
                     hideKeyboard()
+                    onCloseListener?.invoke()
                 }
                 else if (!bottomSheetVisible) {
                     bottomSheetVisible = true
@@ -179,6 +180,8 @@ class NavBottomSheet : CoordinatorLayout {
         textInputEditText.addTextChangedListener(textInputWatcher)
     }
 
+    var onCloseListener: (() -> Unit)? = null
+
     /*    _____ _
          |_   _| |
            | | | |_ ___ _ __ ___  ___
@@ -189,38 +192,52 @@ class NavBottomSheet : CoordinatorLayout {
         appendItem(item)
     }
     fun appendItem(item: IBottomSheetItem<*>) {
-        items += item
-        adapter.notifyItemInserted(items.size - 1)
+        items.add(item)
+        adapter.notifyDataSetChanged()
+        //adapter.notifyItemInserted(items.size - 1)
+    }
+    fun appendItems(vararg items: IBottomSheetItem<*>) {
+        this.items.addAll(items)
+        adapter.notifyDataSetChanged()
+        //adapter.notifyItemRangeInserted(this.items.size - items.size, items.size)
     }
     fun prependItem(item: IBottomSheetItem<*>) {
         items.add(0, item)
-        adapter.notifyItemInserted(0)
+        adapter.notifyDataSetChanged()
+        //adapter.notifyItemInserted(0)
+    }
+    fun prependItems(vararg items: IBottomSheetItem<*>) {
+        this.items.addAll(0, items.toList())
+        adapter.notifyDataSetChanged()
+        //adapter.notifyItemRangeInserted(0, items.size)
     }
     fun addItemAt(index: Int, item: IBottomSheetItem<*>) {
         items.add(index, item)
-        adapter.notifyItemInserted(index)
+        adapter.notifyDataSetChanged()
+        //adapter.notifyItemInserted(index)
     }
     fun removeItemById(id: Int) {
         items.filterNot { it.id == id }
     }
     fun removeItemAt(index: Int) {
         items.removeAt(index)
-        adapter.notifyItemRemoved(index)
+        adapter.notifyDataSetChanged()
+        //adapter.notifyItemRemoved(index)
     }
     fun removeAllItems() {
         items.clear()
         adapter.notifyDataSetChanged()
     }
     fun removeAllStatic() {
-        items.filter { it.isContextual }
+        items.removeAll { !it.isContextual }
         adapter.notifyDataSetChanged()
     }
     fun removeAllContextual() {
-        items.filter { !it.isContextual }
+        items.removeAll { it.isContextual }
         adapter.notifyDataSetChanged()
     }
     fun removeSeparators() {
-        items.filterNot { it is BottomSheetSeparatorItem }
+        items.removeAll { it is BottomSheetSeparatorItem }
         adapter.notifyDataSetChanged()
     }
 
@@ -300,7 +317,7 @@ class NavBottomSheet : CoordinatorLayout {
          * bit 2 = current sorting mode
          */
         if (toggleGroupSelectionMode == TOGGLE_GROUP_SORTING_ORDER) {
-            val button = group.findViewById<MaterialButton>(checkedId)
+            val button = group.findViewById<MaterialButton>(checkedId) ?: return@OnButtonCheckedListener
             var tag = button.tag as Int
             var sortingMode: Int? = null
             if (isChecked) {

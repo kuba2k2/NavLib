@@ -1,6 +1,8 @@
 package pl.szczodrzynski.navlib.drawer
 
-data class IUnreadCounter(val profileId: Int,
-                          val type: Int,
-                          var drawerItemId: Int? = null,
-                          var count: Int)
+interface IUnreadCounter {
+    var profileId: Int
+    var type: Int
+    var drawerItemId: Int?
+    var count: Int
+}
