@@ -85,7 +85,7 @@ class NavDrawer(
                 .withTranslucentNavigationBar(true)
                 .withTranslucentNavigationBarProgrammatically(false)
                 .withToolbar(bottomBar)
-                .withDisplayBelowStatusBar(true)
+                .withDisplayBelowStatusBar(false)
                 .withActionBarDrawerToggleAnimated(true)
                 .withShowDrawerOnFirstLaunch(true)
                 .withShowDrawerUntilDraggedOpened(true)

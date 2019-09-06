@@ -252,6 +252,8 @@ class MainActivity : AppCompatActivity() {
                     .withIcon(CommunityMaterial.Icon.cmd_alarm_bell),
 
                 DrawerPrimaryItem().withName("Lock screen")
+                    .withDescription("aaand not visible in Mini Drawer")
+                    .withHiddenInMiniDrawer(true)
                     .withIdentifier(62)
                     .withBadgeStyle(badgeStyle)
                     .withIcon(CommunityMaterial.Icon.cmd_fingerprint),
@@ -278,15 +280,15 @@ class MainActivity : AppCompatActivity() {
             setUnreadCount(2, 20, 30) // phil swift has 30 unreads on "Settings item"
             setUnreadCount(4, 40, 1000) // mark has 99+ unreads on "Lock screen item"
 
-            setAccountHeaderBackground("/sdcard/ban.gif")
+            //setAccountHeaderBackground("/sdcard/ban.gif")
 
             appendProfiles(
-                DrawerProfile(1, "Think Pad", "think with a pad", "/sdcard/thinkpad.gif"),
-                DrawerProfile(2, "Phil Swift", "I sawed this boat in half!!!", "/sdcard/phil.jpg"),
-                DrawerProfile(3, "The meme bay", "Visit my amazing website", "/sdcard/loader.gif"),
-                DrawerProfile(4, "Mark Zuckerberg", "", null),
-                DrawerProfile(5, "I love GDPR", "spotify:user:popjustice:playlist:5Pe51v0sHLybSEkX0m0JRf", "/sdcard/tenor2.gif"),
-                DrawerProfile(6, "Gandalf", "http://sax.hol.es/", "/sdcard/facepalm.gif")
+                DrawerProfile(1, "Think Pad", "think with a pad", null),
+                DrawerProfile(2, "Phil Swift", "I sawed this boat in half!!!", null),
+                DrawerProfile(3, "The meme bay", "Visit my amazing website", null),
+                DrawerProfile(4, "Mark Zuckerberg", null, null),
+                DrawerProfile(5, "I love GDPR", null, null),
+                DrawerProfile(6, "Gandalf", "http://sax.hol.es/", null)
             )
 
             addProfileSettings(

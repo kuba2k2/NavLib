@@ -40,7 +40,7 @@ buildscript {
                 play_services    : "17.0.0",
 
                 materialdialogs  : "0.9.6.0",
-                materialdrawer   : "e603091449",
+                materialdrawer   : "62b24da031",
                 iconics          : "4.0.1-b02",
                 font_cmd         : "3.5.95.1-kotlin",
 

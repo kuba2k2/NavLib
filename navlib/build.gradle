@@ -44,7 +44,7 @@ dependencies {
     implementation "androidx.recyclerview:recyclerview:${versions.recyclerView}"
     implementation "com.google.android.material:material:${versions.material}"
 
-    api "com.github.kuba2k2.MaterialDrawer:library:${versions.materialdrawer}"
+    api "com.github.kuba2k2:MaterialDrawer:${versions.materialdrawer}"
     api "com.mikepenz:community-material-typeface:${versions.font_cmd}@aar"
     api "com.mikepenz:iconics-core:${versions.iconics}"
     implementation "com.mikepenz:itemanimators:1.1.0"
