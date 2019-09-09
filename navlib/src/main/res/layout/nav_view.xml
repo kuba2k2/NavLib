@@ -54,7 +54,6 @@
                         android:background="?actionBarBackground"
                         android:elevation="4dp"
                         app:title="@string/app_name"
-                        app:subtitle="Phil Swift - 10 unread"
                         tools:targetApi="lollipop">
 
                         <com.mikepenz.materialdrawer.view.BezelImageView
