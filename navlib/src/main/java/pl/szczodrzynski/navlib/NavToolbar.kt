@@ -31,6 +31,9 @@ class NavToolbar : MaterialToolbar {
 
     }
 
+    var subtitleFormat: Int? = null
+    var subtitleFormatWithUnread: Int? = null
+
     var profileImageClickListener: (() -> Unit)? = null
 
     var profileImage

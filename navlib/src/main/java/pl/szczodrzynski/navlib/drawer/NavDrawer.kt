@@ -7,10 +7,12 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.graphics.drawable.LayerDrawable
 import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
 import android.widget.LinearLayout
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.customview.widget.ViewDragHelper
 import androidx.drawerlayout.widget.DrawerLayout
@@ -84,11 +86,11 @@ class NavDrawer(
                 .withTranslucentStatusBar(false)
                 .withTranslucentNavigationBar(true)
                 .withTranslucentNavigationBarProgrammatically(false)
-                .withToolbar(bottomBar)
+                //.withToolbar(bottomBar)
                 .withDisplayBelowStatusBar(false)
-                .withActionBarDrawerToggleAnimated(true)
+                //.withActionBarDrawerToggleAnimated(true)
                 .withShowDrawerOnFirstLaunch(true)
-                .withShowDrawerUntilDraggedOpened(true)
+                //.withShowDrawerUntilDraggedOpened(true)
                 .withGenerateMiniDrawer(true /* if it is not showing on screen, clicking items throws an exception */)
                 .withOnDrawerListener(object : Drawer.OnDrawerListener {
                     override fun onDrawerSlide(drawerView: View, slideOffset: Float) {}
@@ -278,23 +280,50 @@ class NavDrawer(
          | |   | |  | |\ V / (_| | ||  __/ | | | | | |  __/ |_| | | | (_) | (_| \__ \
          |_|   |_|  |_| \_/ \__,_|\__\___| |_| |_| |_|\___|\__|_| |_|\___/ \__,_|__*/
     private fun drawerSetDragMargin(size: Float) {
-        val mDrawerLayout = drawer?.drawerLayout
-        val mDragger = mDrawerLayout?.javaClass?.getDeclaredField(
-            "mLeftDragger"
-        )//mRightDragger for right obviously
-        mDragger?.isAccessible = true
-        val draggerObj = mDragger?.get(mDrawerLayout) as ViewDragHelper?
+        try {
+            val mDrawerLayout = drawer?.drawerLayout
+            val mDragger = mDrawerLayout?.javaClass?.getDeclaredField(
+                "mLeftDragger"
+            )//mRightDragger for right obviously
+            mDragger?.isAccessible = true
+            val draggerObj = mDragger?.get(mDrawerLayout) as ViewDragHelper?
 
-        val mEdgeSize = draggerObj?.javaClass?.getDeclaredField(
-            "mEdgeSize"
-        )
-        mEdgeSize?.isAccessible = true
+            val mEdgeSize = draggerObj?.javaClass?.getDeclaredField(
+                "mEdgeSize"
+            )
+            mEdgeSize?.isAccessible = true
 
-        mEdgeSize?.setInt(
-            draggerObj,
-            size.toInt()
-        ) //optimal value as for me, you may set any constant in dp
+            mEdgeSize?.setInt(
+                draggerObj,
+                size.toInt()
+            ) //optimal value as for me, you may set any constant in dp
+        }
+        catch (e: Exception) {
+            e.printStackTrace()
+            Toast.makeText(context, "Oops, proguard works", Toast.LENGTH_SHORT).show()
+        }
     }
+
+    var miniDrawerVisiblePortrait: Boolean? = null
+        set(value) {
+            field = value
+            val configuration = context.resources.configuration
+            decideDrawerMode(
+                configuration.orientation,
+                configuration.screenWidthDp,
+                configuration.screenHeightDp
+            )
+        }
+    var miniDrawerVisibleLandscape: Boolean? = null
+        set(value) {
+            field = value
+            val configuration = context.resources.configuration
+            decideDrawerMode(
+                configuration.orientation,
+                configuration.screenWidthDp,
+                configuration.screenHeightDp
+            )
+        }
 
     internal fun decideDrawerMode(orientation: Int, widthDp: Int, heightDp: Int) {
         Log.d("NavLib", "Deciding drawer mode:")
@@ -314,7 +343,7 @@ class NavDrawer(
             }
             Log.d("NavLib", "- mini drawer land disabled")
 
-            if (widthDp >= 480) {
+            if ((widthDp >= 480 && miniDrawerVisiblePortrait != false) || miniDrawerVisiblePortrait == true) {
                 if (miniDrawerView == null)
                     miniDrawerView = miniDrawer?.build(context)
                 if (miniDrawerContainerPortrait.indexOfChild(miniDrawerView) == -1)
@@ -339,7 +368,7 @@ class NavDrawer(
             }
             Log.d("NavLib", "- mini drawer port disabled")
 
-            if (widthDp in 480 until 9000) {
+            if ((widthDp in 480 until 9000 && miniDrawerVisibleLandscape != false) || miniDrawerVisibleLandscape == true) {
                 if (miniDrawerView == null)
                     miniDrawerView = miniDrawer?.build(context)
                 if (miniDrawerContainerLandscape.indexOfChild(miniDrawerView) == -1)
@@ -515,6 +544,7 @@ class NavDrawer(
         profileList = profiles as MutableList<IDrawerProfile>
         updateProfileList()
     }
+    private var currentProfileObj: IDrawerProfile? = null
     val profileListEmpty: Boolean
         get() = profileList.isEmpty()
     var currentProfile: Int
@@ -522,7 +552,8 @@ class NavDrawer(
         set(value) {
             Log.d("NavDebug", "currentProfile = $value")
             accountHeader?.setActiveProfile(value.toLong(), false)
-            setToolbarProfileImage(profileList.singleOrNull { it.id == value })
+            currentProfileObj = profileList.singleOrNull { it.id == value }
+            setToolbarProfileImage(currentProfileObj)
             updateBadges()
         }
     fun appendProfile(profile: IDrawerProfile) {
@@ -595,10 +626,14 @@ class NavDrawer(
     private val unreadCounterTypeMap = mutableMapOf<Int, Int>()
 
     fun updateBadges() {
+
+        currentProfileObj = profileList.singleOrNull { it.id == currentProfile }
+
         Log.d("NavDebug", "updateBadges()")
         unreadCounterList.map {
             it.drawerItemId = unreadCounterTypeMap[it.type]
         }
+        var totalCount = 0
         unreadCounterList.forEach {
             if (it.drawerItemId == null)
                 return@forEach
@@ -616,8 +651,36 @@ class NavDrawer(
                     else -> StringHolder(it.count.toString())
                 }
             )
+            totalCount += it.count
         }
         updateMiniDrawer()
+
+        if (bottomBar.navigationIcon is LayerDrawable) {
+            (bottomBar.navigationIcon as LayerDrawable?)?.apply {
+                findDrawableByLayerId(R.id.ic_badge)
+                    .takeIf { it is BadgeDrawable }
+                    ?.also { badge ->
+                        (badge as BadgeDrawable).setCount(totalCount.toString())
+                        mutate()
+                        setDrawableByLayerId(R.id.ic_badge, badge)
+                    }
+            }
+        }
+
+        if (totalCount == 0) {
+            toolbar.subtitle = resources.getString(
+                toolbar.subtitleFormat ?: return,
+                currentProfileObj?.name ?: ""
+            )
+        }
+        else {
+            toolbar.subtitle = resources.getQuantityString(
+                toolbar.subtitleFormatWithUnread ?: toolbar.subtitleFormat ?: return,
+                totalCount,
+                currentProfileObj?.name ?: "",
+                totalCount
+            )
+        }
     }
 
     fun setUnreadCounterList(unreadCounterList: MutableList<out IUnreadCounter>) {

@@ -3,6 +3,7 @@ package pl.szczodrzynski.navlib
 import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Configuration.ORIENTATION_PORTRAIT
+import android.graphics.Point
 import android.util.AttributeSet
 import android.util.Log
 import android.view.LayoutInflater
@@ -15,9 +16,12 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.nav_view.view.*
-import pl.szczodrzynski.edziennik.utils.SwipeRefreshLayoutNoTouch
 import pl.szczodrzynski.navlib.bottomsheet.NavBottomSheet
 import pl.szczodrzynski.navlib.drawer.NavDrawer
+import android.graphics.drawable.RippleDrawable
+import android.os.Build
+import androidx.core.view.children
+import com.mikepenz.materialize.util.UIUtils
 
 
 class NavView : FrameLayout {
@@ -39,6 +43,9 @@ class NavView : FrameLayout {
     lateinit var toolbar: NavToolbar
     lateinit var bottomBar: NavBottomBar
     lateinit var bottomSheet: NavBottomSheet
+    val coordinator by lazy {
+        findViewById<CoordinatorLayout>(R.id.nv_coordinator)
+    }
 
     var navigationLoader: NavigationLoader? = null
 
@@ -95,7 +102,18 @@ class NavView : FrameLayout {
         bottomBar.fabView = floatingActionButton
         bottomBar.fabExtendedView = extendedFloatingActionButton
 
+        ripple.isEnabled = false
+        ripple.children.forEach { it.isEnabled = false }
+
         //bottomSheetBehavior.peekHeight = displayHeight
+    }
+
+    fun gainAttentionOnBottomBar() {
+        var x = ripple.width.toFloat()
+        var y = ripple.height.toFloat()
+        x -= UIUtils.convertDpToPixel(56f, context) / 2
+        y -= UIUtils.convertDpToPixel(56f, context) / 2
+        ripple.performRipple(Point(x.toInt(), y.toInt()))
     }
 
     fun configSystemBarsUtil(systemBarsUtil: SystemBarsUtil) {

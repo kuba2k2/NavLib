@@ -40,9 +40,10 @@
                     android:id="@+id/nv_miniDrawerContainerLandscape"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    tools:background="#2196f3" /><!--tools:layout_width="72dp"-->
+                    android:background="@color/colorSurface_4dp"/><!--tools:layout_width="72dp"-->
 
                 <androidx.coordinatorlayout.widget.CoordinatorLayout
+                    android:id="@+id/nv_coordinator"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
@@ -53,6 +54,7 @@
                         android:background="?actionBarBackground"
                         android:elevation="4dp"
                         app:title="@string/app_name"
+                        app:subtitle="Phil Swift - 10 unread"
                         tools:targetApi="lollipop">
 
                         <com.mikepenz.materialdrawer.view.BezelImageView
@@ -89,7 +91,7 @@
                             android:id="@+id/nv_miniDrawerContainerPortrait"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            tools:background="#ffb300" /><!--tools:layout_width="72dp"-->
+                            android:background="@color/colorSurface_4dp" /><!--tools:layout_width="72dp"-->
 
                         <View
                             android:id="@+id/nv_miniDrawerElevation"
@@ -105,9 +107,33 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
+                        android:gravity="start"
                         android:visibility="visible"
                         app:fabAlignmentMode="center"
                         app:fabAnimationMode="scale" />
+
+                    <com.balysv.materialripple.MaterialRippleLayout
+                        android:id="@+id/ripple"
+                        android:layout_width="100dp"
+                        android:layout_height="?actionBarSize"
+                        android:layout_gravity="bottom|end"
+                        android:enabled="false"
+                        android:focusableInTouchMode="false"
+                        android:focusable="false"
+                        app:mrl_rippleFadeDuration="200"
+                        app:mrl_rippleDuration="350"
+                        app:mrl_rippleColor="?colorOnBackground"
+                        app:mrl_rippleAlpha="0.3">
+
+                        <View
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:enabled="false"
+                            android:focusableInTouchMode="false"
+                            android:focusable="false"
+                            android:visibility="invisible"/>
+
+                    </com.balysv.materialripple.MaterialRippleLayout>
 
                     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
                         android:id="@+id/nv_extendedFloatingActionButton"

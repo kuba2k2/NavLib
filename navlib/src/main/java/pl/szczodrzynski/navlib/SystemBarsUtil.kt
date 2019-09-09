@@ -297,7 +297,6 @@ class SystemBarsUtil(private val activity: Activity) {
             if (insetsListener != null) {
                 if (SDK_INT >= LOLLIPOP) {
                     ViewCompat.setOnApplyWindowInsetsListener(insetsListener!!) { _, insets ->
-                        Toast.makeText(activity, "Insets applied ", Toast.LENGTH_SHORT).show()
                         Log.d("NavLib", "Got insets left = ${insets.systemWindowInsetLeft}, top = ${insets.systemWindowInsetTop}, right = ${insets.systemWindowInsetRight}, bottom = ${insets.systemWindowInsetBottom}")
                         if (insetsApplied)
                             return@setOnApplyWindowInsetsListener insets.consumeSystemWindowInsets()

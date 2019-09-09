@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <plurals name="toolbar_subtitle_with_unread">
+        <item quantity="one">%1$s - %2$d nieprzeczytane</item>
+        <item quantity="few">%1$s - %2$d nieprzeczytane</item>
+        <item quantity="many">%1$s - %2$d nieprzeczytanych</item>
+    </plurals>
+</resources>

@@ -20,4 +20,5 @@
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
 
--keepclassmembers class androidx.drawerlayout.widget.DrawerLayout { *; }
+-keep class androidx.drawerlayout.widget.DrawerLayout { *; }
+-keep class androidx.customview.widget.ViewDragHelper { *; }

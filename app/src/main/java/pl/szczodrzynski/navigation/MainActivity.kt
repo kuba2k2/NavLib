@@ -217,8 +217,17 @@ class MainActivity : AppCompatActivity() {
         navView.bottomBar.fabExtendedText = "Compose"
         navView.bottomBar.fabExtended = false
 
+        rippleButton.setOnClickListener {
+            navView.gainAttentionOnBottomBar()
+        }
+
+        navView.toolbar.subtitleFormat = R.string.toolbar_subtitle
+        navView.toolbar.subtitleFormatWithUnread = R.plurals.toolbar_subtitle_with_unread
 
         navView.drawer.apply {
+
+            miniDrawerVisiblePortrait = true
+            miniDrawerVisibleLandscape = null
 
             addUnreadCounterType(type = 10, drawerItem = 1)
             addUnreadCounterType(type = 20, drawerItem = 2)
@@ -313,6 +322,7 @@ class MainActivity : AppCompatActivity() {
             )
 
             drawerItemSelectedListener = { id, position, drawerItem ->
+                navView.gainAttentionOnBottomBar()
                 if (id == 1 || id == 2) {
                     getItemById(id) {
                         if (it is DrawerPrimaryItem) {
@@ -327,6 +337,8 @@ class MainActivity : AppCompatActivity() {
                             // (if UnreadCounterList have at least one counter with matching
                             // drawer item ID)
                             // See with "Settings" when it.badge AND UnreadCounter is present.
+                            //
+                            // and it of course does not update the badge
                             //
                             // just do not do this.
                             it.badge = StringHolder("${it.tag as Int * 10}")

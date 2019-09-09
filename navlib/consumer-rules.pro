@@ -1,0 +1,2 @@
+-keep class androidx.drawerlayout.widget.DrawerLayout { *; }
+-keep class androidx.customview.widget.ViewDragHelper { *; }

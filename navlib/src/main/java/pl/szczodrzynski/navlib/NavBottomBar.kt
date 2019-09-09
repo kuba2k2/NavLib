@@ -1,11 +1,13 @@
 package pl.szczodrzynski.navlib
 
 import android.content.Context
+import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
 import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.content.ContextCompat
 import com.google.android.material.bottomappbar.BottomAppBar
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -112,10 +114,16 @@ class NavBottomBar : BottomAppBar {
 
         elevation = 0f
 
-        navigationIcon = IconicsDrawable(context)
-            .icon(CommunityMaterial.Icon2.cmd_menu)
-            .sizeDp(20)
-            .colorInt(getColorFromAttr(context, R.attr.colorOnPrimary))
+        val icon = ContextCompat.getDrawable(context, R.drawable.ic_menu_badge) as LayerDrawable?
+        icon?.apply {
+            mutate()
+            setDrawableByLayerId(R.id.ic_menu, IconicsDrawable(context)
+                .icon(CommunityMaterial.Icon2.cmd_menu)
+                .sizeDp(20)
+                .colorInt(getColorFromAttr(context, R.attr.colorOnPrimary)))
+            setDrawableByLayerId(R.id.ic_badge, BadgeDrawable(context))
+        }
+        navigationIcon = icon
 
         menu.add(0, -1, 0, "Menu")
             .setIcon(
