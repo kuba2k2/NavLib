@@ -23,6 +23,7 @@ import com.mikepenz.materialdrawer.holder.StringHolder
 import com.mikepenz.materialdrawer.model.BaseDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem
+import com.mikepenz.materialdrawer.model.interfaces.Badgeable
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IProfile
 import pl.szczodrzynski.navlib.*
@@ -491,6 +492,7 @@ class NavDrawer(
         if (drawer?.currentSelection != id.toLong() || !fireOnClick)
             drawer?.setSelection(id.toLong(), fireOnClick)
 
+        miniDrawer?.setSelection(-1L)
         if (drawerMode == DRAWER_MODE_MINI)
             miniDrawer?.setSelection(id.toLong())
     }
@@ -628,6 +630,13 @@ class NavDrawer(
     fun updateBadges() {
 
         currentProfileObj = profileList.singleOrNull { it.id == currentProfile }
+
+        drawer?.drawerItems?.forEachIndexed { index, item ->
+            if (item is Badgeable<*>) {
+                item.withBadge(null)
+                drawer!!.updateItem(item)
+            }
+        }
 
         Log.d("NavDebug", "updateBadges()")
         unreadCounterList.map {
