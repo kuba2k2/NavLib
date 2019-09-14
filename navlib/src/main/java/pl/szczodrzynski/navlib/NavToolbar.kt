@@ -7,8 +7,6 @@ import com.google.android.material.appbar.MaterialToolbar
 
 class NavToolbar : MaterialToolbar {
 
-    var toolbar: MaterialToolbar = this
-
     constructor(context: Context) : super(context) {
         create(null, 0)
     }
@@ -30,11 +28,11 @@ class NavToolbar : MaterialToolbar {
         }
 
     override fun setSubtitle(subtitle: CharSequence?) {
-        if(subtitle == null || subtitle.isEmpty()) {
-            toolbar.setPadding(0, 0, 0, 0)
+        if(subtitle.isNullOrEmpty()) {
+            setPadding(0, 0, 0, 0)
             toolbarImage?.translationY = 0f
         } else {
-            toolbar.setPadding(0, -1, 0, 5)
+            setPadding(0, -1, 0, 5)
             toolbarImage?.translationY = 6f
         }
         super.setSubtitle(subtitle)
