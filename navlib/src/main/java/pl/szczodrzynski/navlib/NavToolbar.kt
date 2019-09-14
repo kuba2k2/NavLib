@@ -3,10 +3,12 @@ package pl.szczodrzynski.navlib
 import android.content.Context
 import android.util.AttributeSet
 import android.widget.ImageView
-import androidx.core.view.children
 import com.google.android.material.appbar.MaterialToolbar
 
 class NavToolbar : MaterialToolbar {
+    
+    var toolbar: MaterialToolbar = this
+    
     constructor(context: Context) : super(context) {
         create(null, 0)
     }
@@ -26,6 +28,17 @@ class NavToolbar : MaterialToolbar {
                 profileImageClickListener?.invoke()
             }
         }
+    
+    override fun setSubtitle(subtitle: CharSequence?) {
+        if(subtitle == null || subtitle.isEmpty()) {
+            toolbar.setPadding(0, 0, 0, 0)
+            toolbarImage?.translationY = 0f
+        } else {
+            toolbar.setPadding(0, -1, 0, 5)
+            toolbarImage?.translationY = 6f
+        }
+        super.setSubtitle(subtitle)
+    }
 
     private fun create(attrs: AttributeSet?, defStyle: Int) {
 
