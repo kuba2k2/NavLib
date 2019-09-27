@@ -153,9 +153,8 @@ class NavView : FrameLayout {
     /**
      * Set the FAB's on click listener
      */
-    fun setFabOnClickListener(onClickListener: OnClickListener) {
-        floatingActionButton.setOnClickListener(onClickListener)
-        extendedFloatingActionButton.setOnClickListener(onClickListener)
+    fun setFabOnClickListener(onClickListener: OnClickListener?) {
+        bottomBar.setFabOnClickListener(onClickListener)
     }
 
     internal var systemBarsUtil: SystemBarsUtil? = null

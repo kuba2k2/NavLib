@@ -104,6 +104,14 @@ class NavBottomBar : BottomAppBar {
             fabExtendedView?.text = value
         }
 
+    /**
+     * Set the FAB's on click listener
+     */
+    fun setFabOnClickListener(onClickListener: OnClickListener?) {
+        fabView?.setOnClickListener(onClickListener)
+        fabExtendedView?.setOnClickListener(onClickListener)
+    }
+
     private fun create(attrs: AttributeSet?, defStyle: Int) {
         setOnTouchListener { _, event ->
             if (bottomSheet?.enable != true || bottomSheet?.enableDragToOpen != true)
