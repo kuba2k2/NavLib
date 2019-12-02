@@ -647,8 +647,8 @@ class NavDrawer(
             if (it.drawerItemId == null)
                 return@forEach
             if (it.profileId != currentProfile) {
-                Log.d("NavDebug", "- Remove badge for ${it.drawerItemId}")
-                drawer?.updateBadge(it.drawerItemId?.toLong() ?: 0, null)
+                //Log.d("NavDebug", "- Remove badge for ${it.drawerItemId}")
+                //drawer?.updateBadge(it.drawerItemId?.toLong() ?: 0, null)
                 return@forEach
             }
             Log.d("NavDebug", "- Set badge ${it.count} for ${it.drawerItemId}")
