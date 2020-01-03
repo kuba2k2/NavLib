@@ -17,8 +17,8 @@ import pl.szczodrzynski.navlib.getDrawableFromRes
 Example IDrawerProfile implementation
  */
 class DrawerProfile(
-    override var id: Int,
-    override var name: String?,
+    override val id: Int,
+    override var name: String,
     override var subname: String?,
     override var image: String?
 ) : IDrawerProfile {

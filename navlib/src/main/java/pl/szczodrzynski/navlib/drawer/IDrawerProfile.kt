@@ -6,8 +6,8 @@ import android.widget.ImageView
 import pl.szczodrzynski.navlib.ImageHolder
 
 interface IDrawerProfile {
-    var id: Int
-    var name: String?
+    val id: Int
+    var name: String
     var subname: String?
     var image: String?
 
