@@ -5,7 +5,7 @@ import com.mikepenz.materialdrawer.*
 import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.IProfile
 
-fun DrawerBuilder.withOnDrawerItemClickListener(listener: (view: View?, position: Int, drawerItem: IDrawerItem<*>) -> Boolean): DrawerBuilder {
+inline fun DrawerBuilder.withOnDrawerItemClickListener(crossinline listener: (view: View?, position: Int, drawerItem: IDrawerItem<*>) -> Boolean): DrawerBuilder {
     return this.withOnDrawerItemClickListener(object : Drawer.OnDrawerItemClickListener {
         override fun onItemClick(view: View?, position: Int, drawerItem: IDrawerItem<*>): Boolean {
             return listener(view, position, drawerItem)
@@ -13,7 +13,7 @@ fun DrawerBuilder.withOnDrawerItemClickListener(listener: (view: View?, position
     })
 }
 
-fun DrawerBuilder.withOnDrawerItemLongClickListener(listener: (view: View, position: Int, drawerItem: IDrawerItem<*>) -> Boolean): DrawerBuilder {
+inline fun DrawerBuilder.withOnDrawerItemLongClickListener(crossinline listener: (view: View, position: Int, drawerItem: IDrawerItem<*>) -> Boolean): DrawerBuilder {
     return this.withOnDrawerItemLongClickListener(object : Drawer.OnDrawerItemLongClickListener {
         override fun onItemLongClick(view: View, position: Int, drawerItem: IDrawerItem<*>): Boolean {
             return listener(view, position, drawerItem)
@@ -21,7 +21,7 @@ fun DrawerBuilder.withOnDrawerItemLongClickListener(listener: (view: View, posit
     })
 }
 
-fun AccountHeaderBuilder.withOnAccountHeaderListener(listener: (view: View?, profile: IProfile<*>, current: Boolean) -> Boolean): AccountHeaderBuilder {
+inline fun AccountHeaderBuilder.withOnAccountHeaderListener(crossinline listener: (view: View?, profile: IProfile<*>, current: Boolean) -> Boolean): AccountHeaderBuilder {
     return this.withOnAccountHeaderListener(object : AccountHeader.OnAccountHeaderListener {
         override fun onProfileChanged(view: View?, profile: IProfile<*>, current: Boolean): Boolean {
             return listener(view, profile, current)
@@ -29,7 +29,7 @@ fun AccountHeaderBuilder.withOnAccountHeaderListener(listener: (view: View?, pro
     })
 }
 
-fun AccountHeaderBuilder.withOnAccountHeaderItemLongClickListener(listener: (view: View, profile: IProfile<*>, current: Boolean) -> Boolean): AccountHeaderBuilder {
+inline fun AccountHeaderBuilder.withOnAccountHeaderItemLongClickListener(crossinline listener: (view: View, profile: IProfile<*>, current: Boolean) -> Boolean): AccountHeaderBuilder {
     return this.withOnAccountHeaderItemLongClickListener(object : AccountHeader.OnAccountHeaderItemLongClickListener {
         override fun onProfileLongClick(view: View, profile: IProfile<*>, current: Boolean): Boolean {
             return listener(view, profile, current)
@@ -37,13 +37,13 @@ fun AccountHeaderBuilder.withOnAccountHeaderItemLongClickListener(listener: (vie
     })
 }
 
-fun AccountHeaderBuilder.withOnAccountHeaderProfileImageListener(
-    onClick: (
+inline fun AccountHeaderBuilder.withOnAccountHeaderProfileImageListener(
+    crossinline onClick: (
         view: View,
         profile: IProfile<*>,
         current: Boolean
     ) -> Boolean,
-    onLongClick: (
+    crossinline onLongClick: (
         view: View,
         profile: IProfile<*>,
         current: Boolean
@@ -59,7 +59,7 @@ fun AccountHeaderBuilder.withOnAccountHeaderProfileImageListener(
     })
 }
 
-fun MiniDrawer.withOnMiniDrawerItemClickListener(listener: (view: View?, position: Int, drawerItem: IDrawerItem<*>, type: Int) -> Boolean): MiniDrawer {
+inline fun MiniDrawer.withOnMiniDrawerItemClickListener(crossinline listener: (view: View?, position: Int, drawerItem: IDrawerItem<*>, type: Int) -> Boolean): MiniDrawer {
     return this.withOnMiniDrawerItemClickListener(object : MiniDrawer.OnMiniDrawerItemClickListener {
         override fun onItemClick(view: View?, position: Int, drawerItem: IDrawerItem<*>, type: Int): Boolean {
             return listener(view, position, drawerItem, type)

@@ -80,7 +80,7 @@ class NavDrawer(
         val drawerBuilder = DrawerBuilder()
                 .withActivity(activity)
                 .withDrawerLayout(R.layout.material_drawer_fits_not)
-                .withHasStableIds(true)
+                //.withHasStableIds(true)
                 .withItemAnimator(AlphaCrossFadeAnimator())
                 .withRootView(drawerContainer)
                 .withFullscreen(true)
