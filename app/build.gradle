@@ -1,11 +1,10 @@
 apply plugin: 'com.android.application'
-
 apply plugin: 'kotlin-android'
-
 apply plugin: 'kotlin-android-extensions'
 
 android {
     compileSdkVersion setup.compileSdk
+
     defaultConfig {
         applicationId "pl.szczodrzynski.navigation"
         minSdkVersion setup.minSdk

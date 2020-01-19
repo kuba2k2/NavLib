@@ -2,7 +2,7 @@
 
 buildscript {
     ext {
-        kotlin_version = '1.3.50'
+        kotlin_version = '1.3.61'
 
         release = [
                 // major.minor.patch.rc.beta
@@ -18,27 +18,27 @@ buildscript {
         ]
 
         versions = [
-                kotlin           : "1.3.50",
+                kotlin           : "1.3.61",
                 ktx              : "1.1.0",
 
                 androidX         : '1.0.0',
                 annotation       : '1.1.0',
-                recyclerView     : '1.1.0',
-                material         : '1.2.0-alpha02',
-                appcompat        : '1.1.0',
-                constraintLayout : '2.0.0-beta3',
+                recyclerView     : '1.2.0-alpha01',
+                material         : '1.2.0-alpha03',
+                appcompat        : '1.2.0-alpha01',
+                constraintLayout : '2.0.0-beta4',
                 cardview         : '1.0.0',
                 gridLayout       : '1.0.0',
                 navigation       : "2.0.0",
                 navigationFragment: "1.0.0",
                 legacy           : "1.0.0",
 
-                room             : "2.2.1",
-                lifecycle        : "2.2.0-rc02",
+                room             : "2.2.3",
+                lifecycle        : "2.2.0-rc03",
                 work             : "2.2.0",
 
-                firebase         : '17.2.1',
-                firebasemessaging: "20.0.0",
+                firebase         : '17.2.2',
+                firebasemessaging: "20.1.0",
                 play_services    : "17.0.0",
 
                 materialdialogs  : "0.9.6.0",
@@ -46,7 +46,9 @@ buildscript {
                 iconics          : "4.0.1",
                 font_cmd         : "3.5.95.1-kotlin",
 
-                gifdrawable      : "1.2.15"
+                gifdrawable      : "1.2.15",
+
+                retrofit         : '2.6.2'
         ]
     }
 
@@ -55,7 +57,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:3.5.2'
+        classpath 'com.android.tools.build:gradle:3.5.3'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         // NOTE: Do not place your application dependencies here; they belong
