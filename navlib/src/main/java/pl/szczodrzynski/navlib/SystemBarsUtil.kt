@@ -295,7 +295,7 @@ class SystemBarsUtil(private val activity: Activity) {
 
             // PADDING
             if (insetsListener != null) {
-                if (SDK_INT >= LOLLIPOP) {
+                if (SDK_INT >= LOLLIPOP && false) {
                     ViewCompat.setOnApplyWindowInsetsListener(insetsListener!!) { _, insets ->
                         Log.d("NavLib", "Got insets left = ${insets.systemWindowInsetLeft}, top = ${insets.systemWindowInsetTop}, right = ${insets.systemWindowInsetRight}, bottom = ${insets.systemWindowInsetBottom}")
                         if (insetsApplied)

@@ -10,9 +10,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
-import com.mikepenz.iconics.utils.colorInt
 import com.mikepenz.iconics.utils.sizeDp
-import com.mikepenz.materialize.holder.ImageHolder
+import pl.szczodrzynski.navlib.ImageHolder
 import pl.szczodrzynski.navlib.R
 import pl.szczodrzynski.navlib.colorAttr
 import pl.szczodrzynski.navlib.getColorFromAttr
@@ -45,7 +44,7 @@ data class BottomSheetPrimaryItem(override val isContextual: Boolean = true) : I
 
         viewHolder.image.setImageDrawable(IconicsDrawable(viewHolder.text.context)
                 .icon(iconicsIcon ?: CommunityMaterial.Icon.cmd_android)
-                .colorAttr(viewHolder.text.context, R.attr.material_drawer_primary_icon)
+                .colorAttr(viewHolder.text.context, android.R.attr.textColorSecondary)
                 .sizeDp(24))
 
         viewHolder.description.visibility = View.VISIBLE
@@ -59,7 +58,7 @@ data class BottomSheetPrimaryItem(override val isContextual: Boolean = true) : I
             titleRes != null -> viewHolder.text.setText(titleRes!!)
             else -> viewHolder.text.text = title
         }
-        viewHolder.text.setTextColor(getColorFromAttr(viewHolder.text.context, R.attr.material_drawer_primary_text))
+        viewHolder.text.setTextColor(getColorFromAttr(viewHolder.text.context, android.R.attr.textColorPrimary))
     }
 
     /*_____        _

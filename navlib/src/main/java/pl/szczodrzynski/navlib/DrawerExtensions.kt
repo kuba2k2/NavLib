@@ -1,11 +1,18 @@
 package pl.szczodrzynski.navlib
 
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
+import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.materialdrawer.*
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
-import com.mikepenz.materialdrawer.model.interfaces.IProfile
+import com.mikepenz.materialdrawer.holder.StringHolder
+import com.mikepenz.materialdrawer.model.AbstractDrawerItem
+import com.mikepenz.materialdrawer.model.BaseDrawerItem
+import com.mikepenz.materialdrawer.model.interfaces.*
+import com.mikepenz.materialdrawer.util.getDrawerItem
+import com.mikepenz.materialdrawer.util.updateItem
+import com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView
 
-inline fun DrawerBuilder.withOnDrawerItemClickListener(crossinline listener: (view: View?, position: Int, drawerItem: IDrawerItem<*>) -> Boolean): DrawerBuilder {
+/*inline fun DrawerBuilder.withOnDrawerItemClickListener(crossinline listener: (view: View?, position: Int, drawerItem: IDrawerItem<*>) -> Boolean): DrawerBuilder {
     return this.withOnDrawerItemClickListener(object : Drawer.OnDrawerItemClickListener {
         override fun onItemClick(view: View?, position: Int, drawerItem: IDrawerItem<*>): Boolean {
             return listener(view, position, drawerItem)
@@ -65,4 +72,14 @@ inline fun MiniDrawer.withOnMiniDrawerItemClickListener(crossinline listener: (v
             return listener(view, position, drawerItem, type)
         }
     })
+}*/
+
+fun MaterialDrawerSliderView.updateBadge(identifier: Long, badge: StringHolder?) {
+    val drawerItem = getDrawerItem(identifier)
+    if (drawerItem is Badgeable) {
+        drawerItem.withBadge(badge)
+        updateItem(drawerItem)
+    }
 }
+
+fun <T : Iconable> T.withIcon(icon: IIcon) = withIcon(pl.szczodrzynski.navlib.ImageHolder(icon))

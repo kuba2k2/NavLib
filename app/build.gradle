@@ -11,6 +11,8 @@ android {
         targetSdkVersion setup.targetSdk
         versionCode release.versionCode
         versionName release.versionName
+
+        multiDexEnabled true
     }
     buildTypes {
         release {
@@ -34,14 +36,14 @@ dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.appcompat:appcompat:${versions.appcompat}"
     implementation "androidx.legacy:legacy-support-v4:${versions.legacy}"
-    implementation "com.github.kuba2k2:MaterialDrawer:${versions.materialdrawer}"
-    //implementation "com.mikepenz:crossfader:1.6.0" // do not update
-    implementation "com.mikepenz:iconics-core:${versions.iconics}" // do not update. >3.1.0 Breaks jelly bean
-    implementation "com.mikepenz:iconics-views:${versions.iconics}" // do not update
+    implementation "com.mikepenz:materialdrawer:${versions.materialdrawer}"
+    implementation "com.mikepenz:iconics-core:${versions.iconics}"
+    implementation "com.mikepenz:iconics-views:${versions.iconics}"
     implementation "com.mikepenz:community-material-typeface:${versions.font_cmd}@aar"
     implementation "androidx.core:core-ktx:${versions.ktx}"
     implementation "androidx.constraintlayout:constraintlayout:${versions.constraintLayout}"
     implementation "com.google.android.material:material:${versions.material}"
     implementation "pl.droidsonroids.gif:android-gif-drawable:${versions.gifdrawable}"
+    implementation 'androidx.multidex:multidex:2.0.1'
     implementation project(":navlib")
 }

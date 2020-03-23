@@ -12,12 +12,10 @@ import com.mikepenz.iconics.IconicsColor
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.IconicsSize
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
-import com.mikepenz.materialdrawer.Drawer
 import com.mikepenz.materialdrawer.holder.StringHolder
-import com.mikepenz.materialdrawer.model.PrimaryDrawerItem
-import com.mikepenz.materialdrawer.model.ProfileDrawerItem
 import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
+import com.mikepenz.materialdrawer.model.interfaces.*
+import com.mikepenz.materialdrawer.model.utils.withIsHiddenInMiniDrawer
 import kotlinx.android.synthetic.main.sample_nav_view.*
 import pl.szczodrzynski.navlib.SystemBarsUtil
 import pl.szczodrzynski.navlib.SystemBarsUtil.Companion.COLOR_DO_NOT_CHANGE
@@ -29,9 +27,9 @@ import pl.szczodrzynski.navlib.bottomsheet.NavBottomSheet.Companion.SORT_MODE_DE
 import pl.szczodrzynski.navlib.bottomsheet.NavBottomSheet.Companion.TOGGLE_GROUP_SORTING_ORDER
 import pl.szczodrzynski.navlib.bottomsheet.items.BottomSheetPrimaryItem
 import pl.szczodrzynski.navlib.bottomsheet.items.BottomSheetSeparatorItem
-import pl.szczodrzynski.navlib.drawer.IDrawerProfile
 import pl.szczodrzynski.navlib.drawer.items.DrawerPrimaryItem
 import pl.szczodrzynski.navlib.getColorFromAttr
+import pl.szczodrzynski.navlib.withIcon
 
 
 class MainActivity : AppCompatActivity() {
@@ -262,7 +260,7 @@ class MainActivity : AppCompatActivity() {
 
                 DrawerPrimaryItem().withName("Lock screen")
                     .withDescription("aaand not visible in Mini Drawer")
-                    .withHiddenInMiniDrawer(true)
+                    .withIsHiddenInMiniDrawer(true)
                     .withIdentifier(62)
                     .withBadgeStyle(badgeStyle)
                     .withIcon(CommunityMaterial.Icon.cmd_fingerprint),
@@ -307,15 +305,13 @@ class MainActivity : AppCompatActivity() {
                     .withIcon(
                         IconicsDrawable(context, CommunityMaterial.Icon2.cmd_plus)
                             .actionBar()
-                            .padding(IconicsSize.dp(5))
-                            .color(IconicsColor.colorRes(pl.szczodrzynski.navlib.R.color.material_drawer_dark_primary_text))
+                            .padding { IconicsSize.dp(5) }
+                            .color { IconicsColor.colorInt(getColorFromAttr(context, R.attr.materialDrawerPrimaryText)) }
                     )
-                    .withOnDrawerItemClickListener(object : Drawer.OnDrawerItemClickListener {
-                        override fun onItemClick(view: View?, position: Int, drawerItem: IDrawerItem<*>): Boolean {
-                            Toast.makeText(context, "Add account", Toast.LENGTH_SHORT).show()
-                            return true
-                        }
-                    }),
+                    .withOnDrawerItemClickListener { v, item, position ->
+                        Toast.makeText(context, "Add account", Toast.LENGTH_SHORT).show()
+                        true
+                    },
                 ProfileSettingDrawerItem()
                     .withName("Manage Account")
                     .withIcon(CommunityMaterial.Icon2.cmd_settings)

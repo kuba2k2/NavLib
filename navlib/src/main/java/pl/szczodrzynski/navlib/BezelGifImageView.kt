@@ -10,7 +10,6 @@ import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewOutlineProvider
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.view.ViewCompat
 import com.mikepenz.materialdrawer.R
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
@@ -22,7 +21,7 @@ import pl.droidsonroids.gif.GifImageView
  * drawable on top. This is useful for applying a beveled look to image contents, but is also
  * flexible enough for use with other desired aesthetics.
  */
-open class BezelGifImageView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) : GifImageView(context, attrs, defStyle) {
+open class BezelImageView @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyle: Int = 0) : GifImageView(context, attrs, defStyle) {
     private val mBlackPaint: Paint
     private val mMaskedPaint: Paint
 
@@ -54,14 +53,14 @@ open class BezelGifImageView @JvmOverloads constructor(context: Context, attrs: 
         // Attribute initialization
         val a = context.obtainStyledAttributes(attrs, R.styleable.BezelImageView, defStyle, R.style.BezelImageView)
 
-        mMaskDrawable = a.getDrawable(R.styleable.BezelImageView_biv_maskDrawable)
+        mMaskDrawable = a.getDrawable(R.styleable.BezelImageView_materialDrawerMaskDrawable)
         if (mMaskDrawable != null) {
             mMaskDrawable.callback = this
         }
 
-        mDrawCircularShadow = a.getBoolean(R.styleable.BezelImageView_biv_drawCircularShadow, true)
+        mDrawCircularShadow = a.getBoolean(R.styleable.BezelImageView_materialDrawerDrawCircularShadow, true)
 
-        mSelectorColor = a.getColor(R.styleable.BezelImageView_biv_selectorOnPress, 0)
+        mSelectorColor = a.getColor(R.styleable.BezelImageView_materialDrawerSelectorOnPress, 0)
 
         a.recycle()
 

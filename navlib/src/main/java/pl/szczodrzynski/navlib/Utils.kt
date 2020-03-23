@@ -5,20 +5,18 @@ import android.content.Context
 import android.content.res.Configuration
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.util.DisplayMetrics
 import android.util.TypedValue
 import android.view.View
+import android.view.WindowManager
 import androidx.annotation.AttrRes
+import androidx.annotation.ColorInt
+import androidx.annotation.ColorRes
 import androidx.annotation.DrawableRes
 import com.google.android.material.elevation.ElevationOverlayProvider
 import com.mikepenz.iconics.IconicsColor
 import com.mikepenz.iconics.IconicsDrawable
-import android.util.DisplayMetrics
-import android.view.WindowManager
-import androidx.annotation.ColorInt
-import androidx.annotation.ColorRes
-import com.mikepenz.materialdrawer.Drawer
-import com.mikepenz.materialdrawer.holder.StringHolder
-import com.mikepenz.materialdrawer.model.interfaces.Badgeable
+import com.mikepenz.iconics.utils.colorInt
 
 
 /*private val displayMetrics by lazy {
@@ -122,7 +120,7 @@ fun hasNavigationBar(context: Context): Boolean {
     return hasNavigationBar
 }
 
-fun IconicsDrawable.colorAttr(context: Context, @AttrRes attrRes: Int) = color(IconicsColor.colorInt(getColorFromAttr(context, attrRes)))
+fun IconicsDrawable.colorAttr(context: Context, @AttrRes attrRes: Int) = colorInt(getColorFromAttr(context, attrRes))
 
 fun getColorFromAttr(context: Context, @AttrRes color: Int): Int {
     val typedValue = TypedValue()
@@ -146,14 +144,6 @@ fun Context.getColorFromRes(@ColorRes id: Int): Int {
     }
     else {
         resources.getColor(id)
-    }
-}
-
-fun Drawer.updateBadge(identifier: Long, badge: StringHolder?) {
-    val drawerItem = getDrawerItem(identifier)
-    if (drawerItem is Badgeable<*>) {
-        drawerItem.withBadge(badge)
-        updateItem(drawerItem)
     }
 }
 

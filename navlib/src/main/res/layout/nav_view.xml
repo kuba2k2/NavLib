@@ -7,8 +7,8 @@
     android:orientation="horizontal"
     tools:parentTag="FrameLayout">
 
-    <LinearLayout
-        android:id="@+id/nv_drawerContainer"
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/nv_drawerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"
@@ -37,10 +37,11 @@
                 tools:paddingBottom="48dp">
 
                 <FrameLayout
-                    android:id="@+id/nv_miniDrawerContainerLandscape"
+                    android:id="@+id/nv_drawerContainerLandscape"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:background="@color/colorSurface_4dp"/><!--tools:layout_width="72dp"-->
+                    android:background="@color/colorSurface_4dp"
+                    tools:layout_width="72dp" />
 
                 <androidx.coordinatorlayout.widget.CoordinatorLayout
                     android:id="@+id/nv_coordinator"
@@ -68,7 +69,7 @@
                             android:layout_marginEnd="13dp"
                             android:layout_marginRight="13dp"
                             android:scaleType="centerCrop"
-                            app:biv_selectorOnPress="#80ffffff"
+                            app:materialDrawerSelectorOnPress="#80ffffff"
                             tools:src="@tools:sample/backgrounds/scenic" />
 
                     </pl.szczodrzynski.navlib.NavToolbar>
@@ -94,7 +95,8 @@
                             android:id="@+id/nv_miniDrawerContainerPortrait"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:background="@color/colorSurface_4dp" /><!--tools:layout_width="72dp"-->
+                            android:background="@color/colorSurface_4dp"
+                            tools:layout_width="72dp" /><!--tools:layout_width="72dp"-->
 
                         <View
                             android:id="@+id/nv_miniDrawerElevation"
@@ -178,13 +180,7 @@
 
         </FrameLayout>
 
-        <FrameLayout
-            android:id="@+id/nv_fixedDrawerContainer"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            tools:background="#4caf50"/><!--tools:layout_width="300dp"-->
-
-    </LinearLayout>
+    </androidx.drawerlayout.widget.DrawerLayout>
 
     <View
         android:id="@+id/nv_statusBarDarker"

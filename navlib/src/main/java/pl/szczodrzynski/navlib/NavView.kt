@@ -13,15 +13,12 @@ import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.FrameLayout
 import android.widget.LinearLayout
 import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.core.view.children
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.nav_view.view.*
 import pl.szczodrzynski.navlib.bottomsheet.NavBottomSheet
 import pl.szczodrzynski.navlib.drawer.NavDrawer
-import android.graphics.drawable.RippleDrawable
-import android.os.Build
-import androidx.core.view.children
-import com.mikepenz.materialize.util.UIUtils
 
 
 class NavView : FrameLayout {
@@ -82,9 +79,8 @@ class NavView : FrameLayout {
 
         drawer = NavDrawer(
             context,
-            findViewById(R.id.nv_drawerContainer),
-            findViewById(R.id.nv_fixedDrawerContainer),
-            findViewById(R.id.nv_miniDrawerContainerLandscape),
+            findViewById(R.id.nv_drawerLayout),
+            findViewById(R.id.nv_drawerContainerLandscape),
             findViewById(R.id.nv_miniDrawerContainerPortrait),
             findViewById(R.id.nv_miniDrawerElevation)
         )
@@ -108,11 +104,17 @@ class NavView : FrameLayout {
         //bottomSheetBehavior.peekHeight = displayHeight
     }
 
+    private fun convertDpToPixel(dp: Float): Float {
+        val resources = context.resources
+        val metrics = resources.displayMetrics
+        return dp * (metrics.densityDpi / 160f)
+    }
+
     fun gainAttentionOnBottomBar() {
         var x = ripple.width.toFloat()
         var y = ripple.height.toFloat()
-        x -= UIUtils.convertDpToPixel(56f, context) / 2
-        y -= UIUtils.convertDpToPixel(56f, context) / 2
+        x -= convertDpToPixel(56f) / 2
+        y -= convertDpToPixel(56f) / 2
         ripple.performRipple(Point(x.toInt(), y.toInt()))
     }
 
@@ -122,7 +124,7 @@ class NavView : FrameLayout {
             this.navigationBarBgView = navigationBarBackground
             this.statusBarDarkView = nv_statusBarDarker
             //this.navigationBarDarkView = navigationBarBackground
-            this.insetsListener = nv_drawerContainer
+            this.insetsListener = nv_drawerLayout
             this.marginBySystemBars = mainView
             this.paddingByNavigationBar = bottomSheet.getContentView()
         }
@@ -185,7 +187,7 @@ class NavView : FrameLayout {
     }
 
     fun onBackPressed(): Boolean {
-        if (drawer.isOpen) {
+        if (drawer.isOpen && !drawer.fixedDrawerEnabled()) {
             if (drawer.profileSelectionIsOpen) {
                 drawer.profileSelectionClose()
                 return true

@@ -95,16 +95,9 @@
         <item name="android:textViewStyle">@style/NavView.TextView</item>
 
         <!-- drawer & bottom sheet styling -->
-        <item name="material_drawer_background">?android:colorBackground</item>
-        <item name="material_drawer_primary_text">?android:textColorPrimary</item>
-        <item name="material_drawer_primary_icon">#5F6368</item>
-        <item name="material_drawer_secondary_text">?android:textColorSecondary</item>
-        <item name="material_drawer_hint_text">@color/material_drawer_hint_text</item>
-        <item name="material_drawer_divider">@color/material_drawer_divider</item>
-        <item name="material_drawer_selected">@color/material_drawer_selected</item> <!-- Material 2 defines 12% alpha, primary color -->
-        <item name="material_drawer_selected_text">#242424</item>
-        <item name="material_drawer_header_selection_text">@color/material_drawer_header_selection_text</item>
-        <item name="material_drawer_header_selection_subtext">@color/material_drawer_dark_header_selection_subtext</item>
+        <item name="materialDrawerStyle">@style/Widget.MaterialDrawerStyle</item>
+        <item name="materialDrawerHeaderStyle">@style/Widget.MaterialDrawerHeaderStyle</item>
+        <!--<item name="materialDrawerPrimaryIcon">#5F6368</item>-->
     </style>
 
     <style name="NavView.Dark" parent="Theme.MaterialComponents.NoActionBar">
@@ -148,16 +141,9 @@
         <item name="android:textViewStyle">@style/NavView.TextView</item>
 
         <!-- drawer & bottom sheet styling -->
-        <item name="material_drawer_background">?android:colorBackground</item>
-        <item name="material_drawer_primary_text">?android:textColorPrimary</item>
-        <item name="material_drawer_primary_icon">#9AA0A6</item>
-        <item name="material_drawer_secondary_text">?android:textColorSecondary</item>
-        <item name="material_drawer_hint_text">@color/material_drawer_dark_hint_text</item>
-        <item name="material_drawer_divider">@color/material_drawer_dark_divider</item>
-        <item name="material_drawer_selected">@color/material_drawer_dark_selected</item> <!-- Material 2 defines 12% alpha, primary color -->
-        <item name="material_drawer_selected_text">#FFFFFF</item>
-        <item name="material_drawer_header_selection_text">@color/material_drawer_dark_header_selection_text</item>
-        <item name="material_drawer_header_selection_subtext">@color/material_drawer_dark_header_selection_subtext</item>
+        <item name="materialDrawerStyle">@style/Widget.MaterialDrawerStyle</item>
+        <item name="materialDrawerHeaderStyle">@style/Widget.MaterialDrawerHeaderStyle</item>
+        <!--<item name="material_drawer_primary_icon">#9AA0A6</item>-->
     </style>
 
     <style name="NavView.Black" parent="NavView.Dark">
