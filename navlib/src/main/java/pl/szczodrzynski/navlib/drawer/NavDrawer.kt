@@ -82,7 +82,7 @@ class NavDrawer(
 
         badgeStyle = BadgeStyle().apply {
             textColor = ColorHolder.fromColor(Color.WHITE)
-            color = ColorHolder.fromColor(0xffd32f2f.toInt())
+            color = ColorHolder.fromColorRes(R.color.md_red_700)
         }
 
         drawerLayout.addDrawerListener(object : DrawerLayout.DrawerListener {

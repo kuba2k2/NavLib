@@ -245,7 +245,7 @@ class MainActivity : AppCompatActivity() {
                     .withIdentifier(2)
                     .withName("Settings")
                     .withBadgeStyle(badgeStyle)
-                    .withIcon(CommunityMaterial.Icon2.cmd_settings),
+                    .withIcon(CommunityMaterial.Icon.cmd_cog),
 
                 DrawerPrimaryItem().withName("iOS")
                     .withIdentifier(60)
@@ -276,12 +276,12 @@ class MainActivity : AppCompatActivity() {
                     .withDescription("Because we all hate ads")
                     .withIdentifier(64)
                     .withBadgeStyle(badgeStyle)
-                    .withIcon(CommunityMaterial.Icon.cmd_adchoices),
+                    .withIcon(CommunityMaterial.Icon.cmd_google_ads),
 
                 DrawerPrimaryItem().withName("Wonderful browsing experience and this is a long string")
                     .withIdentifier(65)
                     .withBadgeStyle(badgeStyle)
-                    .withIcon(CommunityMaterial.Icon2.cmd_internet_explorer)
+                    .withIcon(CommunityMaterial.Icon2.cmd_microsoft_internet_explorer)
             )
 
             setUnreadCount(2, 20, 30) // phil swift has 30 unreads on "Settings item"
@@ -314,7 +314,7 @@ class MainActivity : AppCompatActivity() {
                     },
                 ProfileSettingDrawerItem()
                     .withName("Manage Account")
-                    .withIcon(CommunityMaterial.Icon2.cmd_settings)
+                    .withIcon(CommunityMaterial.Icon.cmd_cog)
             )
 
             drawerItemSelectedListener = { id, position, drawerItem ->

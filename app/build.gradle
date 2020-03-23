@@ -39,7 +39,7 @@ dependencies {
     implementation "com.mikepenz:materialdrawer:${versions.materialdrawer}"
     implementation "com.mikepenz:iconics-core:${versions.iconics}"
     implementation "com.mikepenz:iconics-views:${versions.iconics}"
-    implementation "com.mikepenz:community-material-typeface:${versions.font_cmd}@aar"
+    //implementation "com.mikepenz:community-material-typeface:${versions.font_cmd}@aar"
     implementation "androidx.core:core-ktx:${versions.ktx}"
     implementation "androidx.constraintlayout:constraintlayout:${versions.constraintLayout}"
     implementation "com.google.android.material:material:${versions.material}"

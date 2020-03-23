@@ -1,1 +1,2 @@
+include ':community-material-typeface'
 include ':app', ':navlib'
