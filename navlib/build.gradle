@@ -46,10 +46,9 @@ dependencies {
     implementation "com.google.android.material:material:${versions.material}"
 
     api "com.mikepenz:materialdrawer:${versions.materialdrawer}"
-    //api "com.mikepenz:community-material-typeface:${versions.font_cmd}@aar"
+    api "com.mikepenz:community-material-typeface:${versions.font_cmd}@aar"
     api "com.mikepenz:iconics-core:${versions.iconics}"
-    api "com.mikepenz:materialize:1.2.1"
-    api project(":community-material-typeface")
+    implementation "com.mikepenz:materialize:1.2.1"
     implementation "com.mikepenz:itemanimators:1.1.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:${versions.kotlin}"
     implementation "pl.droidsonroids.gif:android-gif-drawable:${versions.gifdrawable}"
