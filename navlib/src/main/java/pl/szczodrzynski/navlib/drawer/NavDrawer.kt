@@ -99,6 +99,7 @@ class NavDrawer(
 
         accountHeader = AccountHeaderView(context).apply {
             headerBackground = ImageHolder(R.drawable.header)
+            displayBadgesOnSmallProfileImages = true
 
             onAccountHeaderListener = { view, profile, current ->
                 if (profile is ProfileSettingDrawerItem) {
@@ -477,7 +478,7 @@ class NavDrawer(
         if (drawer.selectedItemIdentifier != id.toLong() || !fireOnClick)
             drawer.setSelection(id.toLong(), fireOnClick)
 
-        miniDrawer.setSelection(-1L)
+        //miniDrawer.setSelection(-1L)
         if (drawerMode == DRAWER_MODE_MINI)
             miniDrawer.setSelection(id.toLong())
     }
@@ -518,12 +519,14 @@ class NavDrawer(
                 .withName(profile.name)
                 .withEmail(profile.subname)
                 .also { it.icon = image }
+                .withBadgeStyle(badgeStyle)
                 .withNameShown(true)
                 .also { profiles?.add(index, it) }
         }
 
         accountHeader.profiles = profiles
 
+        updateBadges()
         updateMiniDrawer()
     }
 
@@ -623,12 +626,32 @@ class NavDrawer(
             }
         }
 
+        var profileCounters = listOf<IUnreadCounter>()
+
+        accountHeader.profiles?.forEach { profile ->
+            if (profile !is ProfileDrawerItem) return@forEach
+            val counters = unreadCounterList.filter { it.profileId == profile.identifier.toInt() }
+            val count = counters.sumBy { it.count }
+            val badge = when {
+                count == 0 -> null
+                count >= 99 -> StringHolder("99+")
+                else -> StringHolder(count.toString())
+            }
+            if (profile.badge != badge) {
+                profile.badge = badge
+                accountHeader.updateProfile(profile)
+            }
+
+            if (currentProfile == profile.identifier.toInt())
+                profileCounters = counters
+        }
+
         Log.d("NavDebug", "updateBadges()")
-        unreadCounterList.map {
+        profileCounters.map {
             it.drawerItemId = unreadCounterTypeMap[it.type]
         }
         var totalCount = 0
-        unreadCounterList.forEach {
+        profileCounters.forEach {
             if (it.drawerItemId == null)
                 return@forEach
             if (it.profileId != currentProfile) {
@@ -699,10 +722,10 @@ class NavDrawer(
         }
         if (item != null) {
             item.count = count
-            updateBadges()
         }
         else {
             unreadCounterList.add(UnreadCounter(profileId, type, null, count))
         }
+        updateBadges()
     }
 }

@@ -260,8 +260,8 @@ class MainActivity : AppCompatActivity() {
 
                 DrawerPrimaryItem().withName("Lock screen")
                     .withDescription("aaand not visible in Mini Drawer")
-                    .withIsHiddenInMiniDrawer(true)
                     .withIdentifier(62)
+                    .withIsHiddenInMiniDrawer(true)
                     .withBadgeStyle(badgeStyle)
                     .withIcon(CommunityMaterial.Icon.cmd_fingerprint),
 
@@ -284,9 +284,6 @@ class MainActivity : AppCompatActivity() {
                     .withIcon(CommunityMaterial.Icon2.cmd_internet_explorer)
             )
 
-            setUnreadCount(2, 20, 30) // phil swift has 30 unreads on "Settings item"
-            setUnreadCount(4, 40, 1000) // mark has 99+ unreads on "Lock screen item"
-
             //setAccountHeaderBackground("/sdcard/ban.gif")
 
             appendProfiles(
@@ -297,6 +294,9 @@ class MainActivity : AppCompatActivity() {
                 DrawerProfile(5, "I love GDPR", null, null),
                 DrawerProfile(6, "Gandalf", "http://sax.hol.es/", null)
             )
+
+            setUnreadCount(2, 20, 30) // phil swift has 30 unreads on "Settings item"
+            setUnreadCount(4, 40, 1000) // mark has 99+ unreads on "Lock screen item"
 
             addProfileSettings(
                 ProfileSettingDrawerItem()
@@ -352,6 +352,10 @@ class MainActivity : AppCompatActivity() {
                 // you cannot select apple
                 id != 60
             }
+        }
+
+        setSelection.setOnClickListener {
+            navView.drawer.setSelection(id = 1, fireOnClick = false)
         }
 
 

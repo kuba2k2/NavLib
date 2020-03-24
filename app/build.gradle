@@ -36,7 +36,9 @@ dependencies {
     implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation "androidx.appcompat:appcompat:${versions.appcompat}"
     implementation "androidx.legacy:legacy-support-v4:${versions.legacy}"
-    implementation "com.mikepenz:materialdrawer:${versions.materialdrawer}"
+    api("com.github.kuba2k2:MaterialDrawer:${versions.materialdrawer}") {
+        exclude module: 'library-iconics'
+    }
     implementation "com.mikepenz:iconics-core:${versions.iconics}"
     implementation "com.mikepenz:iconics-views:${versions.iconics}"
     implementation "com.mikepenz:community-material-typeface:${versions.font_cmd}@aar"

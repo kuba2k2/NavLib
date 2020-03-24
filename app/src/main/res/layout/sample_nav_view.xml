@@ -35,6 +35,12 @@
                     android:layout_height="48dp"
                     android:text="Ripple bottombar" />
 
+                <Button
+                    android:id="@+id/setSelection"
+                    android:layout_width="wrap_content"
+                    android:layout_height="48dp"
+                    android:text="Set selection" />
+
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
