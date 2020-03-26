@@ -171,17 +171,18 @@ class NavDrawer(
         miniDrawer = MiniDrawerSliderView(context).apply {
             drawer = this@NavDrawer.drawer
             includeSecondaryDrawerItems = false
-            this::class.java.getDeclaredField("onMiniDrawerItemClickListener").let {
-                it.isAccessible = true
-                it.set(this, { v: View?, position: Int, item: IDrawerItem<*>, type: Int ->
-                    if (item is MiniProfileDrawerItem) {
-                        profileSelectionOpen()
-                        open()
-                        true
-                    }
-                    else false
-                })
-            }
+            try {
+                this::class.java.getDeclaredField("onMiniDrawerItemClickListener").let {
+                    it.isAccessible = true
+                    it.set(this, { v: View?, position: Int, item: IDrawerItem<*>, type: Int ->
+                        if (item is MiniProfileDrawerItem) {
+                            profileSelectionOpen()
+                            open()
+                            true
+                        } else false
+                    })
+                }
+            } catch (_: Exception) { }
         }
 
         updateMiniDrawer()
@@ -478,7 +479,7 @@ class NavDrawer(
         if (drawer.selectedItemIdentifier != id.toLong() || !fireOnClick)
             drawer.setSelection(id.toLong(), fireOnClick)
 
-        //miniDrawer.setSelection(-1L)
+        miniDrawer.setSelection(-1L)
         if (drawerMode == DRAWER_MODE_MINI)
             miniDrawer.setSelection(id.toLong())
     }
