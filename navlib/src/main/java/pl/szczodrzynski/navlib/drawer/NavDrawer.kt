@@ -280,19 +280,17 @@ class NavDrawer(
             val mDrawerLayout = drawerLayout
             val mDragger = mDrawerLayout::class.java.getDeclaredField(
                 "mLeftDragger"
-            )//mRightDragger for right obviously
+            )
             mDragger.isAccessible = true
             val draggerObj = mDragger.get(mDrawerLayout) as ViewDragHelper?
+            draggerObj?.edgeSize = size.toInt()
 
-            val mEdgeSize = draggerObj?.javaClass?.getDeclaredField(
-                "mEdgeSize"
+            // update for SDK >= 29 (Android 10)
+            val useSystemInsets = mDrawerLayout::class.java.getDeclaredField(
+                "sEdgeSizeUsingSystemGestureInsets"
             )
-            mEdgeSize?.isAccessible = true
-
-            mEdgeSize?.setInt(
-                draggerObj,
-                size.toInt()
-            ) //optimal value as for me, you may set any constant in dp
+            useSystemInsets.isAccessible = true
+            useSystemInsets.set(null, false)
         }
         catch (e: Exception) {
             e.printStackTrace()
