@@ -475,7 +475,7 @@ class NavDrawer(
         }
 
         if (drawer.selectedItemIdentifier != id.toLong() || !fireOnClick)
-            drawer.setSelection(id.toLong(), fireOnClick)
+            drawer.setSelectionAtPosition(drawer.getPosition(id.toLong()), fireOnClick)
 
         miniDrawer.setSelection(-1L)
         if (drawerMode == DRAWER_MODE_MINI)
