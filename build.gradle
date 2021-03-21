@@ -6,8 +6,8 @@ buildscript {
 
         release = [
                 // major.minor.patch.rc.beta
-                versionName: "0.7.0",
-                versionCode: 70099
+                versionName: "0.7.1",
+                versionCode: 70199
         ]
 
         setup = [
