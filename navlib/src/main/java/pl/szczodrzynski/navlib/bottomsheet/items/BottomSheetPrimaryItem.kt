@@ -9,7 +9,6 @@ import androidx.annotation.StringRes
 import androidx.recyclerview.widget.RecyclerView
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
-import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.sizeDp
 import pl.szczodrzynski.navlib.ImageHolder
 import pl.szczodrzynski.navlib.R
@@ -42,10 +41,11 @@ data class BottomSheetPrimaryItem(override val isContextual: Boolean = true) : I
     override fun bindViewHolder(viewHolder: ViewHolder) {
         viewHolder.root.setOnClickListener(onClickListener)
 
-        viewHolder.image.setImageDrawable(IconicsDrawable(viewHolder.text.context)
-                .icon(iconicsIcon ?: CommunityMaterial.Icon.cmd_android)
-                .colorAttr(viewHolder.text.context, android.R.attr.textColorSecondary)
-                .sizeDp(24))
+        viewHolder.image.setImageDrawable(IconicsDrawable(viewHolder.text.context).apply {
+            icon = iconicsIcon
+            colorAttr(viewHolder.text.context, android.R.attr.textColorSecondary)
+            sizeDp = 24
+        })
 
         viewHolder.description.visibility = View.VISIBLE
         when {

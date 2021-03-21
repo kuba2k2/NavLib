@@ -5,13 +5,12 @@ import android.content.res.Configuration.ORIENTATION_PORTRAIT
 import android.content.res.Resources
 import android.graphics.Color
 import android.os.Build.VERSION.SDK_INT
-import android.os.Build.VERSION_CODES.*
+import android.os.Build.VERSION_CODES
 import android.util.Log
 import android.view.View
 import android.view.View.*
 import android.view.Window
 import android.view.WindowManager
-import android.widget.Toast
 import androidx.core.graphics.ColorUtils
 import androidx.core.view.ViewCompat
 import com.mikepenz.materialize.util.KeyboardUtil
@@ -185,12 +184,12 @@ class SystemBarsUtil(private val activity: Activity) {
             // #3 SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN makes the activity not resize when keyboard is open
             // Samsung TouchWiz - app will go fullscreen. There is a problem though, see #3.
             var targetAppFullscreen = false
-            if (SDK_INT >= KITKAT) {
+            if (SDK_INT >= VERSION_CODES.KITKAT) {
                 targetAppFullscreen = true
             }
 
 
-            if (SDK_INT in KITKAT until LOLLIPOP) {
+            if (SDK_INT in VERSION_CODES.KITKAT until VERSION_CODES.LOLLIPOP) {
                 // API 19-20 (KitKat 4.4) - set gradient status bar
                 window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
                 // take FallbackGradient color
@@ -198,7 +197,7 @@ class SystemBarsUtil(private val activity: Activity) {
                 // disable darker even if [statusBarDarker] == true BUT gradient fallback is not COLOR_HALF_TRANSPARENT
                 //targetStatusBarDarker = targetStatusBarDarker && targetStatusBarFallbackGradient == COLOR_HALF_TRANSPARENT
             }
-            else if (SDK_INT >= LOLLIPOP) {
+            else if (SDK_INT >= VERSION_CODES.LOLLIPOP) {
                 // API 21+ (Lollipop 5.0+) - set transparent status bar
                 if (statusBarTranslucent) {
                     window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS)
@@ -206,17 +205,17 @@ class SystemBarsUtil(private val activity: Activity) {
                 else {
                     window.statusBarColor = Color.TRANSPARENT
                 }
-                if (SDK_INT < M && targetStatusBarLight) {
+                if (SDK_INT < VERSION_CODES.M && targetStatusBarLight) {
                     // take FallbackLight color
                     targetStatusBarMode = TARGET_MODE_LIGHT
                 }
             }
-            if (SDK_INT >= M && targetStatusBarLight) {
+            if (SDK_INT >= VERSION_CODES.M && targetStatusBarLight) {
                 // API 23+ (Marshmallow 6.0+) - set the status bar icons to dark color if [statusBarLight] is true
                 window.decorView.systemUiVisibility = window.decorView.systemUiVisibility or SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
             }
             // FOR SAMSUNG/SONY DEVICES (TouchWiz 4.1-4.3)
-            if (SDK_INT < KITKAT) {
+            if (SDK_INT < VERSION_CODES.KITKAT) {
                 val libs = activity.packageManager.systemSharedLibraryNames
                 var reflect: String? = null
                 // TODO galaxy s3 - opening keyboard does not resize activity if fullscreen
@@ -282,20 +281,20 @@ class SystemBarsUtil(private val activity: Activity) {
 
             // TODO navigation bar options like status bar
             // NAVIGATION BAR
-            if (SDK_INT >= KITKAT && (SDK_INT < LOLLIPOP || !navigationBarTransparent)) {
+            if (SDK_INT >= VERSION_CODES.KITKAT && (SDK_INT < VERSION_CODES.LOLLIPOP || !navigationBarTransparent)) {
                 // API 19-20 (KitKat 4.4) - set gradient navigation bar
                 // API 21+ (Lollipop 5.0+) - set half-transparent navigation bar if [navigationBarTransparent] is false
                 window.addFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_NAVIGATION)
             }
 
-            if (SDK_INT >= LOLLIPOP && navigationBarTransparent) {
+            if (SDK_INT >= VERSION_CODES.LOLLIPOP && navigationBarTransparent) {
                 // API 21+ (Lollipop 5.0+) - set fully transparent navigation bar if [navigationBarTransparent] is true
                 window.navigationBarColor = Color.TRANSPARENT
             }
 
             // PADDING
             if (insetsListener != null) {
-                if (SDK_INT >= LOLLIPOP && false) {
+                if (SDK_INT >= VERSION_CODES.LOLLIPOP && false) {
                     ViewCompat.setOnApplyWindowInsetsListener(insetsListener!!) { _, insets ->
                         Log.d("NavLib", "Got insets left = ${insets.systemWindowInsetLeft}, top = ${insets.systemWindowInsetTop}, right = ${insets.systemWindowInsetRight}, bottom = ${insets.systemWindowInsetBottom}")
                         if (insetsApplied)

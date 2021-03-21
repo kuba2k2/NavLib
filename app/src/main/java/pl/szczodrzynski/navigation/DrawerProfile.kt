@@ -6,7 +6,6 @@ import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
 import android.widget.ImageView
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
-import pl.droidsonroids.gif.GifDrawable
 import pl.szczodrzynski.navlib.ImageHolder
 import pl.szczodrzynski.navlib.crc16
 import pl.szczodrzynski.navlib.drawer.IDrawerProfile
@@ -57,7 +56,7 @@ class DrawerProfile(
                     /* if you want to use GIFs as profile drawables, add
                     implementation "pl.droidsonroids.gif:android-gif-drawable:${versions.gifdrawable}"
                      */
-                    return GifDrawable(image ?: "")
+                    return null//GifDrawable(image ?: "")
                 }
                 else {
                     return RoundedBitmapDrawableFactory.create(context.resources, image ?: "")

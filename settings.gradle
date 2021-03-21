@@ -1,1 +1,1 @@
-include ':app', ':navlib'
+include ':app', ':navlib', ':navlib-font'

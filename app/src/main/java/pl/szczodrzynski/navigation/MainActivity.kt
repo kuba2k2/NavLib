@@ -8,10 +8,10 @@ import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.mikepenz.iconics.IconicsColor
 import com.mikepenz.iconics.IconicsDrawable
-import com.mikepenz.iconics.IconicsSize
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
+import com.mikepenz.iconics.utils.actionBar
+import com.mikepenz.iconics.utils.paddingDp
 import com.mikepenz.materialdrawer.holder.StringHolder
 import com.mikepenz.materialdrawer.model.ProfileSettingDrawerItem
 import com.mikepenz.materialdrawer.model.interfaces.*
@@ -27,6 +27,7 @@ import pl.szczodrzynski.navlib.bottomsheet.NavBottomSheet.Companion.SORT_MODE_DE
 import pl.szczodrzynski.navlib.bottomsheet.NavBottomSheet.Companion.TOGGLE_GROUP_SORTING_ORDER
 import pl.szczodrzynski.navlib.bottomsheet.items.BottomSheetPrimaryItem
 import pl.szczodrzynski.navlib.bottomsheet.items.BottomSheetSeparatorItem
+import pl.szczodrzynski.navlib.colorAttr
 import pl.szczodrzynski.navlib.drawer.items.DrawerPrimaryItem
 import pl.szczodrzynski.navlib.getColorFromAttr
 import pl.szczodrzynski.navlib.withIcon
@@ -211,7 +212,7 @@ class MainActivity : AppCompatActivity() {
             navView.bottomSheet.enableDragToOpen = isChecked
         }
 
-        navView.bottomBar.fabIcon = CommunityMaterial.Icon2.cmd_pencil
+        navView.bottomBar.fabIcon = CommunityMaterial.Icon3.cmd_pencil
         navView.bottomBar.fabExtendedText = "Compose"
         navView.bottomBar.fabExtended = false
 
@@ -239,13 +240,13 @@ class MainActivity : AppCompatActivity() {
                     .withSelected(true)
                     .withIdentifier(1)
                     .withBadgeStyle(badgeStyle)
-                    .withIcon(CommunityMaterial.Icon.cmd_google_home),
+                    .withIcon(CommunityMaterial.Icon2.cmd_google_home),
 
                 DrawerPrimaryItem()
                     .withIdentifier(2)
                     .withName("Settings")
                     .withBadgeStyle(badgeStyle)
-                    .withIcon(CommunityMaterial.Icon2.cmd_settings),
+                    .withIcon(CommunityMaterial.Icon.cmd_cog_outline),
 
                 DrawerPrimaryItem().withName("iOS")
                     .withIdentifier(60)
@@ -263,7 +264,7 @@ class MainActivity : AppCompatActivity() {
                     .withIdentifier(62)
                     .withIsHiddenInMiniDrawer(true)
                     .withBadgeStyle(badgeStyle)
-                    .withIcon(CommunityMaterial.Icon.cmd_fingerprint),
+                    .withIcon(CommunityMaterial.Icon2.cmd_fingerprint),
 
                 DrawerPrimaryItem().withName("HDR enable/disable")
                     .withTag(0)
@@ -276,12 +277,12 @@ class MainActivity : AppCompatActivity() {
                     .withDescription("Because we all hate ads")
                     .withIdentifier(64)
                     .withBadgeStyle(badgeStyle)
-                    .withIcon(CommunityMaterial.Icon.cmd_adchoices),
+                    .withIcon(CommunityMaterial.Icon2.cmd_google_ads),
 
                 DrawerPrimaryItem().withName("Wonderful browsing experience and this is a long string")
                     .withIdentifier(65)
                     .withBadgeStyle(badgeStyle)
-                    .withIcon(CommunityMaterial.Icon2.cmd_internet_explorer)
+                    .withIcon(CommunityMaterial.Icon3.cmd_microsoft_internet_explorer)
             )
 
             //setAccountHeaderBackground("/sdcard/ban.gif")
@@ -303,10 +304,11 @@ class MainActivity : AppCompatActivity() {
                     .withName("Add Account")
                     .withDescription("Add new GitHub Account")
                     .withIcon(
-                        IconicsDrawable(context, CommunityMaterial.Icon2.cmd_plus)
-                            .actionBar()
-                            .padding { IconicsSize.dp(5) }
-                            .color { IconicsColor.colorInt(getColorFromAttr(context, R.attr.materialDrawerPrimaryText)) }
+                        IconicsDrawable(context, CommunityMaterial.Icon3.cmd_plus).apply {
+                            actionBar()
+                            paddingDp = 5
+                            colorAttr(context, R.attr.materialDrawerPrimaryText)
+                        }
                     )
                     .withOnDrawerItemClickListener { v, item, position ->
                         Toast.makeText(context, "Add account", Toast.LENGTH_SHORT).show()
@@ -314,7 +316,7 @@ class MainActivity : AppCompatActivity() {
                     },
                 ProfileSettingDrawerItem()
                     .withName("Manage Account")
-                    .withIcon(CommunityMaterial.Icon2.cmd_settings)
+                    .withIcon(CommunityMaterial.Icon.cmd_cog_outline)
             )
 
             drawerItemSelectedListener = { id, position, drawerItem ->
@@ -363,7 +365,7 @@ class MainActivity : AppCompatActivity() {
             this += BottomSheetPrimaryItem(true)
                 .withId(1)
                 .withTitle("Compose")
-                .withIcon(CommunityMaterial.Icon2.cmd_pencil)
+                .withIcon(CommunityMaterial.Icon3.cmd_pencil)
                 .withOnClickListener(View.OnClickListener {
                     Toast.makeText(this@MainActivity, "Compose message", Toast.LENGTH_SHORT).show()
                 })
@@ -371,7 +373,7 @@ class MainActivity : AppCompatActivity() {
             this += BottomSheetPrimaryItem(false)
                 .withId(3)
                 .withTitle("Synchronise")
-                .withIcon(CommunityMaterial.Icon2.cmd_sync)
+                .withIcon(CommunityMaterial.Icon3.cmd_sync)
                 .withOnClickListener(View.OnClickListener {
                     Toast.makeText(this@MainActivity, "Synchronising...", Toast.LENGTH_SHORT).show()
                 })
@@ -403,7 +405,7 @@ class MainActivity : AppCompatActivity() {
             textInputEnabled = true
             textInputHint = "Search"
             textInputHelperText = "0 messages found"
-            textInputIcon = CommunityMaterial.Icon2.cmd_magnify
+            textInputIcon = CommunityMaterial.Icon3.cmd_magnify
             textInputChangedListener = object : NavBottomSheet.OnTextInputChangedListener {
                 override fun onTextChanged(s: String, start: Int, before: Int, count: Int) {
                     navView.toolbar.subtitle = s

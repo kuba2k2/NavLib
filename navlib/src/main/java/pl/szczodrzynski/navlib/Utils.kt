@@ -120,7 +120,9 @@ fun hasNavigationBar(context: Context): Boolean {
     return hasNavigationBar
 }
 
-fun IconicsDrawable.colorAttr(context: Context, @AttrRes attrRes: Int) = colorInt(getColorFromAttr(context, attrRes))
+fun IconicsDrawable.colorAttr(context: Context, @AttrRes attrRes: Int) {
+    colorInt = getColorFromAttr(context, attrRes)
+}
 
 fun getColorFromAttr(context: Context, @AttrRes color: Int): Int {
     val typedValue = TypedValue()

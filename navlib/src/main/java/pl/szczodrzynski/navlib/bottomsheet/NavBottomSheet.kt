@@ -5,7 +5,6 @@ import android.content.Context
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.graphics.drawable.Drawable
-import android.system.Os.close
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.AttributeSet
@@ -28,13 +27,12 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
-import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
+import com.mikepenz.iconics.typeface.library.navlibfont.NavLibFont
 import com.mikepenz.iconics.utils.paddingDp
 import com.mikepenz.iconics.utils.sizeDp
-import com.mikepenz.materialdrawer.model.interfaces.IDrawerItem
 import pl.szczodrzynski.navlib.*
-import pl.szczodrzynski.navlib.bottomsheet.items.IBottomSheetItem
 import pl.szczodrzynski.navlib.bottomsheet.items.BottomSheetSeparatorItem
+import pl.szczodrzynski.navlib.bottomsheet.items.IBottomSheetItem
 
 
 class NavBottomSheet : CoordinatorLayout {
@@ -280,7 +278,10 @@ class NavBottomSheet : CoordinatorLayout {
     private fun toggleGroupGetIconicsDrawable(context: Context, icon: IIcon?): Drawable? {
         if (icon == null)
             return null
-        return IconicsDrawable(context, icon).sizeDp(24).paddingDp(4)
+        return IconicsDrawable(context, icon).apply {
+            sizeDp = 24
+            paddingDp = 4
+        }
     }
 
     fun toggleGroupAddItem(id: Int, text: String, @DrawableRes icon: Int, defaultSortOrder: Int = SORT_MODE_ASCENDING) {
@@ -337,8 +338,8 @@ class NavBottomSheet : CoordinatorLayout {
             }
             button.tag = tag
             button.icon = toggleGroupGetIconicsDrawable(context, when (sortingMode) {
-                SORT_MODE_ASCENDING -> CommunityMaterial.Icon2.cmd_sort_ascending
-                SORT_MODE_DESCENDING -> CommunityMaterial.Icon2.cmd_sort_descending
+                SORT_MODE_ASCENDING -> NavLibFont.Icon.nav_sort_ascending
+                SORT_MODE_DESCENDING -> NavLibFont.Icon.nav_sort_descending
                 else -> null
             })
             if (sortingMode != null) {
@@ -386,7 +387,11 @@ class NavBottomSheet : CoordinatorLayout {
         set(value) {
             textInputLayout.startIconDrawable = when (value) {
                 is Drawable -> value
-                is IIcon -> IconicsDrawable(context, value).sizeDp(24)/*.colorInt(Color.BLACK)*/
+                is IIcon -> IconicsDrawable(context).apply {
+                    icon = value
+                    sizeDp = 34
+                    // colorInt = Color.BLACK
+                }
                 is Int -> context.getDrawableFromRes(value)
                 else -> null
             }

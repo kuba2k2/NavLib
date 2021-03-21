@@ -1,5 +1,6 @@
 package pl.szczodrzynski.navlib
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.drawable.LayerDrawable
 import android.util.AttributeSet
@@ -13,8 +14,7 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
-import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
-import com.mikepenz.iconics.utils.colorInt
+import com.mikepenz.iconics.typeface.library.navlibfont.NavLibFont
 import com.mikepenz.iconics.utils.sizeDp
 import pl.szczodrzynski.navlib.bottomsheet.NavBottomSheet
 import pl.szczodrzynski.navlib.drawer.NavDrawer
@@ -89,11 +89,19 @@ class NavBottomBar : BottomAppBar {
     /**
      * Set the FAB's icon.
      */
-    var fabIcon: IIcon = CommunityMaterial.Icon.cmd_android
+    var fabIcon: IIcon? = null
         set(value) {
             field = value
-            fabView?.setImageDrawable(IconicsDrawable(context, value).colorInt(R.attr.colorFabIcon).sizeDp(24))
-            fabExtendedView?.icon = IconicsDrawable(context, value).colorInt(R.attr.colorFabIcon).sizeDp(24)
+            fabView?.setImageDrawable(IconicsDrawable(context).apply {
+                icon = value
+                colorAttr(context, R.attr.colorFabIcon)
+                sizeDp = 24
+            })
+            fabExtendedView?.icon = IconicsDrawable(context).apply {
+                icon = value
+                colorAttr(context, R.attr.colorFabIcon)
+                sizeDp = 24
+            }
         }
     /**
      * Set the ExtendedFAB's text.
@@ -112,6 +120,7 @@ class NavBottomBar : BottomAppBar {
         fabExtendedView?.setOnClickListener(onClickListener)
     }
 
+    @SuppressLint("ClickableViewAccessibility")
     private fun create(attrs: AttributeSet?, defStyle: Int) {
         setOnTouchListener { _, event ->
             if (bottomSheet?.enable != true || bottomSheet?.enableDragToOpen != true)
@@ -125,20 +134,21 @@ class NavBottomBar : BottomAppBar {
         val icon = ContextCompat.getDrawable(context, R.drawable.ic_menu_badge) as LayerDrawable?
         icon?.apply {
             mutate()
-            setDrawableByLayerId(R.id.ic_menu, IconicsDrawable(context)
-                .icon(CommunityMaterial.Icon2.cmd_menu)
-                .sizeDp(20)
-                .colorInt(getColorFromAttr(context, R.attr.colorOnPrimary)))
+            setDrawableByLayerId(R.id.ic_menu, IconicsDrawable(context).apply {
+                this.icon = NavLibFont.Icon.nav_menu
+                sizeDp = 20
+                colorAttr(context, R.attr.colorOnPrimary)
+            })
             setDrawableByLayerId(R.id.ic_badge, BadgeDrawable(context))
         }
         navigationIcon = icon
 
         menu.add(0, -1, 0, "Menu")
-            .setIcon(
-                IconicsDrawable(context)
-                    .icon(CommunityMaterial.Icon.cmd_dots_vertical)
-                    .sizeDp(20)
-                    .colorInt(getColorFromAttr(context, R.attr.colorOnPrimary)))
+            .setIcon(IconicsDrawable(context).apply {
+                this.icon = NavLibFont.Icon.nav_dots_vertical
+                sizeDp = 20
+                colorAttr(context, R.attr.colorOnPrimary)
+            })
             .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
 
         setNavigationOnClickListener {
