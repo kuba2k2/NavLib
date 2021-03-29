@@ -280,7 +280,6 @@ class NavBottomSheet : CoordinatorLayout {
             return null
         return IconicsDrawable(context, icon).apply {
             sizeDp = 24
-            paddingDp = 4
         }
     }
 
@@ -389,7 +388,7 @@ class NavBottomSheet : CoordinatorLayout {
                 is Drawable -> value
                 is IIcon -> IconicsDrawable(context).apply {
                     icon = value
-                    sizeDp = 34
+                    sizeDp = 24
                     // colorInt = Color.BLACK
                 }
                 is Int -> context.getDrawableFromRes(value)

@@ -8,6 +8,7 @@ import android.view.Gravity
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.mikepenz.iconics.Iconics
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.library.community.material.CommunityMaterial
 import com.mikepenz.iconics.utils.actionBar
@@ -41,6 +42,8 @@ class MainActivity : AppCompatActivity() {
     @SuppressLint("ApplySharedPref")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        Iconics.respectFontBoundsDefault = true
 
         if (darkTheme == null)
             darkTheme = getSharedPreferences("prefs", Context.MODE_PRIVATE).getBoolean("darkTheme", false)

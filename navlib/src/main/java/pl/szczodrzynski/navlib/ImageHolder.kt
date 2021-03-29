@@ -14,7 +14,6 @@ import androidx.appcompat.content.res.AppCompatResources
 import com.mikepenz.iconics.IconicsDrawable
 import com.mikepenz.iconics.typeface.IIcon
 import com.mikepenz.iconics.utils.actionBar
-import com.mikepenz.iconics.utils.paddingDp
 import com.mikepenz.iconics.utils.sizeDp
 import com.mikepenz.materialdrawer.util.DrawerImageLoader
 import pl.droidsonroids.gif.GifDrawable
@@ -103,7 +102,6 @@ open class ImageHolder : com.mikepenz.materialdrawer.holder.ImageHolder {
                 this.icon = ii
                 colorList = iconColor
                 sizeDp = 24
-                this.paddingDp = paddingDp
             }
             iconRes != -1 -> icon = AppCompatResources.getDrawable(ctx, iconRes)
             uri != null -> try {

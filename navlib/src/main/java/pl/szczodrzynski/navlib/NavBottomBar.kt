@@ -136,7 +136,7 @@ class NavBottomBar : BottomAppBar {
             mutate()
             setDrawableByLayerId(R.id.ic_menu, IconicsDrawable(context).apply {
                 this.icon = NavLibFont.Icon.nav_menu
-                sizeDp = 20
+                sizeDp = 24
                 colorAttr(context, R.attr.colorOnPrimary)
             })
             setDrawableByLayerId(R.id.ic_badge, BadgeDrawable(context))
@@ -146,7 +146,7 @@ class NavBottomBar : BottomAppBar {
         menu.add(0, -1, 0, "Menu")
             .setIcon(IconicsDrawable(context).apply {
                 this.icon = NavLibFont.Icon.nav_dots_vertical
-                sizeDp = 20
+                sizeDp = 24
                 colorAttr(context, R.attr.colorOnPrimary)
             })
             .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
