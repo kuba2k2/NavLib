@@ -25,7 +25,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="top"
-                android:background="?android:windowBackground"
+                android:background="?android:colorBackground"
                 tools:layout_height="25dp" />
 
             <LinearLayout
@@ -149,7 +149,7 @@
                         android:focusable="true"
                         android:text=""
                         android:visibility="visible"
-                        app:backgroundTint="?colorFab"
+                        app:backgroundTint="?colorPrimaryContainer"
                         app:layout_anchor="@+id/nv_bottomBar"
                         app:layout_anchorGravity="center|top"
                         tools:icon="@android:drawable/ic_menu_edit" />
@@ -162,7 +162,7 @@
                         android:clickable="true"
                         android:focusable="true"
                         android:visibility="gone"
-                        app:backgroundTint="?colorFab"
+                        app:backgroundTint="?colorPrimaryContainer"
                         app:layout_anchor="@id/nv_bottomBar"
                         tools:srcCompat="@android:drawable/ic_menu_edit" />
 

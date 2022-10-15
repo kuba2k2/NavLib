@@ -94,12 +94,12 @@ class NavBottomBar : BottomAppBar {
             field = value
             fabView?.setImageDrawable(IconicsDrawable(context).apply {
                 icon = value
-                colorAttr(context, R.attr.colorFabIcon)
+                colorAttr(context, R.attr.colorOnPrimaryContainer)
                 sizeDp = 24
             })
             fabExtendedView?.icon = IconicsDrawable(context).apply {
                 icon = value
-                colorAttr(context, R.attr.colorFabIcon)
+                colorAttr(context, R.attr.colorOnPrimaryContainer)
                 sizeDp = 24
             }
         }

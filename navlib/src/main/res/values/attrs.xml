@@ -2,7 +2,6 @@
 <resources>
     <attr name="actionBarBackground" format="color" />
     <attr name="navigationBarBackground" format="color" />
-    <attr name="colorFab" format="color" />
-    <attr name="colorFabIcon" format="color" />
-    <attr name="colorOnFab" format="color" />
+    <attr name="colorPrimaryContainer" format="color" />
+    <attr name="colorOnPrimaryContainer" format="color" />
 </resources>

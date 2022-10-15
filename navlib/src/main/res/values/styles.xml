@@ -5,12 +5,12 @@
     <style name="NavView.Widget" />
 
     <style name="NavView.Widget.FloatingActionButton" parent="Widget.Material3.FloatingActionButton.Primary">
-        <item name="backgroundTint">?colorFab</item>
-        <item name="android:textColor">?colorOnFab</item>
+        <item name="backgroundTint">?colorOnPrimaryContainer</item>
+        <item name="android:textColor">?colorOnPrimaryContainer</item>
     </style>
     <style name="NavView.Widget.ExtendedFloatingActionButton" parent="Widget.Material3.ExtendedFloatingActionButton.Primary">
-        <item name="backgroundTint">?colorFab</item>
-        <item name="android:textColor">?colorOnFab</item>
+        <item name="backgroundTint">?colorOnPrimaryContainer</item>
+        <item name="android:textColor">?colorOnPrimaryContainer</item>
     </style>
 
     <style name="NavView.TextView">
@@ -60,17 +60,13 @@
         <item name="colorAccent">#03DAC6</item>
         <item name="colorSecondary">?colorAccent</item>
         <item name="colorSecondaryVariant">#018786</item>
-
+        <item name="colorPrimaryContainer">#E8DDFF</item>
+        <item name="colorOnPrimaryContainer">#22005D</item>
         <!-- window colors -->
         <item name="android:windowBackground">?android:colorBackground</item>
         <!-- a descendant theme should specify those two as background colors -->
         <item name="android:colorBackground">@color/background_light</item>
         <item name="colorSurface">#ffffff</item>
-
-        <!-- FAB styling -->
-        <item name="colorFab">?colorAccent</item>
-        <item name="colorFabIcon">?colorOnSecondary</item>
-        <item name="colorOnFab">?colorOnSecondary</item>
 
         <!-- text colors -->
         <item name="android:textColorPrimary">#db000000</item>
@@ -108,17 +104,14 @@
         <item name="colorAccent">#03DAC6</item>
         <item name="colorSecondary">?colorAccent</item>
         <item name="colorSecondaryVariant">?colorAccent</item>
+        <item name="colorPrimaryContainer">#5300CD</item>
+        <item name="colorOnPrimaryContainer">#E8DDFF</item>
 
         <!-- window colors -->
         <item name="android:windowBackground">?android:colorBackground</item>
         <!-- a descendant theme should specify those two as background colors -->
         <item name="android:colorBackground">@color/background_dark</item>
         <item name="colorSurface">#333333</item>
-
-        <!-- FAB styling -->
-        <item name="colorFab">?colorAccent</item>
-        <item name="colorFabIcon">?colorOnSecondary</item>
-        <item name="colorOnFab">?colorOnSecondary</item>
 
         <!-- text colors -->
         <item name="android:textColorPrimary">#ffffffff</item>
