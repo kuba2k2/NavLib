@@ -4,11 +4,11 @@
     <style name="NavView" />
     <style name="NavView.Widget" />
 
-    <style name="NavView.Widget.FloatingActionButton" parent="Widget.MaterialComponents.FloatingActionButton">
+    <style name="NavView.Widget.FloatingActionButton" parent="Widget.Material3.FloatingActionButton.Primary">
         <item name="backgroundTint">?colorFab</item>
         <item name="android:textColor">?colorOnFab</item>
     </style>
-    <style name="NavView.Widget.ExtendedFloatingActionButton" parent="Widget.MaterialComponents.ExtendedFloatingActionButton">
+    <style name="NavView.Widget.ExtendedFloatingActionButton" parent="Widget.Material3.ExtendedFloatingActionButton.Primary">
         <item name="backgroundTint">?colorFab</item>
         <item name="android:textColor">?colorOnFab</item>
     </style>
@@ -23,7 +23,7 @@
     <!-- normal(default) body text  14sp, primary, regular -->
     <!-- small body text            14sp, secondary, medium -->
     <!-- helper body text           14sp, secondary, regular -->
-    <style name="NavView.TextView.Normal" parent="Widget.MaterialComponents.TextView">
+    <style name="NavView.TextView.Normal" parent="Widget.Material3.CheckedTextView">
         <item name="android:textAppearance">?attr/textAppearanceBody2</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textColor">?android:textColorPrimary</item>
@@ -52,7 +52,7 @@
 
     <!--<item name="colorAccent">#ffb300</item>-->
 
-    <style name="NavView.Light" parent="Theme.MaterialComponents.Light.NoActionBar">
+    <style name="NavView.Light" parent="Theme.Material3.Light.NoActionBar">
         <!-- primary styling -->
         <item name="colorPrimary">#6200EE</item>
         <item name="colorPrimaryDark">#3700B3</item>
@@ -100,7 +100,7 @@
         <!--<item name="materialDrawerPrimaryIcon">#5F6368</item>-->
     </style>
 
-    <style name="NavView.Dark" parent="Theme.MaterialComponents.NoActionBar">
+    <style name="NavView.Dark" parent="Theme.Material3.Dark.NoActionBar">
         <!-- primary styling -->
         <item name="colorPrimary">#BB86FC</item>
         <item name="colorPrimaryDark">#3700B3</item>
