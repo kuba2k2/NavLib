@@ -5,11 +5,11 @@
     <style name="NavView.Widget" />
 
     <style name="NavView.Widget.FloatingActionButton" parent="Widget.Material3.FloatingActionButton.Primary">
-        <item name="backgroundTint">?colorOnPrimaryContainer</item>
+        <item name="backgroundTint">?colorPrimaryContainer</item>
         <item name="android:textColor">?colorOnPrimaryContainer</item>
     </style>
     <style name="NavView.Widget.ExtendedFloatingActionButton" parent="Widget.Material3.ExtendedFloatingActionButton.Primary">
-        <item name="backgroundTint">?colorOnPrimaryContainer</item>
+        <item name="backgroundTint">?colorPrimaryContainer</item>
         <item name="android:textColor">?colorOnPrimaryContainer</item>
     </style>
 
