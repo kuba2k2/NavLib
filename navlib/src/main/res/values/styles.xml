@@ -91,6 +91,7 @@
         <item name="android:textViewStyle">@style/NavView.TextView</item>
 
         <!-- drawer & bottom sheet styling -->
+        <item name="materialDrawerCompactStyle">true</item>
         <item name="materialDrawerStyle">@style/Widget.MaterialDrawerStyle</item>
         <item name="materialDrawerHeaderStyle">@style/Widget.MaterialDrawerHeaderStyle</item>
         <!--<item name="materialDrawerPrimaryIcon">#5F6368</item>-->
@@ -134,6 +135,7 @@
         <item name="android:textViewStyle">@style/NavView.TextView</item>
 
         <!-- drawer & bottom sheet styling -->
+        <item name="materialDrawerCompactStyle">true</item>
         <item name="materialDrawerStyle">@style/Widget.MaterialDrawerStyle</item>
         <item name="materialDrawerHeaderStyle">@style/Widget.MaterialDrawerHeaderStyle</item>
         <!--<item name="material_drawer_primary_icon">#9AA0A6</item>-->

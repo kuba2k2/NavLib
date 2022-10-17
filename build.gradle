@@ -2,7 +2,7 @@
 
 buildscript {
     ext {
-        kotlin_version = '1.4.31'
+        kotlin_version = '1.7.10'
 
         release = [
                 // major.minor.patch.rc.beta
@@ -12,7 +12,7 @@ buildscript {
 
         setup = [
                 compileSdk: 32,
-                minSdk    : 16,
+                minSdk    : 21,
                 targetSdk : 32
         ]
     }

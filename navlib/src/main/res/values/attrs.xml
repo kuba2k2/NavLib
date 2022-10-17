@@ -2,6 +2,4 @@
 <resources>
     <attr name="actionBarBackground" format="color" />
     <attr name="navigationBarBackground" format="color" />
-    <attr name="colorPrimaryContainer" format="color" />
-    <attr name="colorOnPrimaryContainer" format="color" />
 </resources>

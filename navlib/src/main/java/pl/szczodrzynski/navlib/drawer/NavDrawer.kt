@@ -6,23 +6,17 @@ import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.graphics.drawable.LayerDrawable
 import android.util.Log
 import android.view.Gravity
 import android.view.View
-import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
 import android.widget.FrameLayout
-import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.core.content.ContextCompat
 import androidx.customview.widget.ViewDragHelper
 import androidx.drawerlayout.widget.DrawerLayout
-import com.mikepenz.fastadapter.IAdapter
 import com.mikepenz.itemanimators.AlphaCrossFadeAnimator
-import com.mikepenz.materialdrawer.*
 import com.mikepenz.materialdrawer.holder.BadgeStyle
 import com.mikepenz.materialdrawer.holder.ColorHolder
 import com.mikepenz.materialdrawer.holder.StringHolder
@@ -37,7 +31,6 @@ import com.mikepenz.materialdrawer.widget.MaterialDrawerSliderView
 import com.mikepenz.materialdrawer.widget.MiniDrawerSliderView
 import com.mikepenz.materialize.util.UIUtils
 import pl.szczodrzynski.navlib.*
-import pl.szczodrzynski.navlib.R
 import pl.szczodrzynski.navlib.drawer.items.DrawerPrimaryItem
 
 class NavDrawer(
