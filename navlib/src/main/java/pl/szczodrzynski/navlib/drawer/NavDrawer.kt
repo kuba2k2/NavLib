@@ -6,12 +6,16 @@ import android.content.Context
 import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Color
+import android.graphics.Outline
 import android.graphics.drawable.LayerDrawable
+import android.os.Build
 import android.util.Log
+import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.view.ViewOutlineProvider
 import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.customview.widget.ViewDragHelper
@@ -62,7 +66,7 @@ class NavDrawer(
 
     lateinit var badgeStyle: BadgeStyle
 
-    @SuppressLint("ClickableViewAccessibility")
+    @SuppressLint("ClickableViewAccessibility", "ResourceAsColor")
     fun init(activity: Activity) {
         this.activity = activity
 
@@ -132,6 +136,16 @@ class NavDrawer(
             accountHeader = this@NavDrawer.accountHeader
             itemAnimator = AlphaCrossFadeAnimator()
             //hasStableIds = true
+            val cornerRadius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16f, resources.displayMetrics).toInt()
+            setBackgroundColor(R.color.transparent)
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                outlineProvider = object : ViewOutlineProvider() {
+                    override fun getOutline(view: View, outline: Outline) {
+                        outline.setRoundRect(0 - cornerRadius, 0, view.width, view.height, cornerRadius.toFloat())
+                    }
+                }
+                clipToOutline = true
+            }
 
             onDrawerItemClickListener = { _, drawerItem, position ->
                 if (drawerItem.identifier.toInt() == selection) {
