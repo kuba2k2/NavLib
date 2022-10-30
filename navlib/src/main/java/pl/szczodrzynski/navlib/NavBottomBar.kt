@@ -131,18 +131,6 @@ class NavBottomBar : BottomAppBar {
 
         elevation = 0f
 
-        val icon = ContextCompat.getDrawable(context, R.drawable.ic_menu_badge) as LayerDrawable?
-        icon?.apply {
-            mutate()
-            setDrawableByLayerId(R.id.ic_menu, IconicsDrawable(context).apply {
-                this.icon = NavLibFont.Icon.nav_menu
-                sizeDp = 24
-                colorAttr(context, R.attr.colorOnSurface)
-            })
-            setDrawableByLayerId(R.id.ic_badge, BadgeDrawable(context))
-        }
-        navigationIcon = icon
-
         menu.add(0, -1, 0, "Menu")
             .setIcon(IconicsDrawable(context).apply {
                 this.icon = NavLibFont.Icon.nav_dots_vertical
@@ -150,10 +138,6 @@ class NavBottomBar : BottomAppBar {
                 colorAttr(context, R.attr.colorOnSurface)
             })
             .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-
-        setNavigationOnClickListener {
-            drawer?.toggle()
-        }
 
         super.setOnMenuItemClickListener {
             if (it.itemId == -1 && bottomSheet?.enable == true) {

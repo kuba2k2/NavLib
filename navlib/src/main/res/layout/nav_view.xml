@@ -50,14 +50,13 @@
 
                     <pl.szczodrzynski.navlib.NavToolbar
                         android:id="@+id/nv_toolbar"
-                        style="@style/Widget.Material3.Toolbar.Surface"
+                        style="@style/Widget.Material3.Toolbar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="?actionBarBackground"
                         android:clipToPadding="false"
-                        android:elevation="4dp"
-                        android:minHeight="?attr/actionBarSize"
                         app:title="@string/app_name"
+                        app:titleCentered="true"
+                        app:subtitleCentered="true"
                         app:titleMargin="0dp"
                         tools:targetApi="lollipop">
 
@@ -73,14 +72,6 @@
                             tools:src="@tools:sample/backgrounds/scenic" />
 
                     </pl.szczodrzynski.navlib.NavToolbar>
-
-                    <View
-                        android:id="@+id/nv_toolbarElevation"
-                        android:layout_width="match_parent"
-                        android:layout_height="4dp"
-                        android:layout_marginTop="?actionBarSize"
-                        android:layout_weight="1"
-                        android:background="@drawable/shadow_bottom" />
 
                     <LinearLayout
                         android:id="@+id/nv_content"

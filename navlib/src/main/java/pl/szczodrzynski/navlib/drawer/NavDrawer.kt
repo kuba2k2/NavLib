@@ -198,6 +198,9 @@ class NavDrawer(
             profileSelectionOpen()
             open()
         }
+        toolbar.menuClickListener = {
+            open()
+        }
 
         val configuration = context.resources.configuration
         decideDrawerMode(
@@ -678,8 +681,8 @@ class NavDrawer(
         }
         updateMiniDrawer()
 
-        if (bottomBar.navigationIcon is LayerDrawable) {
-            (bottomBar.navigationIcon as LayerDrawable?)?.apply {
+        if (toolbar.navigationIcon is LayerDrawable) {
+            (toolbar.navigationIcon as LayerDrawable?)?.apply {
                 findDrawableByLayerId(R.id.ic_badge)
                     .takeIf { it is BadgeDrawable }
                     ?.also { badge ->
