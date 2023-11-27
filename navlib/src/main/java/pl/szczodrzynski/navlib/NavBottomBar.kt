@@ -33,7 +33,6 @@ class NavBottomBar : BottomAppBar {
     }
 
     var drawer: NavDrawer? = null
-    var bottomSheet: NavBottomSheet? = null
     var fabView: FloatingActionButton? = null
     var fabExtendedView: ExtendedFloatingActionButton? = null
 
@@ -41,10 +40,10 @@ class NavBottomBar : BottomAppBar {
      * Shows the BottomAppBar and sets the contentView's margin to be
      * above the BottomAppBar.
      */
-    var enable = true
+    var enable = false
         set(value) {
             field = value
-            visibility = if (value) View.VISIBLE else View.GONE
+            visibility = View.GONE
             setFabParams()
         }
     /**
@@ -70,7 +69,7 @@ class NavBottomBar : BottomAppBar {
      * If BottomAppBar is enabled, sets its fabAlignmentMode.
      * Else, sets the actual FAB's gravity.
      */
-    var fabGravity = Gravity.CENTER
+    var fabGravity = Gravity.RIGHT
         set(value) {
             field = value
             setFabParams()
@@ -122,32 +121,6 @@ class NavBottomBar : BottomAppBar {
 
     @SuppressLint("ClickableViewAccessibility")
     private fun create(attrs: AttributeSet?, defStyle: Int) {
-        setOnTouchListener { _, event ->
-            if (bottomSheet?.enable != true || bottomSheet?.enableDragToOpen != true)
-                return@setOnTouchListener false
-            bottomSheet?.dispatchBottomBarEvent(event)
-            true
-        }
-
-        elevation = 0f
-
-        menu.add(0, -1, 0, "Menu")
-            .setIcon(IconicsDrawable(context).apply {
-                this.icon = NavLibFont.Icon.nav_dots_vertical
-                sizeDp = 24
-                colorAttr(context, R.attr.colorOnSurface)
-            })
-            .setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS)
-
-        super.setOnMenuItemClickListener {
-            if (it.itemId == -1 && bottomSheet?.enable == true) {
-                bottomSheet?.toggle()
-            }
-            else {
-                onMenuItemClickListener?.onMenuItemClick(it)
-            }
-            true
-        }
     }
 
     private fun setFabParams() {

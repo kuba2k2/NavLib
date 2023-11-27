@@ -2,4 +2,7 @@
 <resources>
     <attr name="actionBarBackground" format="color" />
     <attr name="navigationBarBackground" format="color" />
+    <attr name="colorCard" format="color" />
+    <attr name="colorDrawer" format="color" />
+    <attr name="colorOutlineVariant" format="color" />
 </resources>

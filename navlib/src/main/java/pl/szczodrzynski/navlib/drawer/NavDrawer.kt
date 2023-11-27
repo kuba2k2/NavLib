@@ -7,19 +7,29 @@ import android.content.res.Configuration
 import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.Outline
+import android.graphics.PorterDuff
 import android.graphics.drawable.LayerDrawable
 import android.os.Build
+import android.util.AttributeSet
 import android.util.Log
 import android.util.TypedValue
 import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.view.ViewGroup.LayoutParams.WRAP_CONTENT
+import android.view.ViewGroup.MarginLayoutParams
 import android.view.ViewOutlineProvider
 import android.widget.FrameLayout
 import android.widget.Toast
+import androidx.core.view.ViewCompat
+import androidx.core.view.ViewCompat.setOnApplyWindowInsetsListener
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import androidx.customview.widget.ViewDragHelper
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.appbar.CollapsingToolbarLayout
 import com.mikepenz.itemanimators.AlphaCrossFadeAnimator
 import com.mikepenz.materialdrawer.holder.BadgeStyle
 import com.mikepenz.materialdrawer.holder.ColorHolder
@@ -55,6 +65,7 @@ class NavDrawer(
         get() = context.resources
 
     internal lateinit var toolbar: NavToolbar
+    internal lateinit var toolbarLayout: CollapsingToolbarLayout
     internal lateinit var bottomBar: NavBottomBar
 
     private lateinit var drawer: MaterialDrawerSliderView
@@ -95,9 +106,9 @@ class NavDrawer(
         })
 
         accountHeader = AccountHeaderView(context).apply {
+            dividerBelowHeader = false
             headerBackground = ImageHolder(R.drawable.header)
             displayBadgesOnSmallProfileImages = true
-
             onAccountHeaderListener = { view, profile, current ->
                 if (profile is ProfileSettingDrawerItem) {
                     drawerProfileSettingClickListener?.invoke(profile.identifier.toInt(), view) ?: false
@@ -116,7 +127,6 @@ class NavDrawer(
                     }
                 }
             }
-
             onAccountHeaderItemLongClickListener = { view, profile, current ->
                 if (profile is ProfileSettingDrawerItem) {
                     drawerProfileSettingLongClickListener?.invoke(profile.identifier.toInt(), view) ?: true
@@ -136,17 +146,6 @@ class NavDrawer(
             accountHeader = this@NavDrawer.accountHeader
             itemAnimator = AlphaCrossFadeAnimator()
             //hasStableIds = true
-            val cornerRadius = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 16f, resources.displayMetrics).toInt()
-            setBackgroundColor(R.color.transparent)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                outlineProvider = object : ViewOutlineProvider() {
-                    override fun getOutline(view: View, outline: Outline) {
-                        outline.setRoundRect(0 - cornerRadius, 0, view.width, view.height, cornerRadius.toFloat())
-                    }
-                }
-                clipToOutline = true
-            }
-
             onDrawerItemClickListener = { _, drawerItem, position ->
                 if (drawerItem.identifier.toInt() == selection) {
                     false
@@ -159,8 +158,8 @@ class NavDrawer(
                     }
                     else if (consumed == true) {
                         when (drawerItem) {
-                            is DrawerPrimaryItem -> toolbar.title = drawerItem.appTitle ?: drawerItem.name?.getText(context) ?: ""
-                            is BaseDrawerItem<*, *> -> toolbar.title = drawerItem.name?.getText(context) ?: ""
+                            is DrawerPrimaryItem -> toolbarLayout.title = drawerItem.appTitle ?: drawerItem.name?.getText(context) ?: ""
+                            is BaseDrawerItem<*, *> -> toolbarLayout.title = drawerItem.name?.getText(context) ?: ""
                         }
                         false
                     }
@@ -173,6 +172,19 @@ class NavDrawer(
             onDrawerItemLongClickListener = { _, drawerItem, position ->
                 drawerItemLongClickListener?.invoke(drawerItem.identifier.toInt(), position, drawerItem) ?: true
             }
+        }
+
+        setOnApplyWindowInsetsListener(drawer) { view, windowInsets ->
+            val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+            // Apply the insets as a margin to the view. Here the system is setting
+            // only the bottom, left, and right dimensions, but apply whichever insets are
+            // appropriate to your layout. You can also update the view padding
+            // if that's more appropriate.
+            view.setPadding(insets.left, insets.top, insets.right, insets.bottom)
+
+            // Return CONSUMED if you don't want want the window insets to keep being
+            // passed down to descendant views.
+            WindowInsetsCompat.CONSUMED
         }
 
         miniDrawer = MiniDrawerSliderView(context).apply {
@@ -192,13 +204,12 @@ class NavDrawer(
             } catch (_: Exception) { }
         }
 
-        updateMiniDrawer()
 
         toolbar.profileImageClickListener = {
             profileSelectionOpen()
             open()
         }
-        toolbar.menuClickListener = {
+        toolbar.drawerClickListener = {
             open()
         }
 
@@ -691,21 +702,6 @@ class NavDrawer(
                         setDrawableByLayerId(R.id.ic_badge, badge)
                     }
             }
-        }
-
-        if (totalCount == 0) {
-            toolbar.subtitle = resources.getString(
-                toolbar.subtitleFormat ?: return,
-                currentProfileObj?.name ?: ""
-            )
-        }
-        else {
-            toolbar.subtitle = resources.getQuantityString(
-                toolbar.subtitleFormatWithUnread ?: toolbar.subtitleFormat ?: return,
-                totalCount,
-                currentProfileObj?.name ?: "",
-                totalCount
-            )
         }
     }
 

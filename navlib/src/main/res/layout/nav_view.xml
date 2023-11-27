@@ -35,7 +35,6 @@
                 android:orientation="horizontal"
                 tools:paddingTop="24dp"
                 tools:paddingBottom="48dp">
-
                 <FrameLayout
                     android:id="@+id/nv_drawerContainerLandscape"
                     android:layout_width="wrap_content"
@@ -48,37 +47,48 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent">
 
-                    <pl.szczodrzynski.navlib.NavToolbar
-                        android:id="@+id/nv_toolbar"
-                        style="@style/Widget.Material3.Toolbar"
+                    <com.google.android.material.appbar.AppBarLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:clipToPadding="false"
-                        app:title="@string/app_name"
-                        app:titleCentered="true"
-                        app:subtitleCentered="true"
-                        app:titleMargin="0dp"
-                        tools:targetApi="lollipop">
-
-                        <com.mikepenz.materialdrawer.view.BezelImageView
-                            android:id="@+id/nv_toolbar_image"
-                            android:layout_width="30dp"
-                            android:layout_height="30dp"
-                            android:layout_gravity="center_vertical|end"
-                            android:layout_marginEnd="13dp"
-                            android:layout_marginRight="13dp"
-                            android:scaleType="centerCrop"
-                            app:materialDrawerSelectorOnPress="#80ffffff"
-                            tools:src="@tools:sample/backgrounds/scenic" />
-
-                    </pl.szczodrzynski.navlib.NavToolbar>
+                        android:fitsSystemWindows="true">
+                        <com.google.android.material.appbar.CollapsingToolbarLayout
+                            android:id="@+id/nv_toolbarLayout"
+                            style="?collapsingToolbarLayoutMediumStyle"
+                            android:layout_width="match_parent"
+                            android:layout_height="?collapsingToolbarLayoutMediumSize"
+                            app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                            android:background="?colorSurfaceContainerLow"
+                            app:title="@string/app_name"
+                            app:titleEnabled="true"
+                            app:titleTextColor="?colorOnSurface">
+                            <pl.szczodrzynski.navlib.NavToolbar
+                                android:id="@+id/nv_toolbar"
+                                style="@style/Widget.Material3.CollapsingToolbar.Large"
+                                app:layout_collapseMode="pin"
+                                android:layout_width="match_parent"
+                                android:layout_height="?actionBarSize"
+                                tools:targetApi="lollipop">
+                                <com.mikepenz.materialdrawer.view.BezelImageView
+                                    android:id="@+id/nv_toolbar_image"
+                                    android:layout_width="30dp"
+                                    android:layout_height="30dp"
+                                    android:layout_gravity="center_vertical|end"
+                                    android:layout_marginEnd="13dp"
+                                    android:layout_marginRight="13dp"
+                                    android:scaleType="centerCrop"
+                                    app:materialDrawerSelectorOnPress="#80ffffff"
+                                    tools:src="@tools:sample/backgrounds/scenic" />
+                            </pl.szczodrzynski.navlib.NavToolbar>
+                        </com.google.android.material.appbar.CollapsingToolbarLayout>
+                    </com.google.android.material.appbar.AppBarLayout>
 
                     <LinearLayout
                         android:id="@+id/nv_content"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
-                        android:layout_marginTop="?actionBarSize"
+                        android:layout_marginTop="-60dp"
+                        app:layout_behavior="@string/appbar_scrolling_view_behavior"
                         android:layout_marginBottom="?actionBarSize"
                         android:orientation="horizontal" >
 
@@ -99,12 +109,11 @@
 
                     <pl.szczodrzynski.navlib.NavBottomBar
                         android:id="@+id/nv_bottomBar"
-                        style="@style/Widget.Material3.BottomAppBar"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
                         android:gravity="start"
-                        android:visibility="visible"
+                        android:visibility="gone"
                         app:fabAlignmentMode="center"
                         app:fabAnimationMode="scale" />
 
@@ -166,7 +175,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="bottom"
-                android:background="?navigationBarBackground"
+                android:visibility="gone"
                 tools:layout_height="48dp" />
 
         </FrameLayout>
@@ -190,8 +199,7 @@
         android:layout_gravity="bottom"
         android:background="#44000000"
         android:visibility="gone"
-        tools:layout_height="48dp"
-        tools:visibility="visible" />
+        tools:layout_height="48dp" />
 
     <pl.szczodrzynski.navlib.bottomsheet.NavBottomSheet
         android:id="@+id/nv_bottomSheet"
