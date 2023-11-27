@@ -2,7 +2,7 @@
 
 buildscript {
     ext {
-        kotlin_version = '1.4.31'
+        kotlin_version = '1.7.10'
 
         release = [
                 // major.minor.patch.rc.beta
@@ -11,9 +11,9 @@ buildscript {
         ]
 
         setup = [
-                compileSdk: 30,
+                compileSdk: 34,
                 minSdk    : 16,
-                targetSdk : 30
+                targetSdk : 34
         ]
     }
 
@@ -22,7 +22,7 @@ buildscript {
         jcenter()
     }
     dependencies {
-        classpath "com.android.tools.build:gradle:4.2.0-beta06"
+        classpath 'com.android.tools.build:gradle:7.3.1'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         // NOTE: Do not place your application dependencies here; they belong

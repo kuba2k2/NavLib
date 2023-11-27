@@ -9,12 +9,15 @@ android {
     defaultConfig {
         minSdkVersion setup.minSdk
         targetSdkVersion setup.targetSdk
+        
         versionCode release.versionCode
         versionName release.versionName
 
         consumerProguardFiles 'consumer-rules.pro'
 
         vectorDrawables.useSupportLibrary = true
+
+        multiDexEnabled true
     }
 
     buildTypes {
@@ -31,7 +34,7 @@ android {
     packagingOptions {
         exclude 'META-INF/library-core_release.kotlin_module'
     }
-}
+} 
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -40,11 +43,12 @@ dependencies {
     implementation "androidx.appcompat:appcompat:1.2.0"
     implementation "androidx.core:core-ktx:1.3.2"
     implementation "androidx.recyclerview:recyclerview:1.1.0"
-    implementation "com.google.android.material:material:1.3.0"
+    implementation "com.google.android.material:material:1.12.0-alpha01"
+    implementation 'com.android.support:multidex:1.0.3'
 
     api "com.mikepenz:materialize:1.2.1"
-    api "com.mikepenz:materialdrawer:8.3.3"
-    api "com.mikepenz:iconics-core:5.3.0-b01"
+    api "com.mikepenz:materialdrawer:9.0.1"
+    api "com.mikepenz:iconics-core:5.3.2"
     api "com.mikepenz:itemanimators:1.1.0"
 
     compileOnly "pl.droidsonroids.gif:android-gif-drawable:1.2.15"
